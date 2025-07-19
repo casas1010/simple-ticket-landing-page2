@@ -7,7 +7,7 @@ export default function MainPageClient() {
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
 
-  if (mode === 'property_management') {
+  if (mode !== 'property_management') {
     return <PropertyManagementPage />;
   }
 
