@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import RawLanding from './get_started_module';
 
 export default function RawPage() {
   const router = useRouter();
@@ -30,6 +31,10 @@ export default function RawPage() {
           Property Management Mode
         </button>
       </div>
+
+
+
+      <RawLanding></RawLanding>
     </div>
   );
 }
