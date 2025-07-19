@@ -2,14 +2,19 @@
 
 import { useSearchParams } from 'next/navigation';
 import PropertyManagementPage from './themes/property_management/page';
+import RestaurantPage from './themes/restaurant/page';
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
 
-  if (mode !== 'property_management') {
+  if (mode === 'property_management') {
     return <PropertyManagementPage />;
   }
 
-  return <div>No mode</div>;
+  else if (mode === 'restaurant') {
+    return <RestaurantPage />;
+  }
+
+  return <RestaurantPage></RestaurantPage>
 }
