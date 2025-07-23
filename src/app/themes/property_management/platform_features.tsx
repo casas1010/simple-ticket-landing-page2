@@ -6,38 +6,7 @@ import { Check } from 'lucide-react';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
-
-
-
-const SectionTitle = ({
-  title,
-  sub_title,
-}: {
-  title: string;
-  sub_title: string;
-}) => {
-  const { ref, inView } = useInView({
-    triggerOnce: false,
-    threshold: 0.3,
-  });
-
-  return (
-    <motion.div
-      ref={ref}
-      className="text-center mb-16"
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-    >
-      <h1 className="text-4xl md:text-5xl font-bold mb-8">
-        {title}
-      </h1>
-      <h2 className="text-2xl md:text-3xl font-semibold text-gray-300">
-        {sub_title}
-      </h2>
-    </motion.div>
-  );
-};
+import SectionTitle from '@/app/components/section_title';
 
 
 
@@ -60,11 +29,11 @@ const PlatformFeatures = () => {
     { value: '99.9%', label: 'Uptime SLA', color: 'text-blue-400' }
   ];
 
-  const parseValue = (value: any) => {
-    const match = value.match(/^([\d.]+)(\D*)$/);
-    if (!match) return { number: 0, suffix: '' };
-    return { number: parseFloat(match[1]), suffix: match[2] };
-  };
+const parseValue = (value: string) => {
+  const match = value.match(/^([\d.]+)(\D*)$/);
+  if (!match) return { number: 0, suffix: '' };
+  return { number: parseFloat(match[1]), suffix: match[2] };
+};
 
   return (
     <div className="min-h-screen text-white py-16 px-4">
