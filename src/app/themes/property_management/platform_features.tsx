@@ -29,11 +29,12 @@ const PlatformFeatures = () => {
     { value: '99.9%', label: 'Uptime SLA', color: 'text-blue-400' }
   ];
 
-const parseValue = (value: string) => {
-  const match = value.match(/^([\d.]+)(\D*)$/);
-  if (!match) return { number: 0, suffix: '' };
-  return { number: parseFloat(match[1]), suffix: match[2] };
-};
+  const parseValue = (value: string) => {
+    const match = value.match(/^([\d.]+)(\D*)$/);
+    if (!match) return { number: 0, suffix: '' };
+    return { number: parseFloat(match[1]), suffix: match[2] };
+  };
+  
 
   return (
     <div className="min-h-screen text-white py-16 px-4">
