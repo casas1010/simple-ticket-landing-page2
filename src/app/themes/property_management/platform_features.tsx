@@ -26,15 +26,15 @@ const PlatformFeatures = () => {
     { value: '99.9%', label: 'Uptime SLA', color: 'text-blue-400' }
   ];
 
-  // Move useInView hooks to component level
-  const statsInViewRefs = [
-    useInView({ triggerOnce: false, threshold: 0.5 }),
-    useInView({ triggerOnce: false, threshold: 0.5 }),
-    useInView({ triggerOnce: false, threshold: 0.5 }),
-    useInView({ triggerOnce: false, threshold: 0.5 })
-  ];
+  // Create individual useInView hooks for each stat
+  const stat1InView = useInView({ triggerOnce: false, threshold: 0.5 });
+  const stat2InView = useInView({ triggerOnce: false, threshold: 0.5 });
+  const stat3InView = useInView({ triggerOnce: false, threshold: 0.5 });
+  const stat4InView = useInView({ triggerOnce: false, threshold: 0.5 });
 
-  const parseValue = (value: string) => {
+  const statsInViewRefs = [stat1InView, stat2InView, stat3InView, stat4InView];
+
+  const parseValue = (value: string): { number: number; suffix: string } => {
     const match = value.match(/^([\d.]+)(\D*)$/);
     if (!match) return { number: 0, suffix: '' };
     return { number: parseFloat(match[1]), suffix: match[2] };
