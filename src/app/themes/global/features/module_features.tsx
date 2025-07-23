@@ -22,13 +22,13 @@ const FeatureCard = ({
     <div
       className={classNames(
         "relative bg-slate-800 rounded-2xl shadow-lg text-white overflow-hidden group",
-        "w-full sm:w-[400px] mx-auto", // Center card itself on small screens
+        "w-full sm:w-[400px] mx-auto",
         "h-[200px]"
       )}
     >
       {/* Title Bar */}
       <div className="flex items-center space-x-4 p-4" style={{ height: TITLE_BAR_HEIGHT }}>
-        <img src={feature.icon} alt={feature.title} className="w-6 h-6 rounded-md" />
+        <div className="text-2xl">{feature.icon}</div>
         <h3 className="text-md font-semibold truncate">{feature.title}</h3>
       </div>
 
@@ -85,7 +85,7 @@ export const ModuleFeatures = ({
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">{description}</p>
         </div>
 
-        {/* Centered Grid Wrapper */}
+        {/* Feature Cards Grid */}
         <div className="flex justify-center">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
