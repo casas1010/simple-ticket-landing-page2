@@ -1,14 +1,11 @@
 'use client';
 
-
 import React from 'react';
 import { Check } from 'lucide-react';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import SectionTitle from '@/app/components/section_title';
-
-
 
 const PlatformFeatures = () => {
   const features = [
@@ -29,18 +26,24 @@ const PlatformFeatures = () => {
     { value: '99.9%', label: 'Uptime SLA', color: 'text-blue-400' }
   ];
 
+  // Move useInView hooks to component level
+  const statsInViewRefs = [
+    useInView({ triggerOnce: false, threshold: 0.5 }),
+    useInView({ triggerOnce: false, threshold: 0.5 }),
+    useInView({ triggerOnce: false, threshold: 0.5 }),
+    useInView({ triggerOnce: false, threshold: 0.5 })
+  ];
+
   const parseValue = (value: string) => {
     const match = value.match(/^([\d.]+)(\D*)$/);
     if (!match) return { number: 0, suffix: '' };
     return { number: parseFloat(match[1]), suffix: match[2] };
   };
-  
 
   return (
     <div className="min-h-screen text-white py-16 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-
         <SectionTitle
           title="Why Choose Our Low-Code Platform?"
           sub_title="Built for Property Managers"
@@ -98,10 +101,7 @@ const PlatformFeatures = () => {
           >
             {stats.map((stat, index) => {
               const { number, suffix } = parseValue(stat.value);
-              const { ref, inView, entry } = useInView({
-                triggerOnce: false,
-                threshold: 0.5,
-              });
+              const { ref, inView } = statsInViewRefs[index];
 
               return (
                 <motion.div
@@ -121,7 +121,6 @@ const PlatformFeatures = () => {
                         duration={2}
                         decimals={number % 1 !== 0 ? 1 : 0}
                         suffix={suffix}
-                        key={entry?.time}
                       />
                     ) : (
                       <>0{suffix}</>
@@ -134,9 +133,6 @@ const PlatformFeatures = () => {
               );
             })}
           </motion.div>
-
-
-
         </div>
 
         {/* Call to Action */}
