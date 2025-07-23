@@ -20,8 +20,11 @@ const FeatureCard = ({
 }) => {
   return (
     <div
-      className="relative bg-slate-800 rounded-2xl shadow-lg text-white overflow-hidden group"
-      style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
+      className={classNames(
+        "relative bg-slate-800 rounded-2xl shadow-lg text-white overflow-hidden group",
+        "w-full sm:w-[400px] mx-auto", // Center card itself on small screens
+        "h-[200px]"
+      )}
     >
       {/* Title Bar */}
       <div className="flex items-center space-x-4 p-4" style={{ height: TITLE_BAR_HEIGHT }}>
@@ -75,18 +78,20 @@ export const ModuleFeatures = ({
   }[];
 }) => {
   return (
-    // bg-slate-900
-    <div className="min-h-screen  py-16 px-4">
+    <div className="min-h-screen py-16 px-4 bg-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-6">{title}</h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">{description}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <FeatureCard key={index} feature={feature} />
-          ))}
+        {/* Centered Grid Wrapper */}
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <FeatureCard key={index} feature={feature} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

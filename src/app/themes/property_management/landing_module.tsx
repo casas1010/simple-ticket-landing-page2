@@ -1,11 +1,16 @@
+'use client';
+
 import React from 'react';
 import SmartHomeInterface from './smart_home';
+import { useIsMobile } from '@/app/context/mobile_context';
 
 export default function PropertyManagementLanding() {
-  return (
-<div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-8 text-left ">      {/* Left: Hero Content */}
-      <div className="flex-1 max-w-2xl">
+  const isMobile = useIsMobile();
 
+  return (
+    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-8 text-left">
+      {/* Left: Hero Content */}
+      <div className="flex-1 max-w-2xl">
         {/* Hero Title */}
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
           Transform Your Property
@@ -23,10 +28,12 @@ export default function PropertyManagementLanding() {
         </p>
       </div>
 
-      {/* Right: Smart Home Interface */}
-      <div className="flex-1 w-full max-w-xl">
-        <SmartHomeInterface />
-      </div>
+      {/* Right: Smart Home Interface — Only show on non-mobile */}
+      {!isMobile && (
+        <div className="flex-1 w-full max-w-xl">
+          <SmartHomeInterface />
+        </div>
+      )}
     </div>
   );
 }
