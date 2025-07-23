@@ -8,20 +8,20 @@ export default function PropertyManagementLanding() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-8 text-left min-h-screen overflow-hidden">
-      {/* Smart Home Interface — Dimmed background on mobile */}
+    <div className="relative flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
+      {/* SmartHomeInterface in background on mobile */}
+      {isMobile && (
+        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+          <SmartHomeInterface />
+        </div>
+      )}
+
+      {/* Left: Hero Content */}
       <div
-        className={`${
-          isMobile
-            ? 'absolute inset-0 z-0 opacity-20 filter brightness-50 pointer-events-none'
-            : 'relative z-10 flex-1 w-full max-w-xl'
+        className={`relative z-10 flex-1 max-w-2xl ${
+          !isMobile ? 'pt-20' : ''
         }`}
       >
-        <SmartHomeInterface />
-      </div>
-
-      {/* Content on top */}
-      <div className="relative z-20 flex-1 max-w-2xl">
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
           Transform Your Property
           <br />
@@ -36,6 +36,13 @@ export default function PropertyManagementLanding() {
           expertise required.
         </p>
       </div>
+
+      {/* Right: Smart Home Interface — Only show on non-mobile */}
+      {!isMobile && (
+        <div className="relative z-10 flex-1 w-full max-w-xl">
+          <SmartHomeInterface />
+        </div>
+      )}
     </div>
   );
 }
