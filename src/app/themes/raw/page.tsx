@@ -1,40 +1,67 @@
-'use client';
-
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import RawLanding from './get_started_module';
+"use client";
+import React, { useRef, useState, useEffect } from 'react';
+import { Home, Play } from 'lucide-react';
+import Header from '@/app/components/header';
+import GetStarted from '@/app/themes/raw/init';
+import PlatformFeatures from '../global/platform_features';
+import Modules from './modules';
 
 export default function RawPage() {
-  const router = useRouter();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
-  const navigateTo = (mode: string) => {
-    router.push(`/?mode=${mode}`);
-  };
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleCanPlay = () => {
+      const playWatcher = setInterval(() => {
+        if (video.currentTime >= 0.1) {
+          clearInterval(playWatcher);
+          setIsReady(true);
+        }
+      }, 50);
+    };
+
+    video.addEventListener('canplay', handleCanPlay);
+
+    // Fallback in case video never reaches .1s
+    const fallbackTimeout = setTimeout(() => {
+      setIsReady(true);
+    }, 3000);
+
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay);
+      clearTimeout(fallbackTimeout);
+    };
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-8">
-      <h1 className="text-2xl font-bold">RAW PAGE</h1>
-      <p className="text-gray-500">Click a button to set mode in the URL:</p>
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Background Video */}
+      <video
+        ref={videoRef}
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source src="https://cdn.jsdelivr.net/gh/casas1010/background-video/background.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      <div className="flex gap-4">
-        <button
-          onClick={() => navigateTo('restaurant')}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Restaurant Mode
-        </button>
+      {isReady && (
+        <div className="relative z-10 w-full h-full overflow-y-auto">
+          <Header />
+          <GetStarted />
+          <PlatformFeatures sub_title="" />
+          <Modules></Modules>
 
-        <button
-          onClick={() => navigateTo('property_management')}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          Property Management Mode
-        </button>
-      </div>
+        </div>
 
+      )}
 
-
-      <RawLanding></RawLanding>
     </div>
   );
 }

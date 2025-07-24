@@ -1,8 +1,7 @@
 import React from 'react';
-import PropertyManagementLanding from './landing_module';
-import PlatformFeatures from './platform_features';
-import RawGetStarted from '../raw/get_started_module';
-import { PropertyManagementSuite } from './module_features';
+import PropertyManagementLanding from './init';
+import PlatformFeatures from '../global/platform_features';
+import { PropertyManagementSuite } from './features';
 import SmartHomeInterface from '@/app/themes/property_management/smart_home';
 import Header from '@/app/components/header';
 
@@ -21,7 +20,7 @@ export default function PropertyManagementPage() {
 
       <PropertyManagementLanding />
       <PropertyManagementSuite />
-      <PlatformFeatures />
+      <PlatformFeatures sub_title='Built for property managers' />
 
 
       <div className="absolute top-1/4 left-10 w-3 h-3 bg-blue-400 rounded-full animate-bounce opacity-60"></div>

@@ -7,7 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import SectionTitle from '@/app/components/section_title';
 
-const PlatformFeatures = () => {
+const PlatformFeatures = ({ sub_title }: { sub_title: string }) => {
   const features = [
     'No coding required - visual drag-and-drop interface',
     'Pre-built property management templates',
@@ -46,7 +46,7 @@ const PlatformFeatures = () => {
         {/* Header */}
         <SectionTitle
           title="Why Choose Our Low-Code Platform?"
-          sub_title="Built for Property Managers"
+          sub_title={sub_title}
         />
 
         {/* Main Content Grid */}

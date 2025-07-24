@@ -2,7 +2,7 @@ import React from 'react';
 import { Home, Play } from 'lucide-react';
 import PropertyManagementLanding from './landing_module';
 
-import RawGetStarted from '../raw/get_started_module';
+import RawGetStarted from '../raw/init';
 import RestaurantLanding from './landing_module';
 
 

@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from "classnames";
 
 // === Configurable Variables ===
-const CARD_WIDTH = 400;
 const CARD_HEIGHT = 200;
 const TITLE_BAR_HEIGHT = 40;
 const SLIDE_PANEL_HEIGHT = CARD_HEIGHT - TITLE_BAR_HEIGHT;
