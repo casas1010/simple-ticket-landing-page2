@@ -1,13 +1,4 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import {
-  Shield,
-  Droplets,
-  FileText,
-  Settings,
-  Users,
-  Lock,
-  Zap,
-} from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/app/context/mobile_context';
 import { MODULES } from '@/app/data/modules_data';
@@ -17,10 +8,15 @@ export default function GetStarted() {
   return <DesktopView />;
 }
 
-// ------------------ Desktop Layout ------------------
+type Module = {
+  id: number;
+  icon: React.ElementType;
+  label: string;
+  color: string;
+};
 
 function DesktopView() {
-  const [module, setModule] = useState<Feature | null>(null);
+  const [module, setModule] = useState<Module | null>(null);
 
   return (
     <div className={`${module?.color || ''} w-full`}>
@@ -46,44 +42,8 @@ function DesktopView() {
   );
 }
 
-type Feature = {
-  id: number;
-  icon: React.ElementType;
-  label: string;
-  color: string;
-};
-
-const getModulesAsFeatures = (): Feature[] => {
-  const iconMap: { [key: string]: React.ElementType } = {
-    'Marketing': Zap,
-    'Recruiting': FileText,
-    'Customer Management': Users,
-    'Sales Management': Droplets,
-    'Financial Documentation': Lock,
-    'Task Management': Shield,
-    'Property Management': Settings,
-  };
-
-  const colorMap: { [key: string]: string } = {
-    'Marketing': 'bg-purple-500',
-    'Recruiting': 'bg-blue-400',
-    'Customer Management': 'bg-yellow-500',
-    'Sales Management': 'bg-cyan-500',
-    'Financial Documentation': 'bg-gray-700',
-    'Task Management': 'bg-red-500',
-    'Property Management': 'bg-blue-500',
-  };
-
-  return MODULES.map((module, index) => ({
-    id: index + 1,
-    icon: iconMap[module.title] || Settings,
-    label: module.title,
-    color: colorMap[module.title] || 'bg-blue-500',
-  }));
-};
-
 type Props = {
-  setModule: (module: Feature | null) => void;
+  setModule: (module: Module | null) => void;
 };
 
 const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
@@ -91,12 +51,19 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
   const [screenWidth, setScreenWidth] = useState<number>(0);
   const [currentAngle, setCurrentAngle] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [activeFeature, setActiveFeature] = useState<Feature | null>(null);
+  const [activeFeature, setActiveFeature] = useState<Module | null>(null);
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
   const [scrollThresholdPassed, setScrollThresholdPassed] = useState<boolean>(false);
 
-  const modulesAsFeatures = useMemo(() => getModulesAsFeatures(), []);
+  const modulesAsFeatures = useMemo(() => {
+    return MODULES.map((module, index) => ({
+      id: index + 1,
+      icon: module.icon,
+      label: module.title,
+      color: module.color,
+    }));
+  }, []);
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);
@@ -114,54 +81,37 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
   }, [isMobile, screenWidth]);
 
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const threshold = 100;
-          const hasScrolledEnough = scrollY > threshold;
+      const scrollY = window.scrollY;
+      const threshold = 100;
+      const hasScrolledEnough = scrollY > threshold;
 
-          if (hasScrolledEnough !== scrollThresholdPassed) {
-            setScrollThresholdPassed(hasScrolledEnough);
-          }
+      if (hasScrolledEnough !== scrollThresholdPassed) {
+        setScrollThresholdPassed(hasScrolledEnough);
+      }
 
-          if (hasScrolledEnough) {
-            const scrollDelta = scrollY - threshold;
-            const moduleIndex = Math.floor(scrollDelta / 150) % modulesAsFeatures.length;
-            const calculatedModule = modulesAsFeatures[moduleIndex];
+      if (hasScrolledEnough) {
+        const scrollDelta = scrollY - threshold;
+        const moduleIndex = Math.floor(scrollDelta / 150) % modulesAsFeatures.length;
+        const calculatedModule = modulesAsFeatures[moduleIndex];
 
-            if (activeFeature?.id !== calculatedModule.id) {
-              setActiveFeature(calculatedModule);
-              setModule(calculatedModule);
-              setIsPaused(true);
-            }
-          } else {
-            if (activeFeature !== null) {
-              setActiveFeature(null);
-              setModule(null);
-              setIsPaused(false);
-            }
-          }
-
-          ticking = false;
-        });
-
-        ticking = true;
+        if (activeFeature?.id !== calculatedModule.id) {
+          setActiveFeature(calculatedModule);
+          setModule(calculatedModule);
+          setIsPaused(true);
+        }
+      } else {
+        if (activeFeature !== null) {
+          setActiveFeature(null);
+          setModule(null);
+          setIsPaused(false);
+        }
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-
-    const handleWheel = (_e: WheelEvent) => {
-      // Optionally implement
-    };
-    window.addEventListener('wheel', handleWheel, { passive: true });
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleWheel);
     };
   }, [setModule, setIsPaused, activeFeature, modulesAsFeatures, scrollThresholdPassed]);
 
@@ -187,7 +137,7 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     };
   }, [isPaused]);
 
-  const handleModuleHover = (feature: Feature | null) => {
+  const handleModuleHover = (feature: Module | null) => {
     setActiveFeature(feature);
     setIsPaused(!!feature);
     setModule(feature);
@@ -195,19 +145,9 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
 
   return (
     <div className="flex justify-center items-start w-full">
-      <div
-        className="relative"
-        style={{
-          width: CONTAINER_SIZE,
-          height: CONTAINER_SIZE,
-        }}
-      >
+      <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-          <img
-            src="https://i.imgur.com/OEMWwAS.png"
-            alt="Static house"
-            style={{ height: HOUSE_SIZE, width: HOUSE_SIZE }}
-          />
+          <img src="https://i.imgur.com/OEMWwAS.png" alt="Static house" style={{ height: HOUSE_SIZE, width: HOUSE_SIZE }} />
         </div>
 
         <div
@@ -256,27 +196,6 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
               );
             })}
         </div>
-
-        {scrollThresholdPassed && activeFeature && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-1 rounded-full text-xs z-30">
-            Scrolled to: {activeFeature.label}
-          </div>
-        )}
-
-        <style jsx>{`
-          @keyframes float {
-            0%,
-            100% {
-              transform: translateY(0px);
-            }
-            50% {
-              transform: translateY(-8px);
-            }
-          }
-          .animate-float {
-            animation: float 2s ease-in-out infinite;
-          }
-        `}</style>
       </div>
     </div>
   );

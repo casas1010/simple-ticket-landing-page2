@@ -31,7 +31,10 @@ import {
   Home,
   Wrench,
   CalendarCheck,
-  CheckLine
+  CheckLine,
+  Zap,
+  Droplets,
+  Shield
 } from 'lucide-react';
 
 export type Detail = {
@@ -47,9 +50,9 @@ export type DetailedCardProps = {
   animationPath: string;
   details: Detail[];
   gradient: string;
+  icon: React.ElementType;
+  color: string;
 };
-
-
 
 export const MODULES: DetailedCardProps[] = [
   {
@@ -57,6 +60,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated outreach tools to grow your customer base.',
     animationPath: 'https://lottie.host/bddd9424-7625-4528-bac0-4cb741f1be05/FIsyTVgp2o.json',
     gradient: 'bg-blue-600',
+    icon: Zap,
+    color: 'bg-purple-500',
     details: [
       { icon: Megaphone, description: 'Targeted campaigns', iconColor: 'text-white', iconBg: 'bg-blue-600' },
       { icon: BarChart, description: 'Detailed analytics', iconColor: 'text-white', iconBg: 'bg-blue-700' },
@@ -68,6 +73,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Streamline your hiring process with automation, better tracking, and AI-assisted candidate screening.',
     animationPath: 'https://lottie.host/06922141-ea60-45da-9862-b085209f056c/RwBLNL0DZp.json',
     gradient: 'bg-purple-600',
+    icon: FileText,
+    color: 'bg-blue-400',
     details: [
       { icon: Briefcase, description: 'Automatically post job openings', iconColor: 'text-white', iconBg: 'bg-purple-600' },
       { icon: Search, description: 'Track candidates through interview/background checks', iconColor: 'text-white', iconBg: 'bg-purple-700' },
@@ -81,6 +88,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Centralize your customer data and interactions to build meaningful, long-term relationships.',
     animationPath: 'https://lottie.host/4ed7ce26-7491-4516-8c9d-ee5e0258f720/l7UQzhbH1t.json',
     gradient: 'bg-teal-600',
+    icon: Users,
+    color: 'bg-yellow-500',
     details: [
       { icon: Contact, description: 'Track interactions, incidents, memberships', iconColor: 'text-white', iconBg: 'bg-teal-600' },
       { icon: Users, description: 'Manage customer segments', iconColor: 'text-white', iconBg: 'bg-teal-700' },
@@ -92,6 +101,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Monitor deals, client communication, and performance metrics to drive revenue efficiently.',
     animationPath: 'https://lottie.host/712ca8ea-8b00-4615-825f-ab76a3a15042/Cb4dHj5nHH.json',
     gradient: 'bg-green-600',
+    icon: Droplets,
+    color: 'bg-cyan-500',
     details: [
       { icon: TrendingUp, description: 'Track leads', iconColor: 'text-white', iconBg: 'bg-green-600' },
       { icon: CheckCircle, description: 'Close deals', iconColor: 'text-white', iconBg: 'bg-green-700' },
@@ -103,6 +114,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Organize invoices, receipts, and reports to maintain clear and compliant financial records.',
     animationPath: 'https://lottie.host/ca635384-4d5e-4fa1-8036-62aa4316be9f/FjoUUvbQUR.json',
     gradient: 'bg-yellow-600',
+    icon: Lock,
+    color: 'bg-gray-700',
     details: [
       { icon: Receipt, description: 'Track expenses', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
       { icon: Calculator, description: 'Simplify accounting', iconColor: 'text-white', iconBg: 'bg-yellow-700' },
@@ -115,6 +128,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Assign, track, and complete tasks with visibility and accountability across teams.',
     animationPath: 'https://lottie.host/9e5ba739-65f8-4cc4-96a8-25dbeb79d0a6/tP4BkPdq3P.json',
     gradient: 'bg-pink-600',
+    icon: Shield,
+    color: 'bg-red-500',
     details: [
       { icon: CheckSquare, description: 'Track and manage tasks', iconColor: 'text-white', iconBg: 'bg-pink-600' },
       { icon: Settings, description: 'Automate workflows', iconColor: 'text-white', iconBg: 'bg-pink-700' },
@@ -128,6 +143,8 @@ export const MODULES: DetailedCardProps[] = [
     description: 'Oversee assets, tenants, and maintenance efficiently with unified management tools.',
     animationPath: 'https://lottie.host/53b254b6-8102-40e6-952a-c111cb232a73/7dUngRXxc9.json',
     gradient: 'bg-rose-600',
+    icon: Settings,
+    color: 'bg-blue-500',
     details: [
       { icon: Home, description: 'Track assets and tenants', iconColor: 'text-white', iconBg: 'bg-rose-600' },
       { icon: Wrench, description: 'Manage maintenance requests', iconColor: 'text-white', iconBg: 'bg-rose-700' },
@@ -135,55 +152,3 @@ export const MODULES: DetailedCardProps[] = [
     ],
   },
 ];
-
-
-
-
-export const FEATURES: DetailedCardProps[] = [
-  {
-    title: 'Fully Automated',
-    description: 'Experience seamless automation...',
-    animationPath: 'https://lottie.host/83d6e419-0d6d-44f2-82ca-1203953dcac8/4L1XMErZg1.json',
-    gradient: 'bg-green-500',
-    details: [
-      { icon: Calendar, description: 'Automate scheduling', iconColor: 'text-white', iconBg: 'bg-green-500' },
-      { icon: Mail, description: 'Send emails', iconColor: 'text-white', iconBg: 'bg-green-600' },
-      { icon: BarChart, description: 'Generate reports', iconColor: 'text-white', iconBg: 'bg-green-700' },
-    ],
-  },
-  {
-    title: 'Notifications',
-    description: 'Stay informed with real-time notifications...',
-    animationPath: 'https://lottie.host/74844795-53af-4b85-bec9-9f74c15a76b4/HgOg2QI9Aw.json',
-    gradient: 'bg-yellow-500',
-    details: [
-      { icon: Bell, description: 'Real-time alerts', iconColor: 'text-black', iconBg: 'bg-yellow-400' },
-      { icon: CalendarDays, description: 'Event updates', iconColor: 'text-black', iconBg: 'bg-yellow-500' },
-      { icon: Pin, description: 'Task reminders', iconColor: 'text-black', iconBg: 'bg-yellow-600' },
-    ],
-  },
-  {
-    title: 'AI Agents',
-    description: 'Deploy autonomous agents...',
-    animationPath: 'https://lottie.host/aee38d53-ce70-492c-a745-5b526199ebd0/hXQO8892mP.json',
-    gradient: 'bg-indigo-500',
-    details: [
-      { icon: AlertTriangle, description: 'Monitor metrics', iconColor: 'text-white', iconBg: 'bg-red-600' },
-      { icon: Settings, description: 'Trigger workflows', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
-      { icon: Bot, description: 'Scale ops', iconColor: 'text-white', iconBg: 'bg-indigo-700' },
-    ],
-  },
-  {
-    title: 'Access Control',
-    description: 'Manage user access securely...',
-    animationPath: 'https://lottie.host/01a7eb11-ca93-46a2-a2db-f784890a581d/ZQuuChnwIM.json',
-    gradient: 'bg-gray-600',
-    details: [
-      { icon: Lock, description: 'Secure data', iconColor: 'text-white', iconBg: 'bg-gray-600' },
-      { icon: ShieldCheck, description: 'Role-based access', iconColor: 'text-white', iconBg: 'bg-gray-700' },
-      { icon: User, description: 'Ensure privacy', iconColor: 'text-white', iconBg: 'bg-gray-800' },
-    ],
-  },
-];
-
-export const ALL_MODULES_AND_FEATURES = [...MODULES, ...FEATURES];
