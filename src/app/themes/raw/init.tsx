@@ -1,4 +1,3 @@
-
 // Updated GetStarted component (code1)
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
@@ -13,6 +12,7 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/app/context/mobile_context';
+import { MODULES } from '@/app/data/modules_data';
 
 export default function GetStarted() {
   const isMobile = useIsMobile();
@@ -20,53 +20,37 @@ export default function GetStarted() {
 }
 
 // ------------------ Desktop Layout ------------------
-function getTailwindColor(colorClass: string): string {
-  const colorMap: { [key: string]: string } = {
-    'bg-blue-500': '#3b82f6',
-    'bg-green-500': '#10b981',
-    'bg-blue-400': '#60a5fa',
-    'bg-cyan-500': '#06b6d4',
-    'bg-gray-700': '#374151',
-    'bg-yellow-500': '#eab308',
-    'bg-purple-500': '#a855f7',
-    'bg-red-500': '#ef4444',
-  };
-  return colorMap[colorClass] || 'transparent';
-}
+
 
 function DesktopView() {
   const [module, setModule] = useState<any>({});
   return (
-    <div
-      className={`relative flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10`}
-      style={{
-        backgroundColor: module?.color ? getTailwindColor(module.color) : 'transparent',
-      }}
-    >
-      {/* Left: Hero Content */}
-      <div className="relative z-10 flex-1 max-w-2xl pt-20">
-        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-          Discover the ideal data management system for your
-          <br />
-          <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            organization
-          </span>
-        </h1>
-        <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed">
-          Build a complete property management CRM system with our low-code platform. Manage
-          tenants, track rent, coordinate maintenance, and automate workflows — all without coding
-          expertise required.
-        </p>
-      </div>
-      {/* Right: Smart Home Interface */}
-      <div className="relative z-10 flex-1 w-full max-w-xl">
-        <SmartHomeInterface setModule={setModule} />
+    <div className={`${module?.color || ''} w-full`}>
+      <div
+        className={`relative flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10`}
+      >
+        {/* Left: Hero Content */}
+        <div className="relative z-10 flex-1 max-w-2xl pt-20">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Discover the ideal data management system for your
+            <br />
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              organization
+            </span>
+          </h1>
+          <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed">
+            Build a complete property management CRM system...
+          </p>
+        </div>
+        {/* Right: Orbit Component */}
+        <div className="relative z-10 flex-1 w-full max-w-xl">
+          <ModulesOrbit setModule={setModule} />
+        </div>
       </div>
     </div>
   );
 }
 
-// ------------------ Updated SmartHomeInterface component (code2) ------------------
 const Player = dynamic(
   () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
   { ssr: false }
@@ -79,23 +63,41 @@ type Feature = {
   color: string;
 };
 
-// Move modules outside component to prevent recreation on every render
-const modules: Feature[] = [
-  { id: 1, icon: Settings, label: 'Property management', color: 'bg-blue-500' },
-  { id: 2, icon: CheckCircle, label: 'Spirits industry', color: 'bg-green-500' },
-  { id: 3, icon: FileText, label: 'Recruiting', color: 'bg-blue-400' },
-  { id: 4, icon: Droplets, label: 'Sales management', color: 'bg-cyan-500' },
-  { id: 5, icon: Lock, label: 'Financial documentation', color: 'bg-gray-700' },
-  { id: 6, icon: Zap, label: 'Customer management', color: 'bg-yellow-500' },
-  { id: 7, icon: Users, label: 'Marketing', color: 'bg-purple-500' },
-  { id: 8, icon: Shield, label: 'Task management', color: 'bg-red-500' },
-];
+// Map MODULES to Feature format
+const getModulesAsFeatures = (): Feature[] => {
+  const iconMap: { [key: string]: React.ElementType } = {
+    'Marketing': Zap,
+    'Recruiting': FileText,
+    'Customer Management': Users,
+    'Sales Management': Droplets,
+    'Financial Documentation': Lock,
+    'Task Management': Shield,
+    'Property Management': Settings,
+  };
+
+  const colorMap: { [key: string]: string } = {
+    'Marketing': 'bg-purple-500',
+    'Recruiting': 'bg-blue-400',
+    'Customer Management': 'bg-yellow-500',
+    'Sales Management': 'bg-cyan-500',
+    'Financial Documentation': 'bg-gray-700',
+    'Task Management': 'bg-red-500',
+    'Property Management': 'bg-blue-500',
+  };
+
+  return MODULES.map((module, index) => ({
+    id: index + 1,
+    icon: iconMap[module.title] || Settings,
+    label: module.title,
+    color: colorMap[module.title] || 'bg-blue-500',
+  }));
+};
 
 type Props = {
   setModule: (module: any) => void;
 };
 
-const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
+const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
   const isMobile = useIsMobile();
   const [screenWidth, setScreenWidth] = useState<number>(0);
   const [currentAngle, setCurrentAngle] = useState<number>(0);
@@ -105,11 +107,14 @@ const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
   const lastTimeRef = useRef<number>(0);
   const [scrollThresholdPassed, setScrollThresholdPassed] = useState<boolean>(false);
 
+  // Get modules as features
+  const modulesAsFeatures = useMemo(() => getModulesAsFeatures(), []);
+
   useEffect(() => {
     setScreenWidth(window.innerWidth);
   }, []);
 
-  const HOUSE_SIZE = isMobile ? '50vw' : '400px';
+  const HOUSE_SIZE = isMobile ? '50vw' : '100px';
   const CONTAINER_SIZE = isMobile ? '100vw' : '600px';
   const ROTATION_SPEED = 0.005;
   const radius = useMemo(() => {
@@ -142,8 +147,8 @@ const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
             // Example logic: Cycle every 150px of scroll beyond threshold
             // You can adjust this calculation for sensitivity/speed
             const scrollDelta = scrollY - threshold;
-            const moduleIndex = Math.floor(scrollDelta / 150) % modules.length; // Adjust 150 for sensitivity
-            const calculatedModule = modules[moduleIndex];
+            const moduleIndex = Math.floor(scrollDelta / 150) % modulesAsFeatures.length; // Adjust 150 for sensitivity
+            const calculatedModule = modulesAsFeatures[moduleIndex];
 
             // Update states only if the module actually changes
             if (activeFeature?.id !== calculatedModule.id) {
@@ -194,7 +199,7 @@ const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
     // scrollThresholdPassed and activeFeature are managed inside, but including
     // them can sometimes cause issues if not handled carefully in the rAF logic.
     // Let's include setModule, setIsPaused for clarity they are used inside.
-  }, [setModule, setIsPaused, activeFeature]); // Removed scrollThresholdPassed due to internal management
+  }, [setModule, setIsPaused, activeFeature, modulesAsFeatures]); // Added modulesAsFeatures dependency
 
   // Main rotation animation
   useEffect(() => {
@@ -240,10 +245,9 @@ const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
       >
         {/* Central Animation */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-          <Player
-            autoplay
-            loop
-            src="https://lottie.host/552360f8-8dae-4103-82c5-697c2bb11902/63mD97uT9d.json"
+          <img
+            src="https://i.imgur.com/OEMWwAS.png"
+            alt="Static house"
             style={{ height: HOUSE_SIZE, width: HOUSE_SIZE }}
           />
         </div>
@@ -256,9 +260,9 @@ const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
           }}
         >
           {radius > 0 &&
-            modules.map((feature, index) => {
+            modulesAsFeatures.map((feature, index) => {
               const Icon = feature.icon;
-              const angle = (index * 360) / modules.length;
+              const angle = (index * 360) / modulesAsFeatures.length;
               const x = Math.cos((angle - 90) * (Math.PI / 180)) * radius;
               const y = Math.sin((angle - 90) * (Math.PI / 180)) * radius;
               const isActive = activeFeature?.id === feature.id;
@@ -277,9 +281,8 @@ const SmartHomeInterface: React.FC<Props> = ({ setModule }) => {
                   }}
                 >
                   <div
-                    className={`w-16 h-16 ${feature.color} rounded-full shadow-lg flex items-center justify-center cursor-pointer transform transition-all duration-300 ${
-                      isActive ? 'scale-110' : 'hover:scale-110' // Simplified class logic
-                    } animate-float z-20`}
+                    className={`w-16 h-16 ${feature.color} rounded-full shadow-lg flex items-center justify-center cursor-pointer transform transition-all duration-300 ${isActive ? 'scale-110' : 'hover:scale-110' // Simplified class logic
+                      } animate-float z-20`}
                     style={{ animationDelay: `${index * 0.2}s` }}
                     onMouseEnter={() => handleModuleHover(feature)}
                     onMouseLeave={() => handleModuleHover(null)}

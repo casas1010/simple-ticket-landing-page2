@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
 
-import { allModulesAndFeatures } from './modules_data';
-import { DetailedCardProps } from './modules_data';
+import { ALL_MODULES_AND_FEATURES } from '../../data/modules_data';
+import { DetailedCardProps } from '../../data/modules_data';
 
 
 
@@ -76,7 +76,7 @@ const DetailedCard: React.FC<DetailedCardProps> = ({ title, description, animati
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center group-hover/item:scale-110 transition-transform duration-300">
-                  <span className="text-lg filter drop-shadow-sm">{detail.icon}</span>
+                  {/* <span className="text-lg filter drop-shadow-sm">{detail.icon}</span> */}
                 </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-100 group-hover/item:translate-x-1 transition-all duration-300">
                   {detail.description}
@@ -118,7 +118,7 @@ const Modules: React.FC = () => {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12">
-          {allModulesAndFeatures.map((item, index) => (
+          {ALL_MODULES_AND_FEATURES.map((item, index) => (
             <div 
               key={index}
               className="animate-fade-in-up"

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import SmartHomeInterface from './smart_home';
 import { useIsMobile } from '@/app/context/mobile_context';
 
 export default function PropertyManagementLanding() {
