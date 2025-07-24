@@ -1,40 +1,9 @@
+// modules_data.ts
 import {
-  Megaphone,
-  BarChart,
-  Mail,
-  Briefcase,
-  Search,
-  FileText,
-  Bot,
-  ClipboardList,
-  Users,
-  Scroll,
-  Calendar,
-  History,
-  Bell,
-  CalendarDays,
-  Pin,
-  AlertTriangle,
-  Settings,
-  ShieldCheck,
-  Lock,
-  User,
-  Contact,
-  TrendingUp,
-  CheckCircle,
-  Workflow,
-  Receipt,
-  Calculator,
-  FileBarChart,
-  CheckSquare,
-  Timer,
-  Home,
-  Wrench,
-  CalendarCheck,
-  CheckLine,
-  Zap,
-  Droplets,
-  Shield
+  Megaphone, BarChart, Mail, Briefcase, Search, FileText, Bot, ClipboardList, Users,
+  History, Contact, TrendingUp, CheckCircle, Workflow, Receipt, Calculator, FileBarChart,
+  CheckSquare, Timer, Settings, Shield, Lock, CheckLine, Home, Wrench, CalendarCheck,
+  AlertTriangle, Zap,Droplets
 } from 'lucide-react';
 
 export type Detail = {
@@ -44,7 +13,7 @@ export type Detail = {
   iconBg?: string;
 };
 
-export type DetailedCardProps = {
+export type Module = {
   title: string;
   description: string;
   animationPath: string;
@@ -54,7 +23,7 @@ export type DetailedCardProps = {
   color: string;
 };
 
-export const MODULES: DetailedCardProps[] = [
+export const MODULES: Module[] = [
   {
     title: 'Marketing',
     description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated outreach tools to grow your customer base.',

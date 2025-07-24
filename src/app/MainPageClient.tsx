@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import PropertyManagementPage from './themes/property_management/page';
 import RestaurantPage from './themes/restaurant/page';
-import RawPage from './themes/raw/page';
+import Page from './themes/raw/page';
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();
@@ -17,5 +17,5 @@ export default function MainPageClient() {
     return <RestaurantPage />;
   }
 
-  return <RawPage></RawPage>
+  return <Page></Page>
 }

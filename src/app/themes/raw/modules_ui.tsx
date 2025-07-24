@@ -1,19 +1,11 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/app/context/mobile_context';
-import { MODULES } from '@/app/data/modules_data';
+import { MODULES, Module } from '@/app/data/modules_data';
 import Header from '@/app/components/header';
 
 export default function GetStarted() {
   return <DesktopView />;
 }
-
-type Module = {
-  id: number;
-  icon: React.ElementType;
-  label: string;
-  color: string;
-};
 
 function DesktopView() {
   const [module, setModule] = useState<Module | null>(null);
@@ -51,19 +43,10 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
   const [screenWidth, setScreenWidth] = useState<number>(0);
   const [currentAngle, setCurrentAngle] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [activeFeature, setActiveFeature] = useState<Module | null>(null);
+  const [activeModule, setActiveModule] = useState<Module | null>(null);
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
   const [scrollThresholdPassed, setScrollThresholdPassed] = useState<boolean>(false);
-
-  const modulesAsFeatures = useMemo(() => {
-    return MODULES.map((module, index) => ({
-      id: index + 1,
-      icon: module.icon,
-      label: module.title,
-      color: module.color,
-    }));
-  }, []);
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);
@@ -92,17 +75,17 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
 
       if (hasScrolledEnough) {
         const scrollDelta = scrollY - threshold;
-        const moduleIndex = Math.floor(scrollDelta / 150) % modulesAsFeatures.length;
-        const calculatedModule = modulesAsFeatures[moduleIndex];
+        const moduleIndex = Math.floor(scrollDelta / 150) % MODULES.length;
+        const calculatedModule = MODULES[moduleIndex];
 
-        if (activeFeature?.id !== calculatedModule.id) {
-          setActiveFeature(calculatedModule);
+        if (activeModule?.title !== calculatedModule.title) {
+          setActiveModule(calculatedModule);
           setModule(calculatedModule);
           setIsPaused(true);
         }
       } else {
-        if (activeFeature !== null) {
-          setActiveFeature(null);
+        if (activeModule !== null) {
+          setActiveModule(null);
           setModule(null);
           setIsPaused(false);
         }
@@ -113,7 +96,7 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [setModule, setIsPaused, activeFeature, modulesAsFeatures, scrollThresholdPassed]);
+  }, [setModule, setIsPaused, activeModule, scrollThresholdPassed]);
 
   useEffect(() => {
     const animate = (timestamp: number) => {
@@ -137,10 +120,10 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     };
   }, [isPaused]);
 
-  const handleModuleHover = (feature: Module | null) => {
-    setActiveFeature(feature);
-    setIsPaused(!!feature);
-    setModule(feature);
+  const handleModuleHover = (mod: Module | null) => {
+    setActiveModule(mod);
+    setIsPaused(!!mod);
+    setModule(mod);
   };
 
   return (
@@ -158,16 +141,16 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
           }}
         >
           {radius > 0 &&
-            modulesAsFeatures.map((feature, index) => {
-              const Icon = feature.icon;
-              const angle = (index * 360) / modulesAsFeatures.length;
+            MODULES.map((mod, index) => {
+              const Icon = mod.icon;
+              const angle = (index * 360) / MODULES.length;
               const x = Math.cos((angle - 90) * (Math.PI / 180)) * radius;
               const y = Math.sin((angle - 90) * (Math.PI / 180)) * radius;
-              const isActive = activeFeature?.id === feature.id;
+              const isActive = activeModule?.title === mod.title;
 
               return (
                 <div
-                  key={feature.id}
+                  key={mod.title}
                   className="absolute"
                   style={{
                     left: `${x}px`,
@@ -178,17 +161,17 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
                   }}
                 >
                   <div
-                    className={`w-16 h-16 ${feature.color} rounded-full shadow-lg flex items-center justify-center cursor-pointer transform transition-all duration-300 ${
+                    className={`w-16 h-16 ${mod.color} rounded-full shadow-lg flex items-center justify-center cursor-pointer transform transition-all duration-300 ${
                       isActive ? 'scale-110' : 'hover:scale-110'
                     } animate-float z-20`}
                     style={{ animationDelay: `${index * 0.2}s` }}
-                    onMouseEnter={() => handleModuleHover(feature)}
+                    onMouseEnter={() => handleModuleHover(mod)}
                     onMouseLeave={() => handleModuleHover(null)}
                   >
                     <Icon className="w-8 h-8 text-white" />
                     {isActive && (
                       <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap">
-                        {feature.label}
+                        {mod.title}
                       </div>
                     )}
                   </div>
