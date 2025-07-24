@@ -1,4 +1,4 @@
-import { ModuleFeatures } from "../global/module_features";
+import { ModuleFeatures } from "../../components/module_features";
 
 const features = [
   {

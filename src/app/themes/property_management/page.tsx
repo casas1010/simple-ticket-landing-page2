@@ -1,8 +1,7 @@
 import React from 'react';
 import PropertyManagementLanding from './init';
-import PlatformFeatures from '../global/platform_features';
+import PlatformFeatures from '../../components/platform_features';
 import { PropertyManagementSuite } from './features';
-import SmartHomeInterface from '@/app/themes/property_management/smart_home';
 import Header from '@/app/components/header';
 
 export default function PropertyManagementPage() {
