@@ -4,7 +4,7 @@ import { Home, Play } from 'lucide-react';
 import Header from '@/app/components/header';
 import GetStarted from '@/app/themes/raw/init';
 import PlatformFeatures from '../global/platform_features';
-import Modules from './modules';
+import Modules from './modules_ui';
 
 export default function RawPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -53,7 +53,7 @@ export default function RawPage() {
 
       {isReady && (
         <div className="relative z-10 w-full h-full overflow-y-auto">
-          <Header />
+          <Header title='Simple Ticket'/>
           <GetStarted />
           <PlatformFeatures sub_title="" />
           <Modules></Modules>

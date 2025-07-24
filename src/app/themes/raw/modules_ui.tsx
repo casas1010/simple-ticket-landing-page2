@@ -3,18 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
 
-type Detail = {
-  icon: string;
-  description: string;
-};
+import { allModulesAndFeatures } from './modules_data';
+import { DetailedCardProps } from './modules_data';
 
-type DetailedCardProps = {
-  title: string;
-  description: string;
-  animationPath: string;
-  details: Detail[];
-  gradient: string;
-};
+
 
 const DetailedCard: React.FC<DetailedCardProps> = ({ title, description, animationPath, details }) => {
   const [animationData, setAnimationData] = useState<object | null>(null);
@@ -103,43 +95,9 @@ const DetailedCard: React.FC<DetailedCardProps> = ({ title, description, animati
   );
 };
 
-const modules1: (DetailedCardProps & { gradient: string })[] = [
-  {
-    title: 'Marketing',
-    description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated marketing tools. Optimize your strategies to reach more customers effectively.',
-    animationPath: 'https://lottie.host/bddd9424-7625-4528-bac0-4cb741f1be05/FIsyTVgp2o.json',
-    gradient: '',
-    details: [
-      { icon: '📣', description: 'Targeted campaigns' },
-      { icon: '📊', description: 'Detailed analytics' },
-      { icon: '📧', description: 'Automatic notifications' },
-    ],
-  },
-  {
-    title: 'Recruiting',
-    description: 'Streamline your recruitment process. Post job openings, review applications, track candidates, and collaborate with your hiring team to find the perfect match for your organization.',
-    animationPath: 'https://lottie.host/06922141-ea60-45da-9862-b085209f056c/RwBLNL0DZp.json',
-    gradient: '',
-    details: [
-      { icon: '💼', description: 'Automatically post job openings' },
-      { icon: '🔍', description: 'Track candidates through interview/background checks' },
-      { icon: '📄', description: 'Create offer letters' },
-      { icon: '🤖', description: 'AI filter candidates' },
-      { icon: '📋', description: 'Extract data from resumes' },
-    ],
-  },
-  {
-    title: 'Customer Management',
-    description: 'Build stronger relationships with your customers. Track interactions, manage customer data, and personalize services to improve satisfaction and retention.',
-    animationPath: 'https://lottie.host/4ed7ce26-7491-4516-8c9d-ee5e0258f720/l7UQzhbH1t.json',
-    gradient: '',
-    details: [
-      { icon: '📇', description: 'Track interactions, incidents, memberships' },
-      { icon: '👥', description: 'Manage customer segments' },
-      { icon: '📜', description: 'Access complete service history' },
-    ],
-  },
-];
+
+
+
 
 const Modules: React.FC = () => {
   return (
@@ -160,7 +118,7 @@ const Modules: React.FC = () => {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12">
-          {modules1.map((item, index) => (
+          {allModulesAndFeatures.map((item, index) => (
             <div 
               key={index}
               className="animate-fade-in-up"
