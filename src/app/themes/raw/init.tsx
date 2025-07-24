@@ -13,6 +13,7 @@ import {
 import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/app/context/mobile_context';
 import { MODULES } from '@/app/data/modules_data';
+import Header from '@/app/components/header';
 
 export default function GetStarted() {
   const isMobile = useIsMobile();
@@ -26,6 +27,8 @@ function DesktopView() {
   const [module, setModule] = useState<any>({});
   return (
     <div className={`${module?.color || ''} w-full`}>
+
+       <Header title='Simple Ticket!' />
       <div
         className={`relative flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10`}
       >

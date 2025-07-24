@@ -11,12 +11,7 @@ export default function RawPage() {
   const [isReady, setIsReady] = useState(true);
 
   return (
-
-    < >
-      {/* <Header title='Simple Ticket!' /> */}
       <GetStarted />
-
-    </>
     // <div className="relative w-full h-screen overflow-hidden">
     //     <div className="relative z-10 w-full h-full overflow-y-auto">
     //       <Header title='Simple Ticket!'/>
