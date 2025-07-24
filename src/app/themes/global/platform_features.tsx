@@ -10,7 +10,6 @@ import SectionTitle from '@/app/components/section_title';
 const PlatformFeatures = ({ sub_title }: { sub_title: string }) => {
   const features = [
     'No coding required - visual drag-and-drop interface',
-    'Pre-built property management templates',
     'Customizable workflows and automation',
     'Integration with popular tools and services',
     'Scalable from single properties to large portfolios',
