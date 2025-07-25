@@ -44,31 +44,33 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         return 220;
     }, [isMobile, screenWidth]);
 
+    // Start or restart auto-select interval
+    const startAutoSelect = () => {
+        if (autoSelectIntervalRef.current) {
+            clearInterval(autoSelectIntervalRef.current);
+        }
+        
+        autoSelectIntervalRef.current = setInterval(() => {
+            setCurrentModuleIndex((prevIndex) => {
+                const nextIndex = (prevIndex + 1) % MODULES.length;
+                const nextModule = MODULES[nextIndex];
+                setActiveModule(nextModule);
+                // Don't update the title/content automatically - only visual selection
+                return nextIndex;
+            });
+        }, 5000);
+    };
+
+    // Stop auto-select interval
+    const stopAutoSelect = () => {
+        if (autoSelectIntervalRef.current) {
+            clearInterval(autoSelectIntervalRef.current);
+            autoSelectIntervalRef.current = null;
+        }
+    };
+
     // Auto-select module every 5 seconds (visual only, doesn't update title)
     useEffect(() => {
-        const startAutoSelect = () => {
-            if (autoSelectIntervalRef.current) {
-                clearInterval(autoSelectIntervalRef.current);
-            }
-            
-            autoSelectIntervalRef.current = setInterval(() => {
-                setCurrentModuleIndex((prevIndex) => {
-                    const nextIndex = (prevIndex + 1) % MODULES.length;
-                    const nextModule = MODULES[nextIndex];
-                    setActiveModule(nextModule);
-                    // Don't update the title/content automatically - only visual selection
-                    return nextIndex;
-                });
-            }, 5000);
-        };
-
-        const stopAutoSelect = () => {
-            if (autoSelectIntervalRef.current) {
-                clearInterval(autoSelectIntervalRef.current);
-                autoSelectIntervalRef.current = null;
-            }
-        };
-
         // Start auto-selection immediately (visual only)
         const firstModule = MODULES[0];
         setActiveModule(firstModule);
@@ -104,10 +106,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                     setIsPaused(true);
                     
                     // Stop auto-selection when user scrolls
-                    if (autoSelectIntervalRef.current) {
-                        clearInterval(autoSelectIntervalRef.current);
-                        autoSelectIntervalRef.current = null;
-                    }
+                    stopAutoSelect();
                 }
             } else {
                 if (activeModule !== null) {
@@ -121,15 +120,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                         setActiveModule(firstModule);
                         setCurrentModuleIndex(0);
                         
-                        autoSelectIntervalRef.current = setInterval(() => {
-                            setCurrentModuleIndex((prevIndex) => {
-                                const nextIndex = (prevIndex + 1) % MODULES.length;
-                                const nextModule = MODULES[nextIndex];
-                                setActiveModule(nextModule);
-                                // Don't update title automatically
-                                return nextIndex;
-                            });
-                        }, 5000);
+                        startAutoSelect();
                     }
                 }
             }
@@ -228,8 +219,22 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         setHoveredModule(mod);
         // Update the title/content only on hover
         setModule(mod);
-        // Pause rotation when hovering over any module
-        setIsPaused(mod !== null);
+        
+        if (mod) {
+            // Pause rotation and auto-select when hovering over any module
+            setIsPaused(true);
+            stopAutoSelect();
+            
+            // Update current module index to the hovered module
+            const newIndex = MODULES.findIndex(m => m.title === mod.title);
+            setCurrentModuleIndex(newIndex);
+        } else {
+            // Resume rotation and auto-select when hover ends
+            setIsPaused(false);
+            if (!autoSelectIntervalRef.current) {
+                startAutoSelect();
+            }
+        }
     };
 
     const pathname = usePathname();
@@ -246,10 +251,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         setIsPaused(true);
         
         // Stop auto-selection when user manually selects
-        if (autoSelectIntervalRef.current) {
-            clearInterval(autoSelectIntervalRef.current);
-            autoSelectIntervalRef.current = null;
-        }
+        stopAutoSelect();
     };
 
     const hasActiveAnimation = (hoveredModule?.animationPath || activeModule?.animationPath);
