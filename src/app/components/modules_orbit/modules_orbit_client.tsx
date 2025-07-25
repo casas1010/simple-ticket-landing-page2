@@ -381,7 +381,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                         </div>
 
                                         {/* Tooltip - only shows on hover */}
-                {(isHovered || isActive) && (
+                {(isHovered || (isActive && !hoveredModule)) && (
     <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
         {mod.title}
         <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>

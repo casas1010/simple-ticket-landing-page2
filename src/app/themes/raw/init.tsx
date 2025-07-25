@@ -3,7 +3,7 @@ import { Module } from '@/app/data/modules_data';
 import Header from '@/app/components/header/header';
 import ModulesOrbit from '../../components/modules_orbit/modules_orbit';
 import StarBackground from '@/app/components/star_background';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, m } from 'framer-motion';
 
 export default function Init() {
   return <DesktopView />;
@@ -16,10 +16,18 @@ function DesktopView() {
   const highlight = module?.main_description_highlight ?? 'organization';
   const subText = module?.sub_description ?? '';
 
+  function getTitle(){
+    if(module==null){
+      return "Simple Ticket"
+    }
+
+    return "Simple "+module.title
+  }
+
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
       <StarBackground starColor={module?.gradient} />
-      <Header  />
+      <Header  title={getTitle()} />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
         <div className="relative z-10 flex-1 max-w-2xl pt-20">

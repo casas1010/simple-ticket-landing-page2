@@ -27,7 +27,7 @@ function StarBackground({ starColor }: StarBackgroundProps) {
       starsRef.current = Array.from({ length: 100 }, () => ({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        r: Math.random() * 1.5 + 0.5,
+        r: Math.random() * 3 + 0.5, // RADIUS
         dx: (Math.random() - 0.5) * 0.2,
         dy: (Math.random() - 0.5) * 0.2,
       }));
