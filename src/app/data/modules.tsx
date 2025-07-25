@@ -5,26 +5,10 @@ import {
   CheckSquare, Timer, Settings, Shield, Lock, CheckLine, Home, Wrench, CalendarCheck,
   AlertTriangle, Zap, Droplets
 } from 'lucide-react';
+import { Module } from '../types/module';
 
-export type Detail = {
-  icon: React.ElementType;
-  description: string;
-  iconColor?: string;
-  iconBg?: string;
-};
 
-export type Module = {
-  title: string;
-  mode: string;
-  main_description: string;
-  main_description_highlight: string;
-  sub_description: string;
-  animationPath: string;
-  details: Detail[];
-  gradient: string;
-  icon: React.ElementType;
-  color: string;
-};
+
 
 export const MODULES: Module[] = [
   {
@@ -146,3 +130,5 @@ export const MODULES: Module[] = [
     ],
   },
 ];
+
+

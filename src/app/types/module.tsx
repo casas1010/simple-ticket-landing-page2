@@ -1,8 +1,6 @@
 import { Detail } from "./detail";
 
-
-
-export type Features = {
+export type Module = {
   title: string;
   mode: string;
   main_description: string;

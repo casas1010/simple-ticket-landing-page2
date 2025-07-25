@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
-import { MODULES, Module } from '@/app/data/modules_data';
+import { MODULES, Module } from '@/app/data/modules';
 import Header from '@/app/components/header/header';
 
 export default function GetStarted() {

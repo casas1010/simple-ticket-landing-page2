@@ -19,7 +19,6 @@ export default function PropertyManagementPage() {
 
       <PropertyManagementLanding />
       <PropertyManagementSuite />
-      <PlatformFeatures sub_title='Built for property managers' />
 
 
       <div className="absolute top-1/4 left-10 w-3 h-3 bg-blue-400 rounded-full animate-bounce opacity-60"></div>

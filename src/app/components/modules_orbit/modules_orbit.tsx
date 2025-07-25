@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Module } from '@/app/data/modules_data';
+import { Module } from '@/app/data/modules';
 import ModulesOrbitClient from './modules_orbit_client';
 import Loader from '../loader';
 

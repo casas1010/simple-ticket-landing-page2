@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Module } from '@/app/data/modules_data';
 import Header from '@/app/components/header/header';
 import ModulesOrbit from '../../components/modules_orbit/modules_orbit';
 import StarBackground from '@/app/components/star_background';
 import { motion, AnimatePresence, m } from 'framer-motion';
+import PlatformFeatures from '@/app/components/platform_features';
+import { Module } from '@/app/types/module';
+import { ModuleFeatures } from '@/app/components/lists/modules';
+import { FEATURES } from '@/app/data/features';
 
 export default function Init() {
   return <DesktopView />;
@@ -16,18 +19,18 @@ function DesktopView() {
   const highlight = module?.main_description_highlight ?? 'organization';
   const subText = module?.sub_description ?? '';
 
-  function getTitle(){
-    if(module==null){
+  function getTitle() {
+    if (module == null) {
       return "Simple Ticket"
     }
 
-    return "Simple "+module.title
+    return "Simple " + module.title
   }
 
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
       <StarBackground starColor={module?.gradient} />
-      <Header  title={getTitle()} />
+      <Header title={getTitle()} />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
         <div className="relative z-10 flex-1 max-w-2xl pt-20">
@@ -57,6 +60,13 @@ function DesktopView() {
           <ModulesOrbit setModule={setModule} />
         </div>
       </div>
+
+      <PlatformFeatures sub_title='' />
+   <ModuleFeatures
+  title="Built for simplicity"
+  description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
+  features={FEATURES}
+/>
     </div>
   );
 }
