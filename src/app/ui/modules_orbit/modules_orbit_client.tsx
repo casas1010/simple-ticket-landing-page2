@@ -11,6 +11,8 @@ type Props = {
     setModule: (module: Module | null) => void;
 };
 
+type LottieAnimationData = Record<string, unknown>;
+
 const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const isMobile = useIsMobile();
     const [screenWidth, setScreenWidth] = useState<number>(0);
@@ -29,7 +31,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const animationInstanceRef = useRef<AnimationItem | null>(null);
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
     const [animationReady, setAnimationReady] = useState<boolean>(false);
-    const [animationCache, setAnimationCache] = useState<Map<string, any>>(new Map());
+    const [animationCache, setAnimationCache] = useState<Map<string, LottieAnimationData>>(new Map());
 
     useEffect(() => {
         setScreenWidth(window.innerWidth);
@@ -46,11 +48,9 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         return 220;
     }, [isMobile, screenWidth]);
 
-    // Function to fetch Lottie animation data from URL
-    const fetchLottieData = async (url: string): Promise<any> => {
-        // Check cache first
+    const fetchLottieData = async (url: string): Promise<LottieAnimationData> => {
         if (animationCache.has(url)) {
-            return animationCache.get(url);
+            return animationCache.get(url)!;
         }
 
         try {
@@ -58,9 +58,9 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch animation: ${response.statusText}`);
             }
-            const animationData = await response.json();
 
-            // Cache the animation data
+            const animationData = await response.json() as LottieAnimationData;
+
             setAnimationCache(prev => new Map(prev.set(url, animationData)));
 
             return animationData;
@@ -70,7 +70,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         }
     };
 
-    // Start or restart auto-select interval
     const startAutoSelect = () => {
         if (autoSelectIntervalRef.current) {
             clearInterval(autoSelectIntervalRef.current);
@@ -81,13 +80,11 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 const nextIndex = (prevIndex + 1) % MODULES.length;
                 const nextModule = MODULES[nextIndex];
                 setActiveModule(nextModule);
-                // Don't update the title/content automatically - only visual selection
                 return nextIndex;
             });
         }, 5000);
     };
 
-    // Stop auto-select interval
     const stopAutoSelect = () => {
         if (autoSelectIntervalRef.current) {
             clearInterval(autoSelectIntervalRef.current);
@@ -95,9 +92,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         }
     };
 
-    // Auto-select module every 5 seconds (visual only, doesn't update title)
     useEffect(() => {
-        // Start auto-selection immediately (visual only)
         const firstModule = MODULES[0];
         setActiveModule(firstModule);
         setCurrentModuleIndex(0);
@@ -107,9 +102,8 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         return () => {
             stopAutoSelect();
         };
-    }, []); // Remove setModule dependency
+    }, []);
 
-    // Handle scroll-based activation (keeping original functionality but with auto-select)
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
@@ -130,8 +124,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                     setModule(calculatedModule);
                     setCurrentModuleIndex(moduleIndex);
                     setIsPaused(true);
-
-                    // Stop auto-selection when user scrolls
                     stopAutoSelect();
                 }
             } else {
@@ -140,12 +132,10 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                     setModule(null);
                     setIsPaused(false);
 
-                    // Restart auto-selection when user scrolls back up (visual only)
                     if (!autoSelectIntervalRef.current) {
                         const firstModule = MODULES[0];
                         setActiveModule(firstModule);
                         setCurrentModuleIndex(0);
-
                         startAutoSelect();
                     }
                 }
@@ -158,7 +148,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         };
     }, [setModule, setIsPaused, activeModule, scrollThresholdPassed]);
 
-    // Handle animation rotation
     useEffect(() => {
         const animate = (timestamp: number) => {
             if (!isPaused) {
@@ -181,22 +170,18 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         };
     }, [isPaused]);
 
-    // Handle Lottie animation - updated to fetch from URL
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
 
         if (moduleToShow?.animationPath && animationContainerRef.current) {
-            // Start transition immediately
             setIsTransitioning(true);
             setAnimationReady(false);
 
-            // Destroy previous animation immediately
             if (animationInstanceRef.current) {
                 animationInstanceRef.current.destroy();
                 animationInstanceRef.current = null;
             }
 
-            // Load new animation from URL
             const loadAnimation = async () => {
                 try {
                     const animationData = await fetchLottieData(moduleToShow.animationPath);
@@ -207,10 +192,9 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                             renderer: 'svg',
                             loop: true,
                             autoplay: true,
-                            animationData: animationData, // Use animationData instead of path
+                            animationData,
                         });
 
-                        // Set animation ready after a brief moment
                         setTimeout(() => {
                             setAnimationReady(true);
                             setIsTransitioning(false);
@@ -223,7 +207,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 }
             };
 
-            // Add a small delay for smoother transition
             const loadTimeout = setTimeout(loadAnimation, 100);
 
             return () => {
@@ -234,7 +217,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 }
             };
         } else {
-            // No animation to show - reset states
             setIsTransitioning(false);
             setAnimationReady(false);
             if (animationInstanceRef.current) {
@@ -246,19 +228,15 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
 
     const handleModuleHover = (mod: Module | null) => {
         setHoveredModule(mod);
-        // Update the title/content only on hover
         setModule(mod);
 
         if (mod) {
-            // Pause rotation and auto-select when hovering over any module
             setIsPaused(true);
             stopAutoSelect();
 
-            // Update current module index to the hovered module
             const newIndex = MODULES.findIndex(m => m.title === mod.title);
             setCurrentModuleIndex(newIndex);
         } else {
-            // Resume rotation and auto-select when hover ends
             setIsPaused(false);
             if (!autoSelectIntervalRef.current) {
                 startAutoSelect();
@@ -278,8 +256,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         setModule(mod);
         setCurrentModuleIndex(MODULES.findIndex(m => m.title === mod.title));
         setIsPaused(true);
-
-        // Stop auto-selection when user manually selects
         stopAutoSelect();
     };
 
@@ -289,11 +265,8 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
 
-                {/* DISPLAY animationPath */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}>
-
-                        {/* Static house image - smoother shrinking animation */}
                         <img
                             src="https://i.imgur.com/OEMWwAS.png"
                             alt="Static house"
@@ -309,8 +282,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                 zIndex: hasActiveAnimation ? 5 : 15
                             }}
                         />
-
-                        {/* Lottie animation - smoother growing animation */}
                         <div
                             ref={animationContainerRef}
                             className={`absolute inset-0 transition-all duration-700 ease-out transform ${hasActiveAnimation && animationReady
@@ -323,8 +294,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
                             }}
                         />
-
-                        {/* Enhanced transition overlay with radial effect */}
                         <div
                             className={`absolute inset-0 rounded-full transition-all duration-500 ease-in-out ${isTransitioning
                                 ? 'opacity-30 scale-110'
@@ -339,8 +308,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                 transformOrigin: 'center center'
                             }}
                         />
-
-                        {/* Subtle glow effect for active animation */}
                         {hasActiveAnimation && animationReady && (
                             <div
                                 className="absolute inset-0 rounded-full opacity-20 animate-pulse"
@@ -354,7 +321,6 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                         )}
                     </div>
                 </div>
-                {/* DISPLAY animationPath */}
 
                 <div
                     className="absolute top-1/2 left-1/2"
@@ -392,24 +358,17 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                         onMouseLeave={() => handleModuleHover(null)}
                                         onClick={() => handleModuleClick(mod)}
                                     >
-                                        {/* Color orb background */}
                                         <div
                                             className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'
                                                 }`}
                                         />
-
-                                        {/* Solid orb base */}
                                         <div
                                             className={`absolute inset-0 rounded-full ${orbColor} transition-all duration-300 ease-out flex items-center justify-center ${isActive ? 'shadow-lg' : 'hover:shadow-md'
                                                 }`}
                                         />
-
-                                        {/* Icon */}
                                         <div className="absolute inset-0 flex items-center justify-center z-10">
                                             <Icon className="w-8 h-8 text-white drop-shadow-md transition-all duration-200" />
                                         </div>
-
-                                        {/* Tooltip - only shows on hover */}
                                         {(isHovered || (isActive && !hoveredModule && !isMobile)) && (
                                             <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
                                                 {mod.title}
