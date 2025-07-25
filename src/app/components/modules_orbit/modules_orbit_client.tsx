@@ -27,12 +27,13 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const animationContainerRef = useRef<HTMLDivElement>(null);
     const animationInstanceRef = useRef<AnimationItem | null>(null);
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+    const [animationReady, setAnimationReady] = useState<boolean>(false);
 
     useEffect(() => {
-        setScreenWidth(window.innerWidth);
+        setScreenWidth(window.innerWidth);  
     }, []);
 
-    const HOUSE_SIZE = isMobile ? '50vw' : '100px';
+    const HOUSE_SIZE = isMobile ? '50vw' : '200px';
     const CONTAINER_SIZE = isMobile ? '100vw' : '600px';
     const ROTATION_SPEED = 0.005;
 
@@ -163,39 +164,63 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         };
     }, [isPaused]);
 
-    // Handle Lottie animation - should respond to hovered module, not active module
+    // Handle Lottie animation - improved for smoother transitions
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
+        
         if (moduleToShow?.animationPath && animationContainerRef.current) {
-            // Start transition
+            // Start transition immediately
             setIsTransitioning(true);
+            setAnimationReady(false);
             
-            // Small delay to allow CSS transition to start
-            setTimeout(() => {
-                if (animationInstanceRef.current) {
-                    animationInstanceRef.current.destroy();
+            // Destroy previous animation immediately
+            if (animationInstanceRef.current) {
+                animationInstanceRef.current.destroy();
+                animationInstanceRef.current = null;
+            }
+
+            // Load new animation with a small delay for smoother transition
+            const loadTimeout = setTimeout(() => {
+                if (animationContainerRef.current) {
+                    try {
+                        animationInstanceRef.current = lottie.loadAnimation({
+                            container: animationContainerRef.current,
+                            renderer: 'svg',
+                            loop: true,
+                            autoplay: true,
+                            path: moduleToShow.animationPath,
+                        });
+
+                        // Set animation ready after a brief moment
+                        const readyTimeout = setTimeout(() => {
+                            setAnimationReady(true);
+                            setIsTransitioning(false);
+                        }, 200);
+
+                        return () => clearTimeout(readyTimeout);
+                    } catch (error) {
+                        console.error('Error loading Lottie animation:', error);
+                        setIsTransitioning(false);
+                        setAnimationReady(false);
+                    }
                 }
-
-                animationInstanceRef.current = lottie.loadAnimation({
-                    container: animationContainerRef.current!,
-                    renderer: 'svg',
-                    loop: true,
-                    autoplay: true,
-                    path: moduleToShow.animationPath,
-                });
-
-                // End transition after animation loads
-                setTimeout(() => {
-                    setIsTransitioning(false);
-                }, 100);
-            }, 150);
+            }, 100);
 
             return () => {
-                animationInstanceRef.current?.destroy();
+                clearTimeout(loadTimeout);
+                if (animationInstanceRef.current) {
+                    animationInstanceRef.current.destroy();
+                    animationInstanceRef.current = null;
+                }
             };
         } else {
-            // If no animation to show, end transition immediately
+            // No animation to show - reset states
             setIsTransitioning(false);
+            setAnimationReady(false);
+            if (animationInstanceRef.current) {
+                animationInstanceRef.current.destroy();
+                animationInstanceRef.current = null;
+            }
         }
     }, [hoveredModule?.animationPath, activeModule?.animationPath]);
 
@@ -237,42 +262,68 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}>
                         
-                        {/* Static house image - shrinks when animation appears */}
+                        {/* Static house image - smoother shrinking animation */}
                         <img
                             src="https://i.imgur.com/OEMWwAS.png"
                             alt="Static house"
-                            className={`absolute inset-0 object-contain transition-all duration-500 ease-in-out transform ${
+                            className={`absolute inset-0 object-contain transition-all duration-700 ease-in-out transform ${
                                 hasActiveAnimation 
-                                    ? 'opacity-0 scale-50 pointer-events-none' 
-                                    : 'opacity-100 scale-100'
+                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none' 
+                                    : 'opacity-100 scale-100 blur-0'
                             }`}
-                            style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}
+                            style={{ 
+                                width: HOUSE_SIZE, 
+                                height: HOUSE_SIZE,
+                                transformOrigin: 'center center',
+                                filter: hasActiveAnimation ? 'brightness(0.7)' : 'brightness(1)',
+                                zIndex: hasActiveAnimation ? 5 : 15
+                            }}
                         />
 
-                        {/* Lottie animation - grows from small to overshadow */}
+                        {/* Lottie animation - smoother growing animation */}
                         <div
                             ref={animationContainerRef}
-                            className={`absolute inset-0 transition-all duration-500 ease-in-out transform ${
-                                hasActiveAnimation 
-                                    ? 'opacity-100 scale-300' 
-                                    : 'opacity-0 scale-75 pointer-events-none'
+                            className={`absolute inset-0 transition-all duration-700 ease-out transform ${
+                                hasActiveAnimation && animationReady
+                                    ? 'opacity-100 scale-[1.8] blur-0' 
+                                    : 'opacity-0 scale-50 blur-sm pointer-events-none'
                             }`}
                             style={{
                                 transformOrigin: 'center center',
-                                zIndex: hasActiveAnimation ? 20 : 10
+                                zIndex: hasActiveAnimation ? 25 : 10,
+                                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
                             }}
                         />
 
-                        {/* Overlay effect during transition */}
+                        {/* Enhanced transition overlay with radial effect */}
                         <div
-                            className={`absolute inset-0 bg-white/10 rounded-full transition-all duration-300 ease-in-out ${
-                                isTransitioning ? 'opacity-100 scale-110' : 'opacity-0 scale-100'
+                            className={`absolute inset-0 rounded-full transition-all duration-500 ease-in-out ${
+                                isTransitioning 
+                                    ? 'opacity-30 scale-110' 
+                                    : 'opacity-0 scale-100'
                             }`}
                             style={{
-                                backdropFilter: 'blur(2px)',
-                                zIndex: 15
+                                background: hasActiveAnimation 
+                                    ? 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
+                                    : 'transparent',
+                                backdropFilter: isTransitioning ? 'blur(1px)' : 'none',
+                                zIndex: 20,
+                                transformOrigin: 'center center'
                             }}
                         />
+
+                        {/* Subtle glow effect for active animation */}
+                        {hasActiveAnimation && animationReady && (
+                            <div
+                                className="absolute inset-0 rounded-full opacity-20 animate-pulse"
+                                style={{
+                                    background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
+                                    transform: 'scale(1.5)',
+                                    zIndex: 1,
+                                    filter: 'blur(20px)'
+                                }}
+                            />
+                        )}
                     </div>
                 </div>
                 {/* DISPLAY animationPath */}
