@@ -1,6 +1,6 @@
 // File: PropertyManagementPage.tsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
 import Header from '@/app/ui/header/header';
 import MainContentSection from '../raw/init';
@@ -13,6 +13,7 @@ import GradientBackground from '@/app/ui/backgrounds/gradient';
 export default function PropertyManagementPage() {
   const module = MODULES.find((r) => r.mode === 'property_management');
   const [animationData, setAnimationData] = useState(null);
+  const moduleFeaturesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (module?.animationPath) {
@@ -22,6 +23,13 @@ export default function PropertyManagementPage() {
         .catch((err) => console.error('Failed to load animation:', err));
     }
   }, [module]);
+
+  useEffect(() => {
+    // Scroll to ModuleFeatures after initial render
+    if (moduleFeaturesRef.current) {
+      moduleFeaturesRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   return (
     <GradientBackground>
@@ -46,11 +54,13 @@ export default function PropertyManagementPage() {
         }
       />
 
-      <ModuleFeatures
-        title="Built for simplicity"
-        description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
-        features={PROPERTY_MANAGEMENT_FEATURES}
-      />
+      <div ref={moduleFeaturesRef}>
+        <ModuleFeatures
+          title="Built for simplicity"
+          description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
+          features={PROPERTY_MANAGEMENT_FEATURES}
+        />
+      </div>
     </GradientBackground>
   );
 }

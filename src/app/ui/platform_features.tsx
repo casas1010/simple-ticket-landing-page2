@@ -134,15 +134,12 @@ const PlatformFeatures = ({ sub_title }: { sub_title: string }) => {
           </motion.div>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-16">
+
+        {/* <div className="text-center mt-16">
           <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl">
             Get Started Today
           </button>
-          <p className="text-gray-400 mt-4">
-            Join thousands of property managers who've streamlined their operations
-          </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

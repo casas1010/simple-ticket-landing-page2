@@ -9,6 +9,7 @@ export default function GradientBackground({
 }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
+      
       {/* Blurred Circles */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-20 left-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-10"></div>
