@@ -1,3 +1,7 @@
+
+
+"use client"
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
 import { MODULES, Module } from '@/app/data/modules_data';
@@ -8,7 +12,7 @@ type Props = {
     setModule: (module: Module | null) => void;
 };
 
-const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
+const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const isMobile = useIsMobile();
     const [screenWidth, setScreenWidth] = useState<number>(0);
     const [currentAngle, setCurrentAngle] = useState<number>(0);
@@ -20,7 +24,8 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     const router = useRouter();
 
     const animationContainerRef = useRef<HTMLDivElement>(null);
-  const animationInstanceRef = useRef<AnimationItem | null>(null);
+    const animationInstanceRef = useRef<AnimationItem | null>(null);
+    
     useEffect(() => {
         setScreenWidth(window.innerWidth);
     }, []);
@@ -122,18 +127,19 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
         setModule(mod);
     };
 
-const pathname = usePathname();
-const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
-const handleModuleClick = (mod: Module) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('mode', mod.mode);
+    const handleModuleClick = (mod: Module) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('mode', mod.mode);
 
-    router.push(`${pathname}?${params.toString()}`);
-    setActiveModule(mod);
-    setModule(mod);
-    setIsPaused(true);
-};
+        router.push(`${pathname}?${params.toString()}`);
+        setActiveModule(mod);
+        setModule(mod);
+        setIsPaused(true);
+    };
+
     return (
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
@@ -212,4 +218,4 @@ const handleModuleClick = (mod: Module) => {
     );
 };
 
-export default ModulesOrbit;
+export default ModulesOrbitClient;

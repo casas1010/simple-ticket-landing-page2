@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Module } from '@/app/data/modules_data';
-import Header from '@/app/components/header';
-import ModulesOrbit from '../../components/modules_orbit';
+import Header from '@/app/components/header/header';
+import ModulesOrbit from '../../components/modules_orbit/modules_orbit';
 import StarBackground from '@/app/components/star_background';
 import { motion, AnimatePresence } from 'framer-motion';
 

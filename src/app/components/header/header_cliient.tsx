@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Image from "next/image"
 
-export default function Header({ title = "Simple Ticket" }: { title?: string }) {
+export default function HeaderClient({ title = "Simple Ticket" }: { title?: string }) {
   const [scrolled, setScrolled] = useState(false)
   const [flash, setFlash] = useState(false)
 
