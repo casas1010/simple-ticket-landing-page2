@@ -1,44 +1,136 @@
-
-
-// Featuress_data.ts
-
-
+// Features_data.ts
 
 import {
-  Zap,
-  Megaphone,
-  BarChart,
-  Mail,
-  CalendarClock,
-  Send,
-  FileText,
-  Bell,
-  CalendarDays,
-  ClipboardCheck,
-  ShieldCheck,
-  Lock,
-  UserCheck,
-  Bot
+    CalendarClock,
+    History,
+    UserCheck,
+    Lock,
+    FileText,
+    Mail,
+    BarChart,
+    CalendarDays,
+    ClipboardCheck,
+    ShieldCheck,
+    Bell,
+    Bot,
+    Zap,
+    Megaphone,
+    Send,
 } from 'lucide-react';
 import { Features } from '../types/feature';
 
 export const PROPERTY_MANAGEMENT_FEATURES: Features[] = [
-
-  {
-    title: 'Fully Automated',
-    mode: 'automation',
-    main_description: 'Streamline repetitive workflows',
-    main_description_highlight: 'with powerful automation tools.',
-    sub_description: 'Save time and reduce error through intelligent task automation.',
-    main_icon_animation_path: 'https://lottie.host/83d6e419-0d6d-44f2-82ca-1203953dcac8/4L1XMErZg1.json',
-    gradient: '#10b981',
-    icon: CalendarClock,
-    color: 'bg-green-600',
-    details: [
-      { icon: CalendarClock, description: 'Automate scheduling', iconColor: 'text-white', iconBg: 'bg-green-600' },
-      { icon: Send, description: 'Send emails', iconColor: 'text-white', iconBg: 'bg-green-700' },
-      { icon: FileText, description: 'Generate reports', iconColor: 'text-white', iconBg: 'bg-green-800' },
-    ],
-  },
-
+    {
+        title: 'Tenant Management',
+        mode: 'tenant_management',
+        main_description: 'Tenant screening and communication',
+        main_description_highlight: 'made easy',
+        sub_description: '',
+        main_icon_path: '👥',
+        gradient: '#10b981',
+        icon: CalendarClock,
+        color: 'bg-green-600',
+        details: [
+            { icon: History, description: 'Complete tenant profiles with application history', iconColor: 'text-white', iconBg: 'bg-green-600' },
+            { icon: UserCheck, description: 'Background and credit checks', iconColor: 'text-white', iconBg: 'bg-green-600' },
+            { icon: Mail, description: 'Message history and communication tracking', iconColor: 'text-white', iconBg: 'bg-green-600' },
+            { icon: FileText, description: 'Automated lease renewals and digital documents', iconColor: 'text-white', iconBg: 'bg-green-600' },
+            { icon: Lock, description: 'Tenant portal access with secure login', iconColor: 'text-white', iconBg: 'bg-green-600' },
+        ],
+    },
+    {
+        title: 'Rent Collection & Accounting',
+        mode: 'rent_collection',
+        main_description:
+            'Automated rent collection, late fee tracking, financial reporting, and integration with accounting software. Real-time dashboard analytics.',
+        main_description_highlight: '',
+        sub_description: '',
+        main_icon_path: '💰',
+        gradient: '#f59e0b',
+        icon: BarChart,
+        color: 'bg-yellow-600',
+        details: [
+            { icon: CalendarDays, description: 'Scheduled rent reminders and auto-pay', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
+            { icon: BarChart, description: 'Integrated accounting dashboard', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
+            { icon: FileText, description: 'Late fee automation and rent tracking', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
+            { icon: Send, description: 'Sync with QuickBooks and other accounting tools', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
+            { icon: ClipboardCheck, description: 'Real-time financial analytics', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
+        ],
+    },
+    {
+        title: 'Maintenance Coordination',
+        mode: 'maintenance_coordination',
+        main_description:
+            'Work order management, vendor coordination, maintenance scheduling, and property inspection tracking. Mobile-friendly for field teams.',
+        main_description_highlight: '',
+        sub_description: '',
+        main_icon_path: '🛠️',
+        gradient: '#3b82f6',
+        icon: ClipboardCheck,
+        color: 'bg-blue-600',
+        details: [
+            { icon: FileText, description: 'Create and manage work orders', iconColor: 'text-white', iconBg: 'bg-blue-600' },
+            { icon: UserCheck, description: 'Vendor assignment and communication', iconColor: 'text-white', iconBg: 'bg-blue-600' },
+            { icon: CalendarDays, description: 'Maintenance scheduling and reminders', iconColor: 'text-white', iconBg: 'bg-blue-600' },
+            { icon: ShieldCheck, description: 'Track property inspections and reports', iconColor: 'text-white', iconBg: 'bg-blue-600' },
+            { icon: Bot, description: 'Mobile access for maintenance staff', iconColor: 'text-white', iconBg: 'bg-blue-600' },
+        ],
+    },
+    {
+        title: 'Property Portfolio',
+        mode: 'property_portfolio',
+        main_description:
+            'Centralized property database, unit management, lease tracking, and performance analytics. Custom fields for property-specific data.',
+        main_description_highlight: '',
+        sub_description: '',
+        main_icon_path: '🏘️',
+        gradient: '#6366f1',
+        icon: FileText,
+        color: 'bg-indigo-600',
+        details: [
+            { icon: FileText, description: 'Manage multiple properties and units', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
+            { icon: CalendarClock, description: 'Track leases and renewals', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
+            { icon: BarChart, description: 'Performance insights and analytics', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
+            { icon: ClipboardCheck, description: 'Custom fields for asset details', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
+            { icon: FileText, description: 'Centralized document repository', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
+        ],
+    },
+    {
+        title: 'Legal & Compliance',
+        mode: 'legal_compliance',
+        main_description:
+            'Document management, lease templates, compliance tracking, and automated legal notices. Integration with legal databases.',
+        main_description_highlight: '',
+        sub_description: '',
+        main_icon_path: '⚖️',
+        gradient: '#8b5cf6',
+        icon: ShieldCheck,
+        color: 'bg-purple-600',
+        details: [
+            { icon: FileText, description: 'Built-in legal templates and forms', iconColor: 'text-white', iconBg: 'bg-purple-600' },
+            { icon: Mail, description: 'Track legal notices and actions', iconColor: 'text-white', iconBg: 'bg-purple-600' },
+            { icon: Send, description: 'Integration with legal services/databases', iconColor: 'text-white', iconBg: 'bg-purple-600' },
+            { icon: FileText, description: 'Centralized storage for legal documents', iconColor: 'text-white', iconBg: 'bg-purple-600' },
+            { icon: Bell, description: 'Compliance alerts and reminders', iconColor: 'text-white', iconBg: 'bg-purple-600' },
+        ],
+    },
+    {
+        title: 'Mobile & Automation',
+        mode: 'mobile_automation',
+        main_description:
+            'Mobile apps for tenants and staff, workflow automation, notification systems, and API integrations with third-party services.',
+        main_description_highlight: '',
+        sub_description: '',
+        main_icon_path: '📲',
+        gradient: '#ec4899',
+        icon: Bot,
+        color: 'bg-pink-600',
+        details: [
+            { icon: Bot, description: 'Native mobile apps for tenants and staff', iconColor: 'text-white', iconBg: 'bg-pink-600' },
+            { icon: Zap, description: 'Automated workflows for common tasks', iconColor: 'text-white', iconBg: 'bg-pink-600' },
+            { icon: Bell, description: 'Customizable notifications and alerts', iconColor: 'text-white', iconBg: 'bg-pink-600' },
+            { icon: Send, description: 'API integrations with external services', iconColor: 'text-white', iconBg: 'bg-pink-600' },
+            { icon: Megaphone, description: 'Modular architecture for easy scaling', iconColor: 'text-white', iconBg: 'bg-pink-600' },
+        ],
+    },
 ];

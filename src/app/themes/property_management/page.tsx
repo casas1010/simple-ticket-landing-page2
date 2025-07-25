@@ -1,29 +1,57 @@
-import React from 'react';
-import PropertyManagementLanding from './init';
-import { PropertyManagementSuite } from './features';
+// File: PropertyManagementPage.tsx
+
+import React, { useEffect, useState } from 'react';
+import Lottie from 'lottie-react';
 import Header from '@/app/ui/header/header';
+import MainContentSection from '../raw/init';
+import { PropertyManagementSuite } from './features';
+import { ModuleFeatures } from '@/app/ui/lists/modules';
+import { PROPERTY_MANAGEMENT_FEATURES } from '@/app/data/property_management_features';
+import { MODULES } from '@/app/data/modules';
+import GradientBackground from '@/app/ui/backgrounds/gradient';
 
 export default function PropertyManagementPage() {
+  const module = MODULES.find((r) => r.mode === 'property_management');
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    if (module?.animationPath) {
+      fetch(module.animationPath)
+        .then((res) => res.json())
+        .then(setAnimationData)
+        .catch((err) => console.error('Failed to load animation:', err));
+    }
+  }, [module]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative">
+    <GradientBackground>
       <Header title="Simple Property" />
 
+      <MainContentSection
+        mainText={module?.main_description || ''}
+        highlight={module?.main_description_highlight || ''}
+        subText={module?.sub_description || ''}
+        setModule={() => { }}
+        component={
+          <div className="flex justify-center items-start w-full">
+            {animationData && (
+              <Lottie
+                animationData={animationData}
+                loop
+                autoplay
+                style={{ width: 300, height: 300 }}
+              />
+            )}
+          </div>
+        }
+      />
 
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-10"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-400 rounded-full blur-3xl opacity-10"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cyan-400 rounded-full blur-3xl opacity-10"></div>
-      </div>
 
-
-      <PropertyManagementLanding />
-      <PropertyManagementSuite />
-
-
-      <div className="absolute top-1/4 left-10 w-3 h-3 bg-blue-400 rounded-full animate-bounce opacity-60"></div>
-      <div className="absolute top-1/3 right-20 w-2 h-2 bg-purple-400 rounded-full animate-pulse opacity-60"></div>
-      <div className="absolute bottom-1/4 left-1/4 w-4 h-4 bg-cyan-400 rounded-full animate-ping opacity-40"></div>
-      <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-emerald-400 rounded-full animate-bounce opacity-60"></div>
-    </div>
+      <ModuleFeatures
+        title="Built for simplicity"
+        description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
+        features={PROPERTY_MANAGEMENT_FEATURES}
+      />
+    </GradientBackground>
   );
 }

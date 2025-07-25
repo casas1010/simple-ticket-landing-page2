@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '@/app/ui/header/header';
-import StarBackground from '@/app/ui/star_background';
+import StarBackground from '@/app/ui/backgrounds/star';
 import PlatformFeatures from '@/app/ui/platform_features';
 import { ModuleFeatures } from '@/app/ui/lists/modules';
 import { PLATFORM_FEATURES } from '@/app/data/features';
@@ -9,11 +9,9 @@ import MainContentSection from './init';
 import { useIsMobile } from '@/app/context/mobile_context';
 
 
+import ModulesOrbit from '@/app/ui/modules_orbit/modules_orbit';
 
-
-
-
-export default function DesktopView() {
+export default function RawPage() {
   const [module, setModule] = useState<Module | null>(null);
 
   const mainText = module?.main_description ?? 'Discover the ideal data management system for your';
@@ -32,6 +30,7 @@ export default function DesktopView() {
         highlight={highlight}
         subText={subText}
         setModule={setModule}
+        component={<ModulesOrbit setModule={setModule} />} // <-- ADDED
       />
 
       <PlatformFeatures sub_title="" />

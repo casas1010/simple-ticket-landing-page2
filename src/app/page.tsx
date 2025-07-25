@@ -3,7 +3,7 @@ import MainPageClient from './MainPageClient';
 
 import { headers } from 'next/headers'; 
 import { MobileProvider } from './context/mobile_context';
-import { isMobileUserAgent } from './utils/is_mobile';
+import { isMobileUserAgent } from './context_utils/is_mobile';
 
 export default async function Page() {
   const headerList = headers(); 

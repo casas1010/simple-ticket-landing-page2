@@ -2,12 +2,12 @@ import { useIsMobile } from '@/app/context/mobile_context';
 import { AnimatePresence, motion } from 'framer-motion';
 import ModulesOrbit from '@/app/ui/modules_orbit/modules_orbit';
 import { Module } from '@/app/types/module';
-
 type Props = {
   mainText: string;
   highlight: string;
   subText: string;
   setModule: (m: Module | null) => void;
+  component?: React.ReactNode; // NEW PROP
 };
 
 export default function MainContentSection(props: Props) {
@@ -15,11 +15,11 @@ export default function MainContentSection(props: Props) {
   return isMobile ? <MobileContent {...props} /> : <DesktopContent {...props} />;
 }
 
-function MobileContent({ mainText, highlight, subText, setModule }: Props) {
+function MobileContent({ mainText, highlight, subText, setModule, component: uiComponent }: Props) {
   return (
     <div className="relative z-10 flex flex-col items-center px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
       <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
-        <ModulesOrbit setModule={setModule} />
+        {uiComponent}
       </div>
       <div className="relative z-10 flex-1 max-w-2xl pt-20">
         <AnimatePresence mode="wait">
@@ -47,7 +47,7 @@ function MobileContent({ mainText, highlight, subText, setModule }: Props) {
   );
 }
 
-function DesktopContent({ mainText, highlight, subText, setModule }: Props) {
+function DesktopContent({ mainText, highlight, subText, setModule, component: orbitComponent }: Props) {
   return (
     <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
       <div className="relative z-10 flex-1 max-w-2xl pt-20">
@@ -73,7 +73,7 @@ function DesktopContent({ mainText, highlight, subText, setModule }: Props) {
         </AnimatePresence>
       </div>
       <div className="relative z-10 flex-1 w-full max-w-xl">
-        <ModulesOrbit setModule={setModule} />
+        {orbitComponent}
       </div>
     </div>
   );
