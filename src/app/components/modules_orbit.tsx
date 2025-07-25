@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
 import { MODULES, Module } from '@/app/data/modules_data';
-import Header from '@/app/components/header';
-
-
+import lottie from 'lottie-web';
 
 type Props = {
     setModule: (module: Module | null) => void;
@@ -18,6 +16,9 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     const animationRef = useRef<number | null>(null);
     const lastTimeRef = useRef<number>(0);
     const [scrollThresholdPassed, setScrollThresholdPassed] = useState<boolean>(false);
+
+    const animationContainerRef = useRef<HTMLDivElement>(null);
+    const animationInstanceRef = useRef<any>(null);
 
     useEffect(() => {
         setScreenWidth(window.innerWidth);
@@ -34,6 +35,7 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
         return 220;
     }, [isMobile, screenWidth]);
 
+    // Handle scroll-based activation
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
@@ -69,6 +71,7 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
         };
     }, [setModule, setIsPaused, activeModule, scrollThresholdPassed]);
 
+    // Handle animation rotation
     useEffect(() => {
         const animate = (timestamp: number) => {
             if (!isPaused) {
@@ -91,6 +94,27 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
         };
     }, [isPaused]);
 
+    // Handle Lottie animation on hover
+    useEffect(() => {
+        if (activeModule?.animationPath && animationContainerRef.current) {
+            if (animationInstanceRef.current) {
+                animationInstanceRef.current.destroy();
+            }
+
+            animationInstanceRef.current = lottie.loadAnimation({
+                container: animationContainerRef.current,
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: activeModule.animationPath,
+            });
+
+            return () => {
+                animationInstanceRef.current?.destroy();
+            };
+        }
+    }, [activeModule?.animationPath]);
+
     const handleModuleHover = (mod: Module | null) => {
         setActiveModule(mod);
         setIsPaused(!!mod);
@@ -100,12 +124,34 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     return (
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
+
+                {/* DISPLAY animationPath */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                    <img src="https://i.imgur.com/OEMWwAS.png" alt="Static house" style={{ height: HOUSE_SIZE, width: HOUSE_SIZE }} />
+                    <div className="relative" style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}>
+                        {/* Lottie animation (if available) */}
+                        <div
+                            ref={animationContainerRef}
+                            className={`absolute inset-0 transition-all duration-500 ease-in-out transform
+    ${activeModule?.animationPath ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                            style={{
+                                transform: activeModule?.animationPath ? 'scale(3)' : 'scale(1.0)',
+                            }}
+                        />
+
+                        {/* Fallback static image */}
+                        <img
+                            src="https://i.imgur.com/OEMWwAS.png"
+                            alt="Static house"
+                            className={`absolute inset-0 object-contain transition-all duration-500 ease-in-out transform ${activeModule?.animationPath ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100'
+                                }`}
+                            style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}
+                        />
+                    </div>
                 </div>
+                {/* DISPLAY animationPath */}
 
                 <div
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    className="absolute top-1/2 left-1/2"
                     style={{
                         transform: `translate(-50%, -50%) rotate(${currentAngle}deg)`,
                         transition: isPaused ? 'none' : 'transform 0.1s linear',
