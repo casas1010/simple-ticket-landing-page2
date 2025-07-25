@@ -30,10 +30,10 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const [animationReady, setAnimationReady] = useState<boolean>(false);
 
     useEffect(() => {
-        setScreenWidth(window.innerWidth);  
+        setScreenWidth(window.innerWidth);
     }, []);
 
-    const HOUSE_SIZE = isMobile ? '50vw' : '200px';
+    const HOUSE_SIZE = isMobile ? '50vw' : '100px';
     const CONTAINER_SIZE = isMobile ? '100vw' : '600px';
     const ROTATION_SPEED = 0.005;
 
@@ -49,7 +49,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         if (autoSelectIntervalRef.current) {
             clearInterval(autoSelectIntervalRef.current);
         }
-        
+
         autoSelectIntervalRef.current = setInterval(() => {
             setCurrentModuleIndex((prevIndex) => {
                 const nextIndex = (prevIndex + 1) % MODULES.length;
@@ -75,7 +75,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         const firstModule = MODULES[0];
         setActiveModule(firstModule);
         setCurrentModuleIndex(0);
-        
+
         startAutoSelect();
 
         return () => {
@@ -104,7 +104,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                     setModule(calculatedModule);
                     setCurrentModuleIndex(moduleIndex);
                     setIsPaused(true);
-                    
+
                     // Stop auto-selection when user scrolls
                     stopAutoSelect();
                 }
@@ -113,13 +113,13 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                     setActiveModule(null);
                     setModule(null);
                     setIsPaused(false);
-                    
+
                     // Restart auto-selection when user scrolls back up (visual only)
                     if (!autoSelectIntervalRef.current) {
                         const firstModule = MODULES[0];
                         setActiveModule(firstModule);
                         setCurrentModuleIndex(0);
-                        
+
                         startAutoSelect();
                     }
                 }
@@ -158,12 +158,12 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     // Handle Lottie animation - improved for smoother transitions
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
-        
+
         if (moduleToShow?.animationPath && animationContainerRef.current) {
             // Start transition immediately
             setIsTransitioning(true);
             setAnimationReady(false);
-            
+
             // Destroy previous animation immediately
             if (animationInstanceRef.current) {
                 animationInstanceRef.current.destroy();
@@ -219,12 +219,12 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         setHoveredModule(mod);
         // Update the title/content only on hover
         setModule(mod);
-        
+
         if (mod) {
             // Pause rotation and auto-select when hovering over any module
             setIsPaused(true);
             stopAutoSelect();
-            
+
             // Update current module index to the hovered module
             const newIndex = MODULES.findIndex(m => m.title === mod.title);
             setCurrentModuleIndex(newIndex);
@@ -249,7 +249,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         setModule(mod);
         setCurrentModuleIndex(MODULES.findIndex(m => m.title === mod.title));
         setIsPaused(true);
-        
+
         // Stop auto-selection when user manually selects
         stopAutoSelect();
     };
@@ -263,18 +263,17 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 {/* DISPLAY animationPath */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}>
-                        
+
                         {/* Static house image - smoother shrinking animation */}
                         <img
                             src="https://i.imgur.com/OEMWwAS.png"
                             alt="Static house"
-                            className={`absolute inset-0 object-contain transition-all duration-700 ease-in-out transform ${
-                                hasActiveAnimation 
-                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none' 
+                            className={`absolute inset-0 object-contain transition-all duration-700 ease-in-out transform ${hasActiveAnimation
+                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none'
                                     : 'opacity-100 scale-100 blur-0'
-                            }`}
-                            style={{ 
-                                width: HOUSE_SIZE, 
+                                }`}
+                            style={{
+                                width: HOUSE_SIZE,
                                 height: HOUSE_SIZE,
                                 transformOrigin: 'center center',
                                 filter: hasActiveAnimation ? 'brightness(0.7)' : 'brightness(1)',
@@ -285,11 +284,10 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                         {/* Lottie animation - smoother growing animation */}
                         <div
                             ref={animationContainerRef}
-                            className={`absolute inset-0 transition-all duration-700 ease-out transform ${
-                                hasActiveAnimation && animationReady
-                                    ? 'opacity-100 scale-[1.8] blur-0' 
+                            className={`absolute inset-0 transition-all duration-700 ease-out transform ${hasActiveAnimation && animationReady
+                                    ? 'opacity-100 scale-[1.8] blur-0'
                                     : 'opacity-0 scale-50 blur-sm pointer-events-none'
-                            }`}
+                                }`}
                             style={{
                                 transformOrigin: 'center center',
                                 zIndex: hasActiveAnimation ? 25 : 10,
@@ -299,13 +297,12 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
 
                         {/* Enhanced transition overlay with radial effect */}
                         <div
-                            className={`absolute inset-0 rounded-full transition-all duration-500 ease-in-out ${
-                                isTransitioning 
-                                    ? 'opacity-30 scale-110' 
+                            className={`absolute inset-0 rounded-full transition-all duration-500 ease-in-out ${isTransitioning
+                                    ? 'opacity-30 scale-110'
                                     : 'opacity-0 scale-100'
-                            }`}
+                                }`}
                             style={{
-                                background: hasActiveAnimation 
+                                background: hasActiveAnimation
                                     ? 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
                                     : 'transparent',
                                 backdropFilter: isTransitioning ? 'blur(1px)' : 'none',
@@ -360,25 +357,22 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                     }}
                                 >
                                     <div
-                                        className={`w-16 h-16 relative cursor-pointer transition-all duration-300 ease-out hover:scale-110 ${
-                                            isActive ? 'scale-125' : ''
-                                        }`}
+                                        className={`w-16 h-16 relative cursor-pointer transition-all duration-300 ease-out hover:scale-110 ${isActive ? 'scale-125' : ''
+                                            }`}
                                         onMouseEnter={() => handleModuleHover(mod)}
                                         onMouseLeave={() => handleModuleHover(null)}
                                         onClick={() => handleModuleClick(mod)}
                                     >
                                         {/* Color orb background */}
                                         <div
-                                            className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${
-                                                isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'
-                                            }`}
+                                            className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'
+                                                }`}
                                         />
 
                                         {/* Solid orb base */}
                                         <div
-                                            className={`absolute inset-0 rounded-full ${orbColor} transition-all duration-300 ease-out flex items-center justify-center ${
-                                                isActive ? 'shadow-lg' : 'hover:shadow-md'
-                                            }`}
+                                            className={`absolute inset-0 rounded-full ${orbColor} transition-all duration-300 ease-out flex items-center justify-center ${isActive ? 'shadow-lg' : 'hover:shadow-md'
+                                                }`}
                                         />
 
                                         {/* Icon */}
@@ -387,12 +381,12 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                         </div>
 
                                         {/* Tooltip - only shows on hover */}
-                                        {isHovered && (
-                                            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
-                                                {mod.title}
-                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-                                            </div>
-                                        )}
+                {(isHovered || isActive) && (
+    <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
+        {mod.title}
+        <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
+    </div>
+)}
                                     </div>
                                 </div>
                             );
