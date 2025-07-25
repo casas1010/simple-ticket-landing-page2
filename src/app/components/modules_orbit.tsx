@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
 import { MODULES, Module } from '@/app/data/modules_data';
-import lottie from 'lottie-web';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import lottie, { AnimationItem } from 'lottie-web';
 
 type Props = {
     setModule: (module: Module | null) => void;
@@ -20,8 +20,7 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     const router = useRouter();
 
     const animationContainerRef = useRef<HTMLDivElement>(null);
-    const animationInstanceRef = useRef<any>(null);
-
+  const animationInstanceRef = useRef<AnimationItem | null>(null);
     useEffect(() => {
         setScreenWidth(window.innerWidth);
     }, []);

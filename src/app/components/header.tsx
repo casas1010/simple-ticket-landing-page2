@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import Image from "next/image"
 
 export default function Header({ title = "Simple Ticket" }: { title?: string }) {
   const [scrolled, setScrolled] = useState(false)
@@ -58,9 +59,11 @@ export default function Header({ title = "Simple Ticket" }: { title?: string }) 
               flash ? "flash-green" : "bg-blue-600"
             }`}
           >
-            <img
+            <Image
               src="https://i.imgur.com/OEMWwAS.png"
               alt="Logo"
+              width={200}
+              height={200}
               className={`transition-all duration-300 ${scrolled ? "w-4 h-4" : "w-6 h-6"}`}
             />
           </div>
