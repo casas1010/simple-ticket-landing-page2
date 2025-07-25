@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -25,7 +23,21 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
 
     const animationContainerRef = useRef<HTMLDivElement>(null);
     const animationInstanceRef = useRef<AnimationItem | null>(null);
-    
+
+    // Color palette for the orbs
+    const orbColors = [
+        'bg-blue-500',
+        'bg-purple-500', 
+        'bg-green-500',
+        'bg-red-500',
+        'bg-yellow-500',
+        'bg-pink-500',
+        'bg-indigo-500',
+        'bg-teal-500',
+        'bg-orange-500',
+        'bg-cyan-500',
+    ];
+
     useEffect(() => {
         setScreenWidth(window.innerWidth);
     }, []);
@@ -183,6 +195,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                             const x = Math.cos((angle - 90) * (Math.PI / 180)) * radius;
                             const y = Math.sin((angle - 90) * (Math.PI / 180)) * radius;
                             const isActive = activeModule?.title === mod.title;
+                            const orbColor = orbColors[index % orbColors.length];
 
                             return (
                                 <div
@@ -197,15 +210,31 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                     }}
                                 >
                                     <div
-                                        className={`w-16 h-16 ...`}
+                                        className={`w-16 h-16 relative cursor-pointer transition-all duration-300 hover:scale-110 ${isActive ? 'scale-125' : ''}`}
                                         onMouseEnter={() => handleModuleHover(mod)}
                                         onMouseLeave={() => handleModuleHover(null)}
                                         onClick={() => handleModuleClick(mod)}
                                     >
-                                        <Icon className="w-8 h-8 text-white" />
+                                        {/* Color orb background */}
+                                        <div 
+                                            className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ${isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'}`}
+                                        />
+                                        
+                                        {/* Solid orb base */}
+                                        <div 
+                                            className={`absolute inset-0 rounded-full ${orbColor} transition-all duration-300 flex items-center justify-center ${isActive ? 'shadow-lg' : 'hover:shadow-md'}`}
+                                        />
+                                        
+                                        {/* Icon */}
+                                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                                            <Icon className="w-8 h-8 text-white drop-shadow-md" />
+                                        </div>
+                                        
+                                        {/* Tooltip */}
                                         {isActive && (
-                                            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap">
+                                            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20">
                                                 {mod.title}
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                                             </div>
                                         )}
                                     </div>

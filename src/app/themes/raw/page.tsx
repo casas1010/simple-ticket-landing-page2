@@ -11,8 +11,8 @@ export default function RawPage() {
   const [isReady, setIsReady] = useState(true);
 
   return (
-    
-      <Init />
+
+    <Init />
 
   );
 }
