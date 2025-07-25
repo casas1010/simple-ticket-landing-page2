@@ -15,6 +15,7 @@ export type Detail = {
 
 export type Module = {
   title: string;
+  mode: string;
   main_description: string;
   main_description_highlight: string;
   sub_description: string;
@@ -28,6 +29,7 @@ export type Module = {
 export const MODULES: Module[] = [
   {
     title: 'Marketing',
+    mode: 'marketing',
     main_description: 'Drive campaigns and engagement',
     main_description_highlight: 'with smart automation.',
     sub_description: 'Grow your audience through automation and analytics.',
@@ -43,6 +45,8 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Recruiting',
+    mode: 'recruiting',
+
     main_description: 'Simplify hiring and screening',
     main_description_highlight: 'with powerful AI tools.',
     sub_description: 'Automate posting, tracking, and candidate evaluation.',
@@ -60,6 +64,7 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Customer Management',
+    mode: 'customer_management',
     main_description: 'Unify all customer data',
     main_description_highlight: 'for better service.',
     sub_description: 'Track interactions and manage relationships effectively.',
@@ -75,6 +80,7 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Sales Management',
+    mode: 'sales_management',
     main_description: 'Track deals and revenue',
     main_description_highlight: 'with live metrics.',
     sub_description: 'Boost sales using lead tracking and automation.',
@@ -90,6 +96,7 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Financial Documentation',
+    mode: 'financial_documentation',
     main_description: 'Organize your finances',
     main_description_highlight: 'for clarity and control.',
     sub_description: 'Track expenses, simplify taxes, and ensure compliance.',
@@ -106,6 +113,7 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Task Management',
+    mode: 'task_mnagement',
     main_description: 'Manage team tasks',
     main_description_highlight: 'with speed and clarity.',
     sub_description: 'Assign, monitor, and complete work in real-time.',
@@ -123,6 +131,7 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Property Management',
+    mode: 'property_management',
     main_description: 'Oversee tenants and assets',
     main_description_highlight: 'from one place.',
     sub_description: 'Track leases, maintenance, and unit history easily.',

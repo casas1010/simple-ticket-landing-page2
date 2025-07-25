@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
 import { MODULES, Module } from '@/app/data/modules_data';
 import lottie from 'lottie-web';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 type Props = {
     setModule: (module: Module | null) => void;
@@ -16,6 +17,7 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
     const animationRef = useRef<number | null>(null);
     const lastTimeRef = useRef<number>(0);
     const [scrollThresholdPassed, setScrollThresholdPassed] = useState<boolean>(false);
+    const router = useRouter();
 
     const animationContainerRef = useRef<HTMLDivElement>(null);
     const animationInstanceRef = useRef<any>(null);
@@ -121,6 +123,18 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
         setModule(mod);
     };
 
+const pathname = usePathname();
+const searchParams = useSearchParams();
+
+const handleModuleClick = (mod: Module) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('mode', mod.mode);
+
+    router.push(`${pathname}?${params.toString()}`);
+    setActiveModule(mod);
+    setModule(mod);
+    setIsPaused(true);
+};
     return (
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
@@ -178,11 +192,10 @@ const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
                                     }}
                                 >
                                     <div
-                                        className={`w-16 h-16 ${mod.color} rounded-full shadow-lg flex items-center justify-center cursor-pointer transform transition-all duration-300 ${isActive ? 'scale-110' : 'hover:scale-110'
-                                            } animate-float z-20`}
-                                        style={{ animationDelay: `${index * 0.2}s` }}
+                                        className={`w-16 h-16 ...`}
                                         onMouseEnter={() => handleModuleHover(mod)}
                                         onMouseLeave={() => handleModuleHover(null)}
+                                        onClick={() => handleModuleClick(mod)}
                                     >
                                         <Icon className="w-8 h-8 text-white" />
                                         {isActive && (

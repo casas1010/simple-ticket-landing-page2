@@ -19,7 +19,7 @@ function DesktopView() {
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
       <StarBackground starColor={module?.gradient} />
-      <Header title="Simple Ticket" />
+      <Header  />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
         <div className="relative z-10 flex-1 max-w-2xl pt-20">

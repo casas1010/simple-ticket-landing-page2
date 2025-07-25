@@ -7,7 +7,7 @@ import Header from '@/app/components/header';
 export default function PropertyManagementPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative">
-      <Header />
+      <Header title="Simple Property" />
 
 
       <div className="absolute inset-0 -z-10 overflow-hidden">
