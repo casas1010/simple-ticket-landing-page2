@@ -13,15 +13,6 @@ export default function RawPage() {
   return (
     
       <Init />
-    // <div className="relative w-full h-screen overflow-hidden">
-    //     <div className="relative z-10 w-full h-full overflow-y-auto">
-    //       <Header title='Simple Ticket!'/>
-    //       <GetStarted />
-    //       {/* <PlatformFeatures sub_title="" /> */}
-    //       {/* <Modules></Modules> */}
 
-    //     </div>
-
-    // </div>
   );
 }

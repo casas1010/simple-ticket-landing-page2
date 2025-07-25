@@ -15,7 +15,9 @@ export type Detail = {
 
 export type Module = {
   title: string;
-  description: string;
+  main_description: string;
+  main_description_highlight: string;
+  sub_description: string;
   animationPath: string;
   details: Detail[];
   gradient: string;
@@ -26,9 +28,11 @@ export type Module = {
 export const MODULES: Module[] = [
   {
     title: 'Marketing',
-    description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated outreach tools to grow your customer base.',
+    main_description: 'Drive campaigns and engagement',
+    main_description_highlight: 'with smart automation.',
+    sub_description: 'Grow your audience through automation and analytics.',
     animationPath: 'https://lottie.host/bddd9424-7625-4528-bac0-4cb741f1be05/FIsyTVgp2o.json',
-    gradient: '#2563eb', // blue-600
+    gradient: '#2563eb',
     icon: Zap,
     color: 'bg-blue-600',
     details: [
@@ -39,9 +43,11 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Recruiting',
-    description: 'Streamline your hiring process with automation, better tracking, and AI-assisted candidate screening.',
+    main_description: 'Simplify hiring and screening',
+    main_description_highlight: 'with powerful AI tools.',
+    sub_description: 'Automate posting, tracking, and candidate evaluation.',
     animationPath: 'https://lottie.host/06922141-ea60-45da-9862-b085209f056c/RwBLNL0DZp.json',
-    gradient: '#9333ea', // purple-600
+    gradient: '#9333ea',
     icon: FileText,
     color: 'bg-purple-600',
     details: [
@@ -54,9 +60,11 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Customer Management',
-    description: 'Centralize your customer data and interactions to build meaningful, long-term relationships.',
+    main_description: 'Unify all customer data',
+    main_description_highlight: 'for better service.',
+    sub_description: 'Track interactions and manage relationships effectively.',
     animationPath: 'https://lottie.host/4ed7ce26-7491-4516-8c9d-ee5e0258f720/l7UQzhbH1t.json',
-    gradient: '#0d9488', // teal-600
+    gradient: '#0d9488',
     icon: Users,
     color: 'bg-teal-600',
     details: [
@@ -67,9 +75,11 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Sales Management',
-    description: 'Monitor deals, client communication, and performance metrics to drive revenue efficiently.',
+    main_description: 'Track deals and revenue',
+    main_description_highlight: 'with live metrics.',
+    sub_description: 'Boost sales using lead tracking and automation.',
     animationPath: 'https://lottie.host/712ca8ea-8b00-4615-825f-ab76a3a15042/Cb4dHj5nHH.json',
-    gradient: '#16a34a', // green-600
+    gradient: '#16a34a',
     icon: Droplets,
     color: 'bg-green-600',
     details: [
@@ -80,9 +90,11 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Financial Documentation',
-    description: 'Organize invoices, receipts, and reports to maintain clear and compliant financial records.',
+    main_description: 'Organize your finances',
+    main_description_highlight: 'for clarity and control.',
+    sub_description: 'Track expenses, simplify taxes, and ensure compliance.',
     animationPath: 'https://lottie.host/ca635384-4d5e-4fa1-8036-62aa4316be9f/FjoUUvbQUR.json',
-    gradient: '#ca8a04', // yellow-600
+    gradient: '#ca8a04',
     icon: Lock,
     color: 'bg-yellow-600',
     details: [
@@ -94,9 +106,11 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Task Management',
-    description: 'Assign, track, and complete tasks with visibility and accountability across teams.',
+    main_description: 'Manage team tasks',
+    main_description_highlight: 'with speed and clarity.',
+    sub_description: 'Assign, monitor, and complete work in real-time.',
     animationPath: 'https://lottie.host/9e5ba739-65f8-4cc4-96a8-25dbeb79d0a6/tP4BkPdq3P.json',
-    gradient: '#db2777', // pink-600
+    gradient: '#db2777',
     icon: Shield,
     color: 'bg-pink-600',
     details: [
@@ -109,9 +123,11 @@ export const MODULES: Module[] = [
   },
   {
     title: 'Property Management',
-    description: 'Oversee assets, tenants, and maintenance efficiently with unified management tools.',
+    main_description: 'Oversee tenants and assets',
+    main_description_highlight: 'from one place.',
+    sub_description: 'Track leases, maintenance, and unit history easily.',
     animationPath: 'https://lottie.host/53b254b6-8102-40e6-952a-c111cb232a73/7dUngRXxc9.json',
-    gradient: '#e11d48', // rose-600
+    gradient: '#e11d48',
     icon: Settings,
     color: 'bg-rose-600',
     details: [
