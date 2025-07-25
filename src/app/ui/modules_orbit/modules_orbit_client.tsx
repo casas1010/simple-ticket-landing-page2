@@ -29,7 +29,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const animationInstanceRef = useRef<AnimationItem | null>(null);
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
     const [animationReady, setAnimationReady] = useState<boolean>(false);
-    const [animationCache, setAnimationCache] = useState<Map<string, any>>(new Map());
+const [animationCache, setAnimationCache] = useState<Map<string, Record<string, unknown>>>(new Map());
 
     useEffect(() => {
         setScreenWidth(window.innerWidth);
@@ -47,11 +47,11 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     }, [isMobile, screenWidth]);
 
     // Function to fetch Lottie animation data from URL
-    const fetchLottieData = async (url: string): Promise<any> => {
-        // Check cache first
+const fetchLottieData = async (url: string): Promise<Record<string, unknown> | null> => {        // Check cache first
         if (animationCache.has(url)) {
-            return animationCache.get(url);
-        }
+    const cached = animationCache.get(url);
+    return cached ?? null; // ensure it returns null, not undefined
+}
 
         try {
             const response = await fetch(url);
