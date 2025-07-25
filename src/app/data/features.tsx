@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { Features } from '../types/feature';
 
-export const FEATURES: Features[] = [
+export const PLATFORM_FEATURES: Features[] = [
 
   {
     title: 'Fully Automated',
@@ -30,7 +30,7 @@ export const FEATURES: Features[] = [
     main_description: 'Streamline repetitive workflows',
     main_description_highlight: 'with powerful automation tools.',
     sub_description: 'Save time and reduce error through intelligent task automation.',
-    animationPath: 'https://lottie.host/83d6e419-0d6d-44f2-82ca-1203953dcac8/4L1XMErZg1.json',
+    main_icon_animation_path: 'https://lottie.host/83d6e419-0d6d-44f2-82ca-1203953dcac8/4L1XMErZg1.json',
     gradient: '#10b981',
     icon: CalendarClock,
     color: 'bg-green-600',
@@ -46,7 +46,7 @@ export const FEATURES: Features[] = [
     main_description: 'Stay in the loop',
     main_description_highlight: 'with real-time alerts.',
     sub_description: 'Get updates and reminders for what matters most.',
-    animationPath: 'https://lottie.host/74844795-53af-4b85-bec9-9f74c15a76b4/HgOg2QI9Aw.json',
+    main_icon_animation_path: 'https://lottie.host/74844795-53af-4b85-bec9-9f74c15a76b4/HgOg2QI9Aw.json',
     gradient: '#f97316',
     icon: Bell,
     color: 'bg-orange-600',
@@ -62,7 +62,7 @@ export const FEATURES: Features[] = [
     main_description: 'Deploy smart systems',
     main_description_highlight: 'for complex operations.',
     sub_description: 'Let intelligent agents handle tasks and scale your workflows.',
-    animationPath: 'https://lottie.host/aee38d53-ce70-492c-a745-5b526199ebd0/hXQO8892mP.json',
+    main_icon_animation_path: 'https://lottie.host/aee38d53-ce70-492c-a745-5b526199ebd0/hXQO8892mP.json',
     gradient: '#8b5cf6',
     icon: Bot,
     color: 'bg-purple-600',
@@ -78,7 +78,7 @@ export const FEATURES: Features[] = [
     main_description: 'Keep data safe',
     main_description_highlight: 'with smart access management.',
     sub_description: 'Control who sees what with role-based permissions.',
-    animationPath: 'https://lottie.host/01a7eb11-ca93-46a2-a2db-f784890a581d/ZQuuChnwIM.json',
+    main_icon_animation_path: 'https://lottie.host/01a7eb11-ca93-46a2-a2db-f784890a581d/ZQuuChnwIM.json',
     gradient: '#ef4444',
     icon: ShieldCheck,
     color: 'bg-red-600',

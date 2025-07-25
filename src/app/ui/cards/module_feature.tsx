@@ -1,8 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import dynamic from 'next/dynamic';
-
-
+import { useIsMobile } from '@/app/context/mobile_context';
 
 // === Configurable Variables ===
 const CARD_HEIGHT = 240;
@@ -16,7 +15,6 @@ const LottiePlayer = dynamic(
   () => import('@lottiefiles/react-lottie-player').then(mod => mod.Player),
   { ssr: false }
 );
-
 
 // === FeatureCard Component ===
 const FeatureCard = ({
@@ -32,6 +30,11 @@ const FeatureCard = ({
   };
 }) => {
   const Icon = feature.icon;
+  const isMobile = useIsMobile();
+
+  const slideTransform = isMobile
+    ? 'translateY(0)' // always open on mobile
+    : `translateY(${SLIDE_PANEL_HEIGHT}px)`; // hidden on desktop by default
 
   return (
     <div
@@ -75,11 +78,14 @@ const FeatureCard = ({
       {feature.details && feature.details.length > 0 && (
         <div
           className={classNames(
-            'absolute bottom-0 left-0 w-full bg-slate-900 transition-transform duration-500 ease-in-out group-hover:translate-y-[-160px]'
+            'absolute bottom-0 left-0 w-full bg-slate-900 transition-transform duration-500 ease-in-out',
+            {
+              'group-hover:translate-y-[-160px]': !isMobile, // only hover effect on non-mobile
+            }
           )}
           style={{
             height: SLIDE_PANEL_HEIGHT,
-            transform: `translateY(${SLIDE_PANEL_HEIGHT}px)`,
+            transform: slideTransform,
           }}
         >
           <div className="p-4 overflow-y-auto h-full space-y-2">
@@ -100,6 +106,5 @@ const FeatureCard = ({
     </div>
   );
 };
-
 
 export default FeatureCard;
