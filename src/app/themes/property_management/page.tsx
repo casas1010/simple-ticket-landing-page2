@@ -46,7 +46,6 @@ export default function PropertyManagementPage() {
         }
       />
 
-
       <ModuleFeatures
         title="Built for simplicity"
         description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
