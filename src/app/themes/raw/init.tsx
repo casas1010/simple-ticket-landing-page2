@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Header from '@/app/components/header/header';
-import ModulesOrbit from '../../components/modules_orbit/modules_orbit';
-import StarBackground from '@/app/components/star_background';
+import Header from '@/app/ui/header/header';
+import ModulesOrbit from '../../ui/modules_orbit/modules_orbit';
+import StarBackground from '@/app/ui/star_background';
 import { motion, AnimatePresence, m } from 'framer-motion';
-import PlatformFeatures from '@/app/components/platform_features';
+import PlatformFeatures from '@/app/ui/platform_features';
 import { Module } from '@/app/types/module';
-import { ModuleFeatures } from '@/app/components/lists/modules';
+import { ModuleFeatures } from '@/app/ui/lists/modules';
 import { FEATURES } from '@/app/data/features';
 
 export default function Init() {

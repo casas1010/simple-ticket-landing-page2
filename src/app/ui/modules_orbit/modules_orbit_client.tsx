@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
-import { MODULES, Module } from '@/app/data/modules';
+import { MODULES } from '@/app/data/modules';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import lottie, { AnimationItem } from 'lottie-web';
+import { Module } from '@/app/types/module';
 
 type Props = {
     setModule: (module: Module | null) => void;
@@ -28,6 +29,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const animationInstanceRef = useRef<AnimationItem | null>(null);
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
     const [animationReady, setAnimationReady] = useState<boolean>(false);
+    const [animationCache, setAnimationCache] = useState<Map<string, any>>(new Map());
 
     useEffect(() => {
         setScreenWidth(window.innerWidth);
@@ -43,6 +45,47 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         }
         return 220;
     }, [isMobile, screenWidth]);
+
+    // Function to fetch Lottie animation data from URL
+    const fetchLottieData = async (url: string): Promise<any> => {
+        // Check cache first
+        if (animationCache.has(url)) {
+            return animationCache.get(url);
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch animation: ${response.statusText}`);
+            }
+
+            // Check if it's a .lottie file (binary) or .json file
+            const isLottieFile = url.toLowerCase().endsWith('.lottie');
+            
+            let animationData;
+            if (isLottieFile) {
+                // For .lottie files, we need to extract the JSON from the binary format
+                // .lottie files are essentially ZIP files containing a data.json file
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // Use JSZip or similar library to extract the JSON
+                // For now, we'll try to load it directly as lottie-web can handle .lottie files
+                // by returning null and using the URL directly in loadAnimation
+                return null;
+            } else {
+                // For .json files, parse as JSON
+                animationData = await response.json();
+            }
+            
+            // Cache the animation data
+            setAnimationCache(prev => new Map(prev.set(url, animationData)));
+            
+            return animationData;
+        } catch (error) {
+            console.error('Error fetching Lottie animation:', error);
+            throw error;
+        }
+    };
 
     // Start or restart auto-select interval
     const startAutoSelect = () => {
@@ -155,7 +198,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         };
     }, [isPaused]);
 
-    // Handle Lottie animation - improved for smoother transitions
+    // Handle Lottie animation - updated to fetch from URL
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
 
@@ -170,32 +213,49 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 animationInstanceRef.current = null;
             }
 
-            // Load new animation with a small delay for smoother transition
-            const loadTimeout = setTimeout(() => {
-                if (animationContainerRef.current) {
-                    try {
-                        animationInstanceRef.current = lottie.loadAnimation({
-                            container: animationContainerRef.current,
-                            renderer: 'svg',
-                            loop: true,
-                            autoplay: true,
-                            path: moduleToShow.animationPath,
-                        });
+            // Load new animation from URL
+            const loadAnimation = async () => {
+                try {
+                    const isLottieFile = moduleToShow.animationPath.toLowerCase().endsWith('.lottie');
+                    
+                    if (animationContainerRef.current) {
+                        if (isLottieFile) {
+                            // For .lottie files, use the path directly
+                            animationInstanceRef.current = lottie.loadAnimation({
+                                container: animationContainerRef.current,
+                                renderer: 'svg',
+                                loop: true,
+                                autoplay: true,
+                                path: moduleToShow.animationPath, // Use path for .lottie files
+                            });
+                        } else {
+                            // For .json files, fetch and use animationData
+                            const animationData = await fetchLottieData(moduleToShow.animationPath);
+                            
+                            animationInstanceRef.current = lottie.loadAnimation({
+                                container: animationContainerRef.current,
+                                renderer: 'svg',
+                                loop: true,
+                                autoplay: true,
+                                animationData: animationData, // Use animationData for .json files
+                            });
+                        }
 
                         // Set animation ready after a brief moment
-                        const readyTimeout = setTimeout(() => {
+                        setTimeout(() => {
                             setAnimationReady(true);
                             setIsTransitioning(false);
                         }, 200);
-
-                        return () => clearTimeout(readyTimeout);
-                    } catch (error) {
-                        console.error('Error loading Lottie animation:', error);
-                        setIsTransitioning(false);
-                        setAnimationReady(false);
                     }
+                } catch (error) {
+                    console.error('Error loading Lottie animation:', error);
+                    setIsTransitioning(false);
+                    setAnimationReady(false);
                 }
-            }, 100);
+            };
+
+            // Add a small delay for smoother transition
+            const loadTimeout = setTimeout(loadAnimation, 100);
 
             return () => {
                 clearTimeout(loadTimeout);
@@ -213,7 +273,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                 animationInstanceRef.current = null;
             }
         }
-    }, [hoveredModule?.animationPath, activeModule?.animationPath]);
+    }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache]);
 
     const handleModuleHover = (mod: Module | null) => {
         setHoveredModule(mod);

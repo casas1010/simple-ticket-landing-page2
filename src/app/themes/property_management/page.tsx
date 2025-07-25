@@ -1,8 +1,7 @@
 import React from 'react';
 import PropertyManagementLanding from './init';
-import PlatformFeatures from '../../components/platform_features';
 import { PropertyManagementSuite } from './features';
-import Header from '@/app/components/header/header';
+import Header from '@/app/ui/header/header';
 
 export default function PropertyManagementPage() {
   return (

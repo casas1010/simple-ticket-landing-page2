@@ -1,4 +1,3 @@
-import { ModuleFeatures } from "../../components/lists/modules";
 
 // const features = [
 //   {

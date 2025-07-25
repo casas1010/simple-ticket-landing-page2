@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/context/mobile_context';
-import { MODULES, Module } from '@/app/data/modules';
-import Header from '@/app/components/header/header';
+import { MODULES } from '@/app/data/modules';
+import { Module } from '@/app/types/module';
+import Header from '@/app/ui/header/header';
 
 export default function GetStarted() {
   return <DesktopView />;
