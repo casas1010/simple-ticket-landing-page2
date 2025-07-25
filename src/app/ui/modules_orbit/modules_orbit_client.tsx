@@ -29,13 +29,13 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     const animationInstanceRef = useRef<AnimationItem | null>(null);
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
     const [animationReady, setAnimationReady] = useState<boolean>(false);
-const [animationCache, setAnimationCache] = useState<Map<string, Record<string, unknown>>>(new Map());
+    const [animationCache, setAnimationCache] = useState<Map<string, any>>(new Map());
 
     useEffect(() => {
         setScreenWidth(window.innerWidth);
     }, []);
 
-    const HOUSE_SIZE = isMobile ? '50vw' : '100px';
+    const HOUSE_SIZE = isMobile ? '15vw' : '100px';
     const CONTAINER_SIZE = isMobile ? '100vw' : '600px';
     const ROTATION_SPEED = 0.005;
 
@@ -47,39 +47,22 @@ const [animationCache, setAnimationCache] = useState<Map<string, Record<string, 
     }, [isMobile, screenWidth]);
 
     // Function to fetch Lottie animation data from URL
-const fetchLottieData = async (url: string): Promise<Record<string, unknown> | null> => {        // Check cache first
+    const fetchLottieData = async (url: string): Promise<any> => {
+        // Check cache first
         if (animationCache.has(url)) {
-    const cached = animationCache.get(url);
-    return cached ?? null; // ensure it returns null, not undefined
-}
+            return animationCache.get(url);
+        }
 
         try {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Failed to fetch animation: ${response.statusText}`);
             }
+            const animationData = await response.json();
 
-            // Check if it's a .lottie file (binary) or .json file
-            const isLottieFile = url.toLowerCase().endsWith('.lottie');
-            
-            let animationData;
-            if (isLottieFile) {
-                // For .lottie files, we need to extract the JSON from the binary format
-                // .lottie files are essentially ZIP files containing a data.json file
-                const arrayBuffer = await response.arrayBuffer();
-                
-                // Use JSZip or similar library to extract the JSON
-                // For now, we'll try to load it directly as lottie-web can handle .lottie files
-                // by returning null and using the URL directly in loadAnimation
-                return null;
-            } else {
-                // For .json files, parse as JSON
-                animationData = await response.json();
-            }
-            
             // Cache the animation data
             setAnimationCache(prev => new Map(prev.set(url, animationData)));
-            
+
             return animationData;
         } catch (error) {
             console.error('Error fetching Lottie animation:', error);
@@ -216,30 +199,16 @@ const fetchLottieData = async (url: string): Promise<Record<string, unknown> | n
             // Load new animation from URL
             const loadAnimation = async () => {
                 try {
-                    const isLottieFile = moduleToShow.animationPath.toLowerCase().endsWith('.lottie');
-                    
+                    const animationData = await fetchLottieData(moduleToShow.animationPath);
+
                     if (animationContainerRef.current) {
-                        if (isLottieFile) {
-                            // For .lottie files, use the path directly
-                            animationInstanceRef.current = lottie.loadAnimation({
-                                container: animationContainerRef.current,
-                                renderer: 'svg',
-                                loop: true,
-                                autoplay: true,
-                                path: moduleToShow.animationPath, // Use path for .lottie files
-                            });
-                        } else {
-                            // For .json files, fetch and use animationData
-                            const animationData = await fetchLottieData(moduleToShow.animationPath);
-                            
-                            animationInstanceRef.current = lottie.loadAnimation({
-                                container: animationContainerRef.current,
-                                renderer: 'svg',
-                                loop: true,
-                                autoplay: true,
-                                animationData: animationData, // Use animationData for .json files
-                            });
-                        }
+                        animationInstanceRef.current = lottie.loadAnimation({
+                            container: animationContainerRef.current,
+                            renderer: 'svg',
+                            loop: true,
+                            autoplay: true,
+                            animationData: animationData, // Use animationData instead of path
+                        });
 
                         // Set animation ready after a brief moment
                         setTimeout(() => {
@@ -329,8 +298,8 @@ const fetchLottieData = async (url: string): Promise<Record<string, unknown> | n
                             src="https://i.imgur.com/OEMWwAS.png"
                             alt="Static house"
                             className={`absolute inset-0 object-contain transition-all duration-700 ease-in-out transform ${hasActiveAnimation
-                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none'
-                                    : 'opacity-100 scale-100 blur-0'
+                                ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none'
+                                : 'opacity-100 scale-100 blur-0'
                                 }`}
                             style={{
                                 width: HOUSE_SIZE,
@@ -345,8 +314,8 @@ const fetchLottieData = async (url: string): Promise<Record<string, unknown> | n
                         <div
                             ref={animationContainerRef}
                             className={`absolute inset-0 transition-all duration-700 ease-out transform ${hasActiveAnimation && animationReady
-                                    ? 'opacity-100 scale-[1.8] blur-0'
-                                    : 'opacity-0 scale-50 blur-sm pointer-events-none'
+                                ? 'opacity-100 scale-[1.8] blur-0'
+                                : 'opacity-0 scale-50 blur-sm pointer-events-none'
                                 }`}
                             style={{
                                 transformOrigin: 'center center',
@@ -358,8 +327,8 @@ const fetchLottieData = async (url: string): Promise<Record<string, unknown> | n
                         {/* Enhanced transition overlay with radial effect */}
                         <div
                             className={`absolute inset-0 rounded-full transition-all duration-500 ease-in-out ${isTransitioning
-                                    ? 'opacity-30 scale-110'
-                                    : 'opacity-0 scale-100'
+                                ? 'opacity-30 scale-110'
+                                : 'opacity-0 scale-100'
                                 }`}
                             style={{
                                 background: hasActiveAnimation
@@ -441,12 +410,12 @@ const fetchLottieData = async (url: string): Promise<Record<string, unknown> | n
                                         </div>
 
                                         {/* Tooltip - only shows on hover */}
-                {(isHovered || (isActive && !hoveredModule)) && (
-    <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
-        {mod.title}
-        <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
-    </div>
-)}
+                                        {(isHovered || (isActive && !hoveredModule && !isMobile)) && (
+                                            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
+                                                {mod.title}
+                                                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );
