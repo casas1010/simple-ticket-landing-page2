@@ -3,7 +3,7 @@ import {
   Megaphone, BarChart, Mail, Briefcase, Search, FileText, Bot, ClipboardList, Users,
   History, Contact, TrendingUp, CheckCircle, Workflow, Receipt, Calculator, FileBarChart,
   CheckSquare, Timer, Settings, Shield, Lock, CheckLine, Home, Wrench, CalendarCheck,
-  AlertTriangle, Zap,Droplets
+  AlertTriangle, Zap, Droplets
 } from 'lucide-react';
 
 export type Detail = {
@@ -28,9 +28,9 @@ export const MODULES: Module[] = [
     title: 'Marketing',
     description: 'Enhance your marketing efforts with targeted campaigns, detailed analytics, and automated outreach tools to grow your customer base.',
     animationPath: 'https://lottie.host/bddd9424-7625-4528-bac0-4cb741f1be05/FIsyTVgp2o.json',
-    gradient: 'bg-blue-600',
+    gradient: '#2563eb', // blue-600
     icon: Zap,
-    color: 'bg-purple-500',
+    color: 'bg-blue-600',
     details: [
       { icon: Megaphone, description: 'Targeted campaigns', iconColor: 'text-white', iconBg: 'bg-blue-600' },
       { icon: BarChart, description: 'Detailed analytics', iconColor: 'text-white', iconBg: 'bg-blue-700' },
@@ -41,9 +41,9 @@ export const MODULES: Module[] = [
     title: 'Recruiting',
     description: 'Streamline your hiring process with automation, better tracking, and AI-assisted candidate screening.',
     animationPath: 'https://lottie.host/06922141-ea60-45da-9862-b085209f056c/RwBLNL0DZp.json',
-    gradient: 'bg-purple-600',
+    gradient: '#9333ea', // purple-600
     icon: FileText,
-    color: 'bg-blue-400',
+    color: 'bg-purple-600',
     details: [
       { icon: Briefcase, description: 'Automatically post job openings', iconColor: 'text-white', iconBg: 'bg-purple-600' },
       { icon: Search, description: 'Track candidates through interview/background checks', iconColor: 'text-white', iconBg: 'bg-purple-700' },
@@ -56,9 +56,9 @@ export const MODULES: Module[] = [
     title: 'Customer Management',
     description: 'Centralize your customer data and interactions to build meaningful, long-term relationships.',
     animationPath: 'https://lottie.host/4ed7ce26-7491-4516-8c9d-ee5e0258f720/l7UQzhbH1t.json',
-    gradient: 'bg-teal-600',
+    gradient: '#0d9488', // teal-600
     icon: Users,
-    color: 'bg-yellow-500',
+    color: 'bg-teal-600',
     details: [
       { icon: Contact, description: 'Track interactions, incidents, memberships', iconColor: 'text-white', iconBg: 'bg-teal-600' },
       { icon: Users, description: 'Manage customer segments', iconColor: 'text-white', iconBg: 'bg-teal-700' },
@@ -69,9 +69,9 @@ export const MODULES: Module[] = [
     title: 'Sales Management',
     description: 'Monitor deals, client communication, and performance metrics to drive revenue efficiently.',
     animationPath: 'https://lottie.host/712ca8ea-8b00-4615-825f-ab76a3a15042/Cb4dHj5nHH.json',
-    gradient: 'bg-green-600',
+    gradient: '#16a34a', // green-600
     icon: Droplets,
-    color: 'bg-cyan-500',
+    color: 'bg-green-600',
     details: [
       { icon: TrendingUp, description: 'Track leads', iconColor: 'text-white', iconBg: 'bg-green-600' },
       { icon: CheckCircle, description: 'Close deals', iconColor: 'text-white', iconBg: 'bg-green-700' },
@@ -82,9 +82,9 @@ export const MODULES: Module[] = [
     title: 'Financial Documentation',
     description: 'Organize invoices, receipts, and reports to maintain clear and compliant financial records.',
     animationPath: 'https://lottie.host/ca635384-4d5e-4fa1-8036-62aa4316be9f/FjoUUvbQUR.json',
-    gradient: 'bg-yellow-600',
+    gradient: '#ca8a04', // yellow-600
     icon: Lock,
-    color: 'bg-gray-700',
+    color: 'bg-yellow-600',
     details: [
       { icon: Receipt, description: 'Track expenses', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
       { icon: Calculator, description: 'Simplify accounting', iconColor: 'text-white', iconBg: 'bg-yellow-700' },
@@ -96,9 +96,9 @@ export const MODULES: Module[] = [
     title: 'Task Management',
     description: 'Assign, track, and complete tasks with visibility and accountability across teams.',
     animationPath: 'https://lottie.host/9e5ba739-65f8-4cc4-96a8-25dbeb79d0a6/tP4BkPdq3P.json',
-    gradient: 'bg-pink-600',
+    gradient: '#db2777', // pink-600
     icon: Shield,
-    color: 'bg-red-500',
+    color: 'bg-pink-600',
     details: [
       { icon: CheckSquare, description: 'Track and manage tasks', iconColor: 'text-white', iconBg: 'bg-pink-600' },
       { icon: Settings, description: 'Automate workflows', iconColor: 'text-white', iconBg: 'bg-pink-700' },
@@ -111,9 +111,9 @@ export const MODULES: Module[] = [
     title: 'Property Management',
     description: 'Oversee assets, tenants, and maintenance efficiently with unified management tools.',
     animationPath: 'https://lottie.host/53b254b6-8102-40e6-952a-c111cb232a73/7dUngRXxc9.json',
-    gradient: 'bg-rose-600',
+    gradient: '#e11d48', // rose-600
     icon: Settings,
-    color: 'bg-blue-500',
+    color: 'bg-rose-600',
     details: [
       { icon: Home, description: 'Track assets and tenants', iconColor: 'text-white', iconBg: 'bg-rose-600' },
       { icon: Wrench, description: 'Manage maintenance requests', iconColor: 'text-white', iconBg: 'bg-rose-700' },

@@ -1,10 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 
+interface StarBackgroundProps {
+  starColor?: string;
+}
 
-
-
-function StarBackground() {
+function StarBackground({ starColor }: StarBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const starsRef = useRef<Array<{x: number, y: number, r: number, dx: number, dy: number}>>([]);
+  const animationIdRef = useRef<number>(1);
+  const currentStarColorRef = useRef<string>('white');
+
+  // Update the current color ref when starColor changes
+  useEffect(() => {
+    currentStarColorRef.current = starColor || 'white';
+  }, [starColor]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -13,13 +22,16 @@ function StarBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const stars = Array.from({ length: 100 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 1.5 + 0.5,
-      dx: (Math.random() - 0.5) * 0.2,
-      dy: (Math.random() - 0.5) * 0.2,
-    }));
+    // Initialize stars only once
+    if (starsRef.current.length === 0) {
+      starsRef.current = Array.from({ length: 100 }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.5 + 0.5,
+        dx: (Math.random() - 0.5) * 0.2,
+        dy: (Math.random() - 0.5) * 0.2,
+      }));
+    }
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -28,9 +40,11 @@ function StarBackground() {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'white';
-
-      stars.forEach((star) => {
+      
+      // Use the current star color from the ref (this will be updated dynamically)
+      ctx.fillStyle = currentStarColorRef.current;
+      
+      starsRef.current.forEach((star) => {
         star.x += star.dx;
         star.y += star.dy;
 
@@ -45,14 +59,20 @@ function StarBackground() {
         ctx.fill();
       });
 
-      requestAnimationFrame(animate);
+      animationIdRef.current = requestAnimationFrame(animate);
     };
 
     resize();
     animate();
 
     window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
+    
+    return () => {
+      window.removeEventListener('resize', resize);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+    };
   }, []);
 
   return (
