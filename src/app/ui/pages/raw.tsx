@@ -14,8 +14,13 @@ import { ModuleFeatures } from '../components/lists/modules';
 import PlatformFeatures from '../components/platform_features';
 import ContactUs from '../components/contact_us';
 
-export default function RawPage() {
-  const [module, setModule] = useState<Module | null>(null);
+
+interface RawPageProps {
+  setModule: React.Dispatch<React.SetStateAction<Module | null>>;
+  module: Module | null;}
+
+export default function RawPage({setModule,module}:RawPageProps) {
+  // const [module, setModule] = useState<Module | null>(null);
 
   const mainText = module?.main_description ?? 'Discover the ideal data management system for your';
   const highlight = module?.main_description_highlight ?? 'organization';
@@ -24,9 +29,9 @@ export default function RawPage() {
   const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
 
   return (
-    <div className="bg-[#35495f] relative w-full overflow-hidden">
-      <StarBackground starColor={module?.gradient} />
-      <Header title={getTitle()} />
+    <>
+      {/* <StarBackground starColor={module?.gradient} /> */}
+      {/* <Header title={getTitle()} /> */}
 
       <TitleAndIcon
         mainText={mainText}
@@ -54,6 +59,6 @@ export default function RawPage() {
       <div className="h-50">
 
       </div>
-    </div>
+    </>
   );
 }

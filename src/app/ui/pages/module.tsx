@@ -46,8 +46,8 @@ export default function ModulePage({ mode }: ModulePageProps) {
 
 
   return (
-    <GradientBackground>
-      <Header title={"Simple " + module_.title} />
+    <>
+      {/* <Header title={"Simple " + module_.title} /> */}
 
       <TitleAndIcon
         mainText={module_?.main_description || ''}
@@ -88,7 +88,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
 
 
 
-    </GradientBackground>
+    </>
   );
 
 
