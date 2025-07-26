@@ -4,7 +4,7 @@ import MainPageClient from './MainPageClient';
 import { headers } from 'next/headers';
 import { MobileProvider } from './core/context/mobile_context';
 import { isMobileUserAgent } from './core/context_utils/is_mobile';
-import Loader from './components/loader';
+import Loader from './ui/components/loader';
 
 export default async function Page() {
   const headerList = headers();

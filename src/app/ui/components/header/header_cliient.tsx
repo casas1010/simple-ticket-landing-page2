@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Image from "next/image"
+import ContactUs from "../contact_us"
 
 export default function HeaderClient({ title = "Simple Ticket" }: { title?: string }) {
   const [scrolled, setScrolled] = useState(false)
@@ -70,11 +71,7 @@ export default function HeaderClient({ title = "Simple Ticket" }: { title?: stri
           <span className="text-white text-xl font-bold">{title}</span>
         </div>
 
-        <nav className="hidden md:flex items-center space-x-8">
-          <a href="#contact" className="text-white hover:text-blue-400 transition-colors">
-            Contact
-          </a>
-        </nav>
+        <ContactUs />
       </header>
     </div>
   )

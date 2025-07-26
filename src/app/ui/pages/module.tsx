@@ -4,12 +4,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
-import Header from '@/app/components/header/header';
 
-import { ModuleFeatures } from '@/app/components/lists/modules';
-import GradientBackground from '@/app/components/backgrounds/gradient';
+
 import { MODULES } from '@/app/core/data/modules';
-import TitleAndIcon from '@/app/components/title_and_icon';
+import GradientBackground from '../components/backgrounds/gradient';
+import Header from '../components/header/header';
+import TitleAndIcon from '../components/title_and_icon';
+import { ModuleFeatures } from '../components/lists/modules';
 
 interface ModulePageProps {
   mode: string;

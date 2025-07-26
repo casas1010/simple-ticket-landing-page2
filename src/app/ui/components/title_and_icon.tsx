@@ -2,7 +2,6 @@
 // Code2 - Updated MainContentSection with better positioning
 import { useIsMobile } from '@/app/core/context/mobile_context';
 import { AnimatePresence, motion } from 'framer-motion';
-import ModulesOrbit from '@/app/components/modules_orbit/modules_orbit';
 import { Module } from '@/app/core/types/module';
 
 type Props = {

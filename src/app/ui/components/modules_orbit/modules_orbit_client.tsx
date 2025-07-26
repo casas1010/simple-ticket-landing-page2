@@ -1,8 +1,7 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useIsMobile } from '@/app/core/context/mobile_context';
-
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import lottie, { AnimationItem } from 'lottie-web';
 import { Module } from '@/app/core/types/module';
@@ -171,23 +170,37 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
         };
     }, [isPaused]);
 
+    // DEBUG: Animation loading with debug statements
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
+        
+        // console.log('🔄 Animation Effect Triggered:', {
+        //     moduleToShow: moduleToShow?.title,
+        //     hasAnimationPath: !!moduleToShow?.animationPath,
+        //     isTransitioning,
+        //     animationReady,
+        //     hasActiveAnimation
+        // });
 
         if (moduleToShow?.animationPath && animationContainerRef.current) {
+            // console.log('🚀 Starting animation load for:', moduleToShow.title);
             setIsTransitioning(true);
             setAnimationReady(false);
 
             if (animationInstanceRef.current) {
+                console.log('🗑️ Destroying previous animation');
                 animationInstanceRef.current.destroy();
                 animationInstanceRef.current = null;
             }
 
             const loadAnimation = async () => {
                 try {
+                    // console.log('📦 Fetching animation data...');
                     const animationData = await fetchLottieData(moduleToShow.animationPath);
+                    // console.log('✅ Animation data loaded');
 
                     if (animationContainerRef.current) {
+                        console.log('🎬 Creating Lottie animation');
                         animationInstanceRef.current = lottie.loadAnimation({
                             container: animationContainerRef.current,
                             renderer: 'svg',
@@ -197,27 +210,30 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                         });
 
                         setTimeout(() => {
+                            // console.log('🎯 Animation ready!');
                             setAnimationReady(true);
                             setIsTransitioning(false);
-                        }, 200);
+                        }, 100);
                     }
                 } catch (error) {
-                    console.error('Error loading Lottie animation:', error);
+                    console.error('❌ Error loading Lottie animation:', error);
                     setIsTransitioning(false);
                     setAnimationReady(false);
                 }
             };
 
-            const loadTimeout = setTimeout(loadAnimation, 100);
+            // Start loading immediately for smoother transition
+            loadAnimation();
 
             return () => {
-                clearTimeout(loadTimeout);
                 if (animationInstanceRef.current) {
+                    // console.log('🧹 Cleanup: destroying animation');
                     animationInstanceRef.current.destroy();
                     animationInstanceRef.current = null;
                 }
             };
         } else {
+            // console.log('🛑 No animation needed, cleaning up');
             setIsTransitioning(false);
             setAnimationReady(false);
             if (animationInstanceRef.current) {
@@ -228,6 +244,7 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
     }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache]);
 
     const handleModuleHover = (mod: Module | null) => {
+        // console.log('🖱️ Module hover:', mod?.title || 'null');
         setHoveredModule(mod);
         setModule(mod);
 
@@ -262,19 +279,32 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
 
     const hasActiveAnimation = (hoveredModule?.animationPath || activeModule?.animationPath);
 
+    // DEBUG: Log state changes
+    useEffect(() => {
+        // console.log('📊 State Update:', {
+        //     hasActiveAnimation: !!hasActiveAnimation,
+        //     isTransitioning,
+        //     animationReady,
+        //     hoveredModule: hoveredModule?.title,
+        //     activeModule: activeModule?.title
+        // });
+    }, [hasActiveAnimation, isTransitioning, animationReady, hoveredModule, activeModule]);
+
     return (
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
 
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}>
+                        {/* DEBUG: Static house with debug info */}
                         <img
                             src="https://i.imgur.com/OEMWwAS.png"
                             alt="Static house"
-                            className={`absolute inset-0 object-contain transition-all duration-700 ease-in-out transform ${hasActiveAnimation
-                                ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none'
-                                : 'opacity-100 scale-100 blur-0'
-                                }`}
+                            className={`absolute inset-0 object-contain transition-all duration-500 ease-in-out transform ${
+                                hasActiveAnimation
+                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none'
+                                    : 'opacity-100 scale-100 blur-0'
+                            }`}
                             style={{
                                 width: HOUSE_SIZE,
                                 height: HOUSE_SIZE,
@@ -282,33 +312,58 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                 filter: hasActiveAnimation ? 'brightness(0.7)' : 'brightness(1)',
                                 zIndex: hasActiveAnimation ? 5 : 15
                             }}
+                            onTransitionEnd={() => {
+                                // console.log('🏠 House transition ended:', {
+                                //     hasActiveAnimation,
+                                //     opacity: hasActiveAnimation ? 0 : 100,
+                                //     scale: hasActiveAnimation ? 0.3 : 1
+                                // });
+                            }}
                         />
+                        
+                        {/* DEBUG: Animation container with debug info */}
                         <div
                             ref={animationContainerRef}
-                            className={`absolute inset-0 transition-all duration-700 ease-out transform ${hasActiveAnimation && animationReady
-                                ? 'opacity-100 scale-[1.8] blur-0'
-                                : 'opacity-0 scale-50 blur-sm pointer-events-none'
-                                }`}
+                            className={`absolute inset-0 transition-all ease-out transform ${
+                                hasActiveAnimation && animationReady
+                                    ? 'opacity-100 scale-[1.8] blur-0 duration-500'
+                                    : hasActiveAnimation && !animationReady
+                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
+                                    : 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
+                            }`}
                             style={{
                                 transformOrigin: 'center center',
                                 zIndex: hasActiveAnimation ? 25 : 10,
                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
                             }}
+                            onTransitionEnd={() => {
+                                // console.log('🎬 Animation transition ended:', {
+                                //     hasActiveAnimation,
+                                //     animationReady,
+                                //     opacity: hasActiveAnimation && animationReady ? 100 : 0,
+                                //     scale: hasActiveAnimation && animationReady ? 1.8 : 0.3
+                                // });
+                            }}
                         />
+                        
+                        {/* FIXED: Improved transition overlay */}
                         <div
-                            className={`absolute inset-0 rounded-full transition-all duration-500 ease-in-out ${isTransitioning
-                                ? 'opacity-30 scale-110'
-                                : 'opacity-0 scale-100'
-                                }`}
+                            className={`absolute inset-0 rounded-full transition-all duration-300 ease-in-out ${
+                                isTransitioning
+                                    ? 'opacity-20 scale-105'
+                                    : 'opacity-0 scale-100'
+                            }`}
                             style={{
                                 background: hasActiveAnimation
-                                    ? 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
+                                    ? 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)'
                                     : 'transparent',
-                                backdropFilter: isTransitioning ? 'blur(1px)' : 'none',
+                                backdropFilter: isTransitioning ? 'blur(0.5px)' : 'none',
                                 zIndex: 20,
                                 transformOrigin: 'center center'
                             }}
                         />
+                        
+                        {/* Glow effect */}
                         {hasActiveAnimation && animationReady && (
                             <div
                                 className="absolute inset-0 rounded-full opacity-20 animate-pulse"
@@ -353,19 +408,22 @@ const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
                                     }}
                                 >
                                     <div
-                                        className={`w-16 h-16 relative cursor-pointer transition-all duration-300 ease-out hover:scale-110 ${isActive ? 'scale-125' : ''
-                                            }`}
+                                        className={`w-16 h-16 relative cursor-pointer transition-all duration-300 ease-out hover:scale-110 ${
+                                            isActive ? 'scale-125' : ''
+                                        }`}
                                         onMouseEnter={() => handleModuleHover(mod)}
                                         onMouseLeave={() => handleModuleHover(null)}
                                         onClick={() => handleModuleClick(mod)}
                                     >
                                         <div
-                                            className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'
-                                                }`}
+                                            className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${
+                                                isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'
+                                            }`}
                                         />
                                         <div
-                                            className={`absolute inset-0 rounded-full ${orbColor} transition-all duration-300 ease-out flex items-center justify-center ${isActive ? 'shadow-lg' : 'hover:shadow-md'
-                                                }`}
+                                            className={`absolute inset-0 rounded-full ${orbColor} transition-all duration-300 ease-out flex items-center justify-center ${
+                                                isActive ? 'shadow-lg' : 'hover:shadow-md'
+                                            }`}
                                         />
                                         <div className="absolute inset-0 flex items-center justify-center z-10">
                                             <Icon className="w-8 h-8 text-white drop-shadow-md transition-all duration-200" />

@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import Header from '@/app/components/header/header';
-import StarBackground from '@/app/components/backgrounds/star';
-import PlatformFeatures from '@/app/components/platform_features';
-import { ModuleFeatures } from '@/app/components/lists/modules';
-import { Module } from '@/app/core/types/module';
-import TitleAndIcon from '../../components/title_and_icon';
+
 import { useIsMobile } from '@/app/core/context/mobile_context';
 
 
-import ModulesOrbit from '@/app/components/modules_orbit/modules_orbit';
 import { PLATFORM_FEATURES } from '@/app/core/data/features';
 import { MODULES } from '@/app/core/data/modules';
+import { Module } from '@/app/core/types/module';
+import StarBackground from '../components/backgrounds/star';
+import Header from '../components/header/header';
+import TitleAndIcon from '../components/title_and_icon';
+import ModulesOrbit from '../components/modules_orbit/modules_orbit';
+import { ModuleFeatures } from '../components/lists/modules';
+import PlatformFeatures from '../components/platform_features';
+import ContactUs from '../components/contact_us';
 
 export default function RawPage() {
   const [module, setModule] = useState<Module | null>(null);
@@ -47,6 +49,11 @@ export default function RawPage() {
         description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
         features={PLATFORM_FEATURES}
       />
+
+      <ContactUs />
+      <div className="h-50">
+
+      </div>
     </div>
   );
 }
