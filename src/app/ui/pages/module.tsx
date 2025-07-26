@@ -16,18 +16,18 @@ interface ModulePageProps {
 }
 
 export default function ModulePage({ mode }: ModulePageProps) {
-  const module = MODULES.find((r) => r.mode === mode);
+  const module_ = MODULES.find((r) => r.mode === mode); // module is reserved word, so use module_
   const [animationData, setAnimationData] = useState(null);
   const moduleFeaturesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (module?.animationPath) {
-      fetch(module.animationPath)
+    if (module_?.animationPath) {
+      fetch(module_.animationPath)
         .then((res) => res.json())
         .then(setAnimationData)
         .catch((err) => console.error('Failed to load animation:', err));
     }
-  }, [module]);
+  }, [module_]);
 
   useEffect(() => {
     // Scroll to ModuleFeatures after initial render
@@ -36,7 +36,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
     }
   }, []);
 
-  if (module == null) {
+  if (module_ == null) {
     return <text>AAA</text>
   }
 
@@ -45,12 +45,12 @@ export default function ModulePage({ mode }: ModulePageProps) {
 
   return (
     <GradientBackground>
-      <Header title={"Simple " + module.title} />
+      <Header title={"Simple " + module_.title} />
 
       <TitleAndIcon
-        mainText={module?.main_description || ''}
-        highlight={module?.main_description_highlight || ''}
-        subText={module?.sub_description || ''}
+        mainText={module_?.main_description || ''}
+        highlight={module_?.main_description_highlight || ''}
+        subText={module_?.sub_description || ''}
         setModule={() => { }}
         component={
           <div className="flex justify-center items-center w-full h-full min-h-[400px]">
@@ -70,9 +70,9 @@ export default function ModulePage({ mode }: ModulePageProps) {
 
       <div ref={moduleFeaturesRef}>
         <ModuleFeatures
-          title={module?.title}
-          description={module?.main_description}
-          features={module.features}
+          title={module_?.title}
+          description={module_?.main_description}
+          features={module_.features}
         />
       </div>
 
