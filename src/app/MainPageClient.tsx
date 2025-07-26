@@ -1,9 +1,8 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import ModulePage from './themes/property_management/page';
-import RestaurantPage from './themes/restaurant/page';
-import RawPage from './themes/raw/page';
+import RawPage from './ui/pages/raw';
+import ModulePage from './ui/pages/module';
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();

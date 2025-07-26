@@ -1,11 +1,12 @@
 "use client"
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useIsMobile } from '@/app/context/mobile_context';
-import { MODULES } from '@/app/data/modules';
+import { useIsMobile } from '@/app/core/context/mobile_context';
+
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import lottie, { AnimationItem } from 'lottie-web';
-import { Module } from '@/app/types/module';
+import { Module } from '@/app/core/types/module';
+import { MODULES } from '@/app/core/data/modules';
 
 type Props = {
     setModule: (module: Module | null) => void;

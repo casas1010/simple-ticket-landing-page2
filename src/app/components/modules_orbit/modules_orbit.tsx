@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import ModulesOrbitClient from './modules_orbit_client';
 import Loader from '../loader';
-import { Module } from '@/app/types/module';
+import { Module } from '@/app/core/types/module';
 
 type Props = {
     setModule: (module: Module | null) => void;

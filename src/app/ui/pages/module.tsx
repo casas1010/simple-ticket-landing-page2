@@ -1,13 +1,15 @@
+'use client';
+
 // File: PropertyManagementPage.tsx
 
 import React, { useEffect, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
-import Header from '@/app/ui/header/header';
-import MainContentSection from '../raw/init';
-import { ModuleFeatures } from '@/app/ui/lists/modules';
-import { PROPERTY_MANAGEMENT_FEATURES } from '@/app/data/property_management_features';
-import { MODULES } from '@/app/data/modules';
-import GradientBackground from '@/app/ui/backgrounds/gradient';
+import Header from '@/app/components/header/header';
+
+import { ModuleFeatures } from '@/app/components/lists/modules';
+import GradientBackground from '@/app/components/backgrounds/gradient';
+import { MODULES } from '@/app/core/data/modules';
+import TitleAndIcon from '@/app/components/title_and_icon';
 
 interface ModulePageProps {
   mode: string;
@@ -45,7 +47,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
     <GradientBackground>
       <Header title={"Simple " + module.title} />
 
-      <MainContentSection
+      <TitleAndIcon
         mainText={module?.main_description || ''}
         highlight={module?.main_description_highlight || ''}
         subText={module?.sub_description || ''}

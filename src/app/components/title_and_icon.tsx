@@ -1,9 +1,9 @@
 
 // Code2 - Updated MainContentSection with better positioning
-import { useIsMobile } from '@/app/context/mobile_context';
+import { useIsMobile } from '@/app/core/context/mobile_context';
 import { AnimatePresence, motion } from 'framer-motion';
-import ModulesOrbit from '@/app/ui/modules_orbit/modules_orbit';
-import { Module } from '@/app/types/module';
+import ModulesOrbit from '@/app/components/modules_orbit/modules_orbit';
+import { Module } from '@/app/core/types/module';
 
 type Props = {
   mainText: string;
@@ -13,7 +13,7 @@ type Props = {
   component?: React.ReactNode;
 };
 
-export default function MainContentSection(props: Props) {
+export default function TitleAndIcon(props: Props) {
   const isMobile = useIsMobile();
   return isMobile ? <MobileContent {...props} /> : <DesktopContent {...props} />;
 }

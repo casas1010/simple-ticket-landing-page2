@@ -2,7 +2,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import dynamic from 'next/dynamic';
-import { useIsMobile } from '@/app/context/mobile_context';
+import { useIsMobile } from '@/app/core/context/mobile_context';
 
 // === Configurable Variables ===
 const CARD_HEIGHT = 240;

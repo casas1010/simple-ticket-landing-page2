@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import Header from '@/app/ui/header/header';
-import StarBackground from '@/app/ui/backgrounds/star';
-import PlatformFeatures from '@/app/ui/platform_features';
-import { ModuleFeatures } from '@/app/ui/lists/modules';
-import { PLATFORM_FEATURES } from '@/app/data/features';
-import { Module } from '@/app/types/module';
-import MainContentSection from './init';
-import { useIsMobile } from '@/app/context/mobile_context';
+import Header from '@/app/components/header/header';
+import StarBackground from '@/app/components/backgrounds/star';
+import PlatformFeatures from '@/app/components/platform_features';
+import { ModuleFeatures } from '@/app/components/lists/modules';
+import { Module } from '@/app/core/types/module';
+import TitleAndIcon from '../../components/title_and_icon';
+import { useIsMobile } from '@/app/core/context/mobile_context';
 
 
-import ModulesOrbit from '@/app/ui/modules_orbit/modules_orbit';
-import { MODULES } from '@/app/data/modules';
+import ModulesOrbit from '@/app/components/modules_orbit/modules_orbit';
+import { PLATFORM_FEATURES } from '@/app/core/data/features';
+import { MODULES } from '@/app/core/data/modules';
 
 export default function RawPage() {
   const [module, setModule] = useState<Module | null>(null);
@@ -26,7 +26,7 @@ export default function RawPage() {
       <StarBackground starColor={module?.gradient} />
       <Header title={getTitle()} />
 
-      <MainContentSection
+      <TitleAndIcon
         mainText={mainText}
         highlight={highlight}
         subText={subText}
