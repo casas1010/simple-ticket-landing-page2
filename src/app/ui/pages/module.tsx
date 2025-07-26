@@ -11,6 +11,7 @@ import GradientBackground from '../components/backgrounds/gradient';
 import Header from '../components/header/header';
 import TitleAndIcon from '../components/title_and_icon';
 import { ModuleFeatures } from '../components/lists/modules';
+import ContactSection from '../components/contact_us';
 
 interface ModulePageProps {
   mode: string;
@@ -77,11 +78,13 @@ export default function ModulePage({ mode }: ModulePageProps) {
         />
       </div>
 
-      <div className="text-center mt-16">
+      {/* <div className="text-center mt-16">
         <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl">
           Get Started Today
         </button>
-      </div>
+      </div> */}
+
+      <ContactSection />
 
 
 

@@ -35,7 +35,7 @@ const ContactSection = () => {
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(emailAddress);
-      toast.success('Email address copied to clipboard');
+      // toast.success('Email address copied to clipboard');
     } catch (err) {
       toast.error('Failed to copy email');
     }
