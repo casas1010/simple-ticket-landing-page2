@@ -10,6 +10,7 @@ import { useIsMobile } from '@/app/context/mobile_context';
 
 
 import ModulesOrbit from '@/app/ui/modules_orbit/modules_orbit';
+import { MODULES } from '@/app/data/modules';
 
 export default function RawPage() {
   const [module, setModule] = useState<Module | null>(null);
@@ -31,6 +32,13 @@ export default function RawPage() {
         subText={subText}
         setModule={setModule}
         component={<ModulesOrbit setModule={setModule} />} // <-- ADDED
+      />
+
+      <ModuleFeatures
+        title="Modules"
+        description="Start from one of our pre build modules or create your own"
+        features={MODULES}
+        open_page={true}
       />
 
       <PlatformFeatures sub_title="" />

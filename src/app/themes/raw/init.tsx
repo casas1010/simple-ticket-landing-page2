@@ -1,13 +1,16 @@
+
+// Code2 - Updated MainContentSection with better positioning
 import { useIsMobile } from '@/app/context/mobile_context';
 import { AnimatePresence, motion } from 'framer-motion';
 import ModulesOrbit from '@/app/ui/modules_orbit/modules_orbit';
 import { Module } from '@/app/types/module';
+
 type Props = {
   mainText: string;
   highlight: string;
   subText: string;
   setModule: (m: Module | null) => void;
-  component?: React.ReactNode; // NEW PROP
+  component?: React.ReactNode;
 };
 
 export default function MainContentSection(props: Props) {
@@ -15,13 +18,19 @@ export default function MainContentSection(props: Props) {
   return isMobile ? <MobileContent {...props} /> : <DesktopContent {...props} />;
 }
 
+
+
 function MobileContent({ mainText, highlight, subText, setModule, component: uiComponent }: Props) {
+  console.log("MOBILE");
   return (
-    <div className="relative z-10 flex flex-col items-center px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
-      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
+    <div className="relative flex flex-col items-center px-8 pt-10 text-center max-w-7xl mx-auto min-h-screen">
+      {/* Background component (Lottie) - dimmed */}
+      <div className="absolute inset-0 z-0 flex justify-center items-center w-full opacity-30">
         {uiComponent}
       </div>
-      <div className="relative z-10 flex-1 max-w-2xl pt-20">
+      
+      {/* Text content - in foreground */}
+      <div className="relative z-10 max-w-2xl pt-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={`${mainText}-${highlight}-${subText}`}
@@ -43,14 +52,17 @@ function MobileContent({ mainText, highlight, subText, setModule, component: uiC
           </motion.div>
         </AnimatePresence>
       </div>
+      
+      {/* Spacer to maintain layout */}
+      <div className="flex-1"></div>
     </div>
   );
 }
 
 function DesktopContent({ mainText, highlight, subText, setModule, component: orbitComponent }: Props) {
   return (
-    <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start px-8 pt-10 text-left max-w-7xl mx-auto gap-10">
-      <div className="relative z-10 flex-1 max-w-2xl pt-20">
+    <div className="relative z-10 flex flex-col md:flex-row items-center md:items-stretch px-8 pt-10 text-left max-w-7xl mx-auto gap-10 min-h-[70vh]">
+      <div className="relative z-10 flex-1 max-w-2xl pt-20 flex flex-col justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={`${mainText}-${highlight}-${subText}`}
@@ -72,7 +84,9 @@ function DesktopContent({ mainText, highlight, subText, setModule, component: or
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="relative z-10 flex-1 w-full max-w-xl">
+
+      {/* Right column with centered component */}
+      <div className="relative z-10 flex-1 w-full max-w-xl flex justify-center items-center min-h-[500px]">
         {orbitComponent}
       </div>
     </div>

@@ -6,6 +6,12 @@ import {
   AlertTriangle, Zap, Droplets
 } from 'lucide-react';
 import { Module } from '../types/module';
+import { PROPERTY_MANAGEMENT_FEATURES } from './property_management_features';
+import { TASK_MANAGEMENT_FEATURES } from './task_management_features';
+import { FINANCIAL_DOCUMENTATION_FEATURES } from './financial_documentation_feature';
+import { SALES_MANAGEMENT_FEATURES } from './sales_management_features';
+import { CUSTOMER_MANAGEMENT_FEATURES } from './customer_management_feature';
+import { MARKETING_FEATURES } from './marketing_feature';
 
 
 
@@ -26,11 +32,12 @@ export const MODULES: Module[] = [
       { icon: BarChart, description: 'Detailed analytics', iconColor: 'text-white', iconBg: 'bg-blue-700' },
       { icon: Mail, description: 'Automatic notifications', iconColor: 'text-white', iconBg: 'bg-blue-800' },
     ],
+    features: MARKETING_FEATURES
+
   },
   {
     title: 'Recruiting',
     mode: 'recruiting',
-
     main_description: 'Simplify hiring and screening',
     main_description_highlight: 'with powerful AI tools.',
     sub_description: 'Automate posting, tracking, and candidate evaluation.',
@@ -45,6 +52,7 @@ export const MODULES: Module[] = [
       { icon: Bot, description: 'Use AI to filter candidates', iconColor: 'text-white', iconBg: 'bg-purple-900' },
       { icon: ClipboardList, description: 'Automatically extract resume data', iconColor: 'text-white', iconBg: 'bg-purple-950' },
     ],
+    features: CUSTOMER_MANAGEMENT_FEATURES
   },
   {
     title: 'Customer Management',
@@ -61,6 +69,8 @@ export const MODULES: Module[] = [
       { icon: Users, description: 'Manage customer segments', iconColor: 'text-white', iconBg: 'bg-teal-700' },
       { icon: History, description: 'Access complete service history', iconColor: 'text-white', iconBg: 'bg-teal-800' },
     ],
+    features: CUSTOMER_MANAGEMENT_FEATURES
+
   },
   {
     title: 'Sales Management',
@@ -77,6 +87,8 @@ export const MODULES: Module[] = [
       { icon: CheckCircle, description: 'Close deals', iconColor: 'text-white', iconBg: 'bg-green-700' },
       { icon: Workflow, description: 'Streamline workflow', iconColor: 'text-white', iconBg: 'bg-green-800' },
     ],
+    features: SALES_MANAGEMENT_FEATURES
+
   },
   {
     title: 'Financial Documentation',
@@ -94,6 +106,7 @@ export const MODULES: Module[] = [
       { icon: CheckLine, description: 'Ensure compliance', iconColor: 'text-white', iconBg: 'bg-yellow-800' },
       { icon: FileBarChart, description: 'Tax ready documentation', iconColor: 'text-white', iconBg: 'bg-yellow-900' },
     ],
+    features: FINANCIAL_DOCUMENTATION_FEATURES
   },
   {
     title: 'Task Management',
@@ -112,6 +125,7 @@ export const MODULES: Module[] = [
       { icon: Timer, description: 'Ensure timely resolution', iconColor: 'text-white', iconBg: 'bg-pink-900' },
       { icon: AlertTriangle, description: 'Set and track priorities', iconColor: 'text-white', iconBg: 'bg-pink-950' },
     ],
+    features: TASK_MANAGEMENT_FEATURES
   },
   {
     title: 'Property Management',
@@ -128,6 +142,7 @@ export const MODULES: Module[] = [
       { icon: Wrench, description: 'Manage maintenance requests', iconColor: 'text-white', iconBg: 'bg-rose-700' },
       { icon: CalendarCheck, description: 'Monitor lease schedules', iconColor: 'text-white', iconBg: 'bg-rose-800' },
     ],
+    features: PROPERTY_MANAGEMENT_FEATURES,
   },
 ];
 

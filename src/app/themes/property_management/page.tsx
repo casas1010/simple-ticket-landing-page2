@@ -4,14 +4,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import Lottie from 'lottie-react';
 import Header from '@/app/ui/header/header';
 import MainContentSection from '../raw/init';
-import { PropertyManagementSuite } from './features';
 import { ModuleFeatures } from '@/app/ui/lists/modules';
 import { PROPERTY_MANAGEMENT_FEATURES } from '@/app/data/property_management_features';
 import { MODULES } from '@/app/data/modules';
 import GradientBackground from '@/app/ui/backgrounds/gradient';
 
-export default function PropertyManagementPage() {
-  const module = MODULES.find((r) => r.mode === 'property_management');
+interface ModulePageProps {
+  mode: string;
+}
+
+export default function ModulePage({ mode }: ModulePageProps) {
+  const module = MODULES.find((r) => r.mode === mode);
   const [animationData, setAnimationData] = useState(null);
   const moduleFeaturesRef = useRef<HTMLDivElement>(null);
 
@@ -31,9 +34,16 @@ export default function PropertyManagementPage() {
     }
   }, []);
 
+  if (module == null) {
+    return <text>AAA</text>
+  }
+
+
+
+
   return (
     <GradientBackground>
-      <Header title="Simple Property" />
+      <Header title={"Simple " + module.title} />
 
       <MainContentSection
         mainText={module?.main_description || ''}
@@ -41,14 +51,16 @@ export default function PropertyManagementPage() {
         subText={module?.sub_description || ''}
         setModule={() => { }}
         component={
-          <div className="flex justify-center items-start w-full">
+          <div className="flex justify-center items-center w-full h-full min-h-[400px]">
             {animationData && (
-              <Lottie
-                animationData={animationData}
-                loop
-                autoplay
-                style={{ width: 300, height: 300 }}
-              />
+              <div className="flex justify-center items-center">
+                <Lottie
+                  animationData={animationData}
+                  loop
+                  autoplay
+                  style={{ width: 300, height: 300 }}
+                />
+              </div>
             )}
           </div>
         }
@@ -56,11 +68,22 @@ export default function PropertyManagementPage() {
 
       <div ref={moduleFeaturesRef}>
         <ModuleFeatures
-          title="Built for simplicity"
-          description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
-          features={PROPERTY_MANAGEMENT_FEATURES}
+          title={module?.title}
+          description={module?.main_description}
+          features={module.features}
         />
       </div>
+
+      <div className="text-center mt-16">
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl">
+          Get Started Today
+        </button>
+      </div>
+
+
+
     </GradientBackground>
   );
+
+
 }

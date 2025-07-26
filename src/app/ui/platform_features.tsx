@@ -135,11 +135,7 @@ const PlatformFeatures = ({ sub_title }: { sub_title: string }) => {
         </div>
 
 
-        {/* <div className="text-center mt-16">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl">
-            Get Started Today
-          </button>
-        </div> */}
+     
       </div>
     </div>
   );
