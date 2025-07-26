@@ -2,13 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { Copy, Mail, Calendar } from 'lucide-react';
-import { toast } from 'react-toastify';
 
 const ContactSection = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const emailAddress = 'jcasas@simple-ticket.net';
   const calendlyUrl = 'https://calendly.com/jcasasmail';
+
+  // Mock toast function since react-toastify isn't available
+  const toast = {
+    success: (message:string) => alert(message),
+    error: (message:string) => alert(message)
+  };
 
   // Detect screen size on mount
   useEffect(() => {
@@ -60,38 +65,38 @@ const ContactSection = () => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <button
-          onClick={sendEmail}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Contact us
-        </button>
-
         {isHovered && (
-          <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-xl p-4 flex gap-4 z-10">
+          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-xl p-4 flex gap-4 z-10 border">
             <button
               onClick={copyEmail}
-              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded"
+              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded transition-colors"
             >
               <Copy size={16} />
               Copy Email
             </button>
             <button
               onClick={sendEmail}
-              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded"
+              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded transition-colors"
             >
               <Mail size={16} />
               Send Email
             </button>
             <button
               onClick={openCalendly}
-              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded"
+              className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded transition-colors"
             >
               <Calendar size={16} />
               Schedule Meeting
             </button>
           </div>
         )}
+
+        <button
+          onClick={sendEmail}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          Contact us
+        </button>
       </div>
     </div>
   );
