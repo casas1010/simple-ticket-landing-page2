@@ -60,7 +60,7 @@ export default function HeaderClient({ title = "Simple Ticket" }: { title?: stri
               flash ? "flash-green" : "bg-blue-600"
             }`}
           >
-            <Image
+            <img
               src="https://i.imgur.com/OEMWwAS.png"
               alt="Logo"
               width={200}

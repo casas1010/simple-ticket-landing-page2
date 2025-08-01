@@ -1,15 +1,23 @@
-import { Suspense } from 'react';
+'use client';
+
+import { Suspense, useEffect, useState } from 'react';
 import MainPageClient from './MainPageClient';
 
-import { headers } from 'next/headers';
 import { MobileProvider } from './core/context/mobile_context';
 import { isMobileUserAgent } from './core/context_utils/is_mobile';
 import Loader from './ui/components/loader';
 
-export default async function Page() {
-  const headerList = headers();
-  const userAgent = (await headerList).get('user-agent') || '';
-  const isMobile = isMobileUserAgent(userAgent);
+export default function Page() {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent || '';
+    setIsMobile(isMobileUserAgent(userAgent));
+  }, []);
+
+  if (isMobile === null) {
+    return <Loader />;
+  }
 
   return (
     <MobileProvider isMobile={isMobile}>
@@ -19,11 +27,3 @@ export default async function Page() {
     </MobileProvider>
   );
 }
-
-
-
-
-
-
-
-

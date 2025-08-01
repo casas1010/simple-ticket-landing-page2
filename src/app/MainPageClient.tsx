@@ -16,16 +16,6 @@ import ContactUs from './ui/components/contact_us';
 import RawPage from './ui/pages/raw';
 import ModulePage from './ui/pages/module';
 
-// export default function MainPageClient() {
-//   const searchParams = useSearchParams();
-//   const mode = searchParams.get('mode');
-
-// if (mode != null) {
-//   return <ModulePage mode={mode} />;
-// }
-
-// return <RawPage></RawPage>
-// }
 
 
 
@@ -34,12 +24,9 @@ export default function MainPageClient() {
   const mode = searchParams.get('mode');
   const [module, setModule] = useState<Module | null>(null);
 
-  const mainText = module?.main_description ?? 'Discover the ideal data management system for your';
-  const highlight = module?.main_description_highlight ?? 'organization';
-  const subText = module?.sub_description ?? '';
 
   const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
-  const getUi = () => (mode != null ? <ModulePage mode={mode} /> : <RawPage setModule={setModule} module={mode} />);
+  const getUi = () => (mode != null ? <ModulePage mode={mode} /> : <RawPage setModule={setModule} module={module} />);
 
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">

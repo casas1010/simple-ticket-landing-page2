@@ -26,7 +26,6 @@ export default function RawPage({setModule,module}:RawPageProps) {
   const highlight = module?.main_description_highlight ?? 'organization';
   const subText = module?.sub_description ?? '';
 
-  const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
 
   return (
     <>
