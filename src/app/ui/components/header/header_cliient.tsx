@@ -4,10 +4,12 @@ import { useEffect, useState } from "react"
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Image from "next/image"
 import ContactUs from "../contact_us"
+import { useModule } from "@/app/core/context/module"
 
 export default function HeaderClient({ title = "Simple Ticket" }: { title?: string }) {
   const [scrolled, setScrolled] = useState(false)
   const [flash, setFlash] = useState(false)
+  const { module, setModule } = useModule();
 
   const router = useRouter()
   const pathname = usePathname()
@@ -22,18 +24,28 @@ export default function HeaderClient({ title = "Simple Ticket" }: { title?: stri
   }, [])
 
   useEffect(() => {
-    if (title && title !== "Simple Ticket") {
+    let interval: NodeJS.Timeout | null = null
+
+    if (module !== null) {
       setFlash(true)
-      const timeout = setTimeout(() => setFlash(false), 2000)
-      return () => clearTimeout(timeout)
+      interval = setInterval(() => {
+        setFlash((prev) => !prev)
+      }, 1000) // match the animation duration
+    } else {
+      setFlash(false)
     }
-  }, [title])
+
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [module])
 
   const handleIconClick = () => {
     const params = new URLSearchParams(searchParams.toString())
     if (params.has("mode")) {
       params.delete("mode")
       router.replace(`${pathname}?${params.toString()}`)
+      setModule(null);
     }
   }
 
@@ -49,16 +61,14 @@ export default function HeaderClient({ title = "Simple Ticket" }: { title?: stri
         }
       `}</style>
       <header
-        className={`w-full max-w-6xl rounded-2xl backdrop-blur bg-white/10 shadow-lg transition-all ${
-          scrolled ? "py-2" : "py-4"
-        } px-6 md:px-8 flex items-center justify-between`}
+        className={`w-full max-w-6xl rounded-2xl backdrop-blur bg-white/10 shadow-lg transition-all ${scrolled ? "py-2" : "py-4"
+          } px-6 md:px-8 flex items-center justify-between`}
       >
         <div className="flex items-center space-x-3">
           <div
             onClick={handleIconClick}
-            className={`p-2 rounded-lg transition-all duration-300 cursor-pointer ${
-              flash ? "flash-green" : "bg-blue-600"
-            }`}
+            className={`p-2 rounded-lg transition-all duration-300 cursor-pointer ${flash ? "flash-green" : "bg-blue-600"
+              }`}
           >
             <img
               src="https://i.imgur.com/OEMWwAS.png"

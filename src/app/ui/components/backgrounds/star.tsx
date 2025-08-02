@@ -1,19 +1,20 @@
+import { useModule } from '@/app/core/context/module';
 import React, { useEffect, useRef } from 'react';
 
-interface StarBackgroundProps {
-  starColor?: string;
-}
 
-function StarBackground({ starColor }: StarBackgroundProps) {
+
+function StarBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const starsRef = useRef<Array<{x: number, y: number, r: number, dx: number, dy: number}>>([]);
+  const starsRef = useRef<Array<{ x: number, y: number, r: number, dx: number, dy: number }>>([]);
   const animationIdRef = useRef<number>(1);
   const currentStarColorRef = useRef<string>('white');
+  const { module, setModule } = useModule();
+
 
   // Update the current color ref when starColor changes
   useEffect(() => {
-    currentStarColorRef.current = starColor || 'white';
-  }, [starColor]);
+    currentStarColorRef.current = module?.gradient || 'white';
+  }, [module?.gradient]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -40,10 +41,10 @@ function StarBackground({ starColor }: StarBackgroundProps) {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       // Use the current star color from the ref (this will be updated dynamically)
       ctx.fillStyle = currentStarColorRef.current;
-      
+
       starsRef.current.forEach((star) => {
         star.x += star.dx;
         star.y += star.dy;
@@ -66,7 +67,7 @@ function StarBackground({ starColor }: StarBackgroundProps) {
     animate();
 
     window.addEventListener('resize', resize);
-    
+
     return () => {
       window.removeEventListener('resize', resize);
       if (animationIdRef.current) {

@@ -1,107 +1,63 @@
-
-
-
-
-
 // components/AboutUsHero.jsx
 import React from 'react';
 
-const AboutUsHero = () => {
+const values = [
+  {
+    title: "Automate with Purpose",
+    description:
+      "We automate intentionally—to eliminate the mundane and unlock time for real innovation. Automation helps us and our customers focus on what truly matters.",
+    icon: "⚙️",
+  },
+  {
+    title: "Relentlessly Improve",
+    description:
+      "Stagnation isn’t an option. From our products to our people, we’re always evolving—learning, refining, and pushing boundaries.",
+    icon: "📈",
+  },
+  {
+    title: "Move with Agility",
+    description:
+      "Adaptability is our strength. We stay flexible, move fast, and embrace change to stay ahead of what our customers need next.",
+    icon: "🤸",
+  },
+  {
+    title: "Lead with Honesty",
+    description:
+      "We choose transparency over ego. Honest feedback and open communication build trust, growth, and meaningful progress.",
+    icon: "🫱🤝🫲",
+  },
+  {
+    title: "Assume Positive Intent",
+    description:
+      "We trust each other first. By assuming the best in people, we create space for bold ideas, open dialogue, and authentic collaboration.",
+    icon: "💡",
+  },
+];
+
+const AboutUs = () => {
   return (
-    <div className="hero-container">
-      <div className="content">
-        <p className="tagline">SIMPLE SOLUTIONS. POWERFUL RESULTS.</p>
-        <h1 className="main-title">About Us</h1>
-        <div className="scroll-indicator">
-          <div className="scroll-line"></div>
-          <span className="scroll-text">Scroll</span>
+    <div className="p-6 max-w-3xl mx-auto space-y-6">
+      {values.map((value, index) => (
+        <div
+          key={index}
+          className="relative overflow-hidden rounded-2xl border border-white/20 shadow-xl backdrop-blur-md bg-white/10 transition-transform hover:scale-[1.02]"
+        >
+          {/* Content */}
+          <div className="relative z-10 p-6 flex items-start gap-4 text-white">
+            <div className="text-3xl mt-1">{value.icon}</div>
+            <div>
+              <h3 className="text-xl font-semibold tracking-wide">
+                {value.title}
+              </h3>
+              <p className="text-white/80 mt-2 leading-relaxed font-medium">
+                {value.description}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <style jsx>{`
-        .hero-container {
-          min-height: 100vh;
-          background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3730a3 50%, #7c3aed 75%, #ec4899 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .content {
-          text-align: center;
-          z-index: 2;
-          max-width: 800px;
-          padding: 0 20px;
-        }
-
-        .tagline {
-          font-size: 14px;
-          font-weight: 400;
-          letter-spacing: 3px;
-          color: rgba(255, 255, 255, 0.7);
-          margin-bottom: 30px;
-          text-transform: uppercase;
-        }
-
-        .main-title {
-          font-size: clamp(4rem, 12vw, 8rem);
-          font-weight: 700;
-          background: linear-gradient(90deg, #a855f7, #ec4899, #f97316);
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin: 0;
-          line-height: 1.1;
-        }
-
-        .scroll-indicator {
-          position: absolute;
-          bottom: 40px;
-          left: 50%;
-          transform: translateX(-50%);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .scroll-line {
-          width: 1px;
-          height: 40px;
-          background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.5));
-          animation: scrollPulse 2s ease-in-out infinite;
-        }
-
-        .scroll-text {
-          font-size: 12px;
-          color: rgba(255, 255, 255, 0.6);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        @keyframes scrollPulse {
-          0%, 100% {
-            opacity: 0.3;
-            transform: translateY(0);
-          }
-          50% {
-            opacity: 1;
-            transform: translateY(5px);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .tagline {
-            font-size: 12px;
-            letter-spacing: 2px;
-          }
-        }
-      `}</style>
+      ))}
     </div>
   );
 };
 
-
-export default AboutUsHero;
+export default AboutUs;

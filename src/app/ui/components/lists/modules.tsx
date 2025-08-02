@@ -19,7 +19,7 @@ export const ModuleFeatures = ({
     main_description?: string;
     description?: string;
     details?: { icon: React.ElementType; description: string }[];
-    mode?: string; // mode used for query param
+    mode?: string;
   }[];
 }) => {
   const router = useRouter();
@@ -34,28 +34,10 @@ export const ModuleFeatures = ({
     }
   };
 
-  const getLastRowItemCount = () => {
-    const cols = { base: 1, md: 2, lg: 3 };
-    const lgLastRowCount = features.length % cols.lg || cols.lg;
-    const mdLastRowCount = features.length % cols.md || cols.md;
-    return { lgLastRowCount, mdLastRowCount };
-  };
-
-  const { lgLastRowCount, mdLastRowCount } = getLastRowItemCount();
-
-  const getGridColSpan = () => {
-    if (lgLastRowCount === 1) {
-      return 'lg:[&>*:nth-last-child(-n+1)]:col-start-2';
-    } else if (lgLastRowCount === 2) {
-      return 'lg:[&>*:nth-last-child(-n+2)]:col-start-1';
-    }
-
-    if (mdLastRowCount === 1) {
-      return 'md:[&>*:nth-last-child(-n+1)]:col-start-1 lg:[&>*:nth-last-child(-n+1)]:col-start-2';
-    }
-
-    return '';
-  };
+  // Split features into full rows and a final partial row
+  const fullRows = Math.floor(features.length / 3) * 3;
+  const rowsExceptLast = features.slice(0, fullRows);
+  const lastRow = features.slice(fullRows);
 
   return (
     <div className="min-h-screen py-16 px-4">
@@ -65,18 +47,32 @@ export const ModuleFeatures = ({
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">{description}</p>
         </div>
 
-        <div className="flex justify-center">
-          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center ${getGridColSpan()}`}>
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                onClick={() => handleCardClick(feature)}
-                className={open_page ? 'cursor-pointer w-full' : 'w-full'}
-              >
-                <FeatureCard feature={feature} />
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Render full rows */}
+          {rowsExceptLast.map((feature, index) => (
+            <div
+              key={index}
+              onClick={() => handleCardClick(feature)}
+              className={`w-full ${open_page ? 'cursor-pointer' : ''}`}
+            >
+              <FeatureCard feature={feature} />
+            </div>
+          ))}
+
+          {/* Center last row if it exists */}
+          {lastRow.length > 0 && (
+            <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center gap-8">
+              {lastRow.map((feature, index) => (
+                <div
+                  key={fullRows + index}
+                  onClick={() => handleCardClick(feature)}
+                  className={`w-full max-w-sm ${open_page ? 'cursor-pointer' : ''}`}
+                >
+                  <FeatureCard feature={feature} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

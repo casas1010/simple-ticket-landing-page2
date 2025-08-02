@@ -49,7 +49,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
     <>
 
       <TitleAndIcon
-         videos={module_?.videos}
+        videos={module_?.videos}
         mainText={module_?.main_description || ''}
         highlight={module_?.main_description_highlight || ''}
         subText={module_?.sub_description || ''}

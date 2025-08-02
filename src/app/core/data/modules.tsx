@@ -3,7 +3,10 @@ import {
   Megaphone, BarChart, Mail, Briefcase, Search, FileSignature, Bot, ClipboardList, Users,
   History, Contact, TrendingUp, CheckCircle, Workflow, Receipt, Calculator, FileBarChart,
   CheckSquare, Timer, Settings, Shield, Lock, CheckLine, Home, Hammer, CalendarRange,
-  AlertTriangle, Zap, Droplets, UserPlus, PieChart, DollarSign, FolderKanban, Building2
+  AlertTriangle, Zap, Droplets, UserPlus, PieChart, DollarSign, FolderKanban, Building2,
+  Gavel,
+  FileTextIcon,
+  ShieldCheck
 } from 'lucide-react';
 import { Module } from '../types/module';
 import { PROPERTY_MANAGEMENT_FEATURES } from './property_management_features';
@@ -12,6 +15,7 @@ import { FINANCIAL_DOCUMENTATION_FEATURES } from './financial_documentation_feat
 import { SALES_MANAGEMENT_FEATURES } from './sales_management_features';
 import { CUSTOMER_MANAGEMENT_FEATURES } from './customer_management_feature';
 import { MARKETING_FEATURES } from './marketing_feature';
+import { LEGAL_CASE_MANAGEMENT_FEATURES } from './legal_case_management';
 
 export const MODULES: Module[] = [
   {
@@ -137,13 +141,36 @@ export const MODULES: Module[] = [
       { icon: CalendarRange, description: 'Monitor lease schedules', iconColor: 'text-white', iconBg: 'bg-rose-800' },
     ],
     features: PROPERTY_MANAGEMENT_FEATURES,
-       videos: [
-            { "name": "Incident creation", "url": "https://youtu.be/VUgp57b2bAs" },
-            { "name": "Job creation", "url": "https://youtu.be/hcsNQiEUC3s" },
-            { "name": "Job application", "url": "https://youtu.be/dEJj68S3F_8" },
-            { "name": "Complete job", "url": "https://youtu.be/MSBbHMUkkhI" },
-            { "name": "Incident complete", "url": "https://youtu.be/q-K9RAaB2fE" },
+    videos: [
+      { "name": "Incident creation", "url": "https://youtu.be/VUgp57b2bAs" },
+      { "name": "Job creation", "url": "https://youtu.be/hcsNQiEUC3s" },
+      { "name": "Job application", "url": "https://youtu.be/dEJj68S3F_8" },
+      { "name": "Complete job", "url": "https://youtu.be/MSBbHMUkkhI" },
+      { "name": "Incident complete", "url": "https://youtu.be/q-K9RAaB2fE" },
 
-        ]
+    ]
   },
+
+  ///////////
+
+{
+  title: 'Case Management',
+  mode: 'case_management',
+  main_description: 'Simplify legal workflows, from intake to invoicing',
+  main_description_highlight: '— all with intelligent automation.',
+  sub_description: 'Manage legal workflows, automate documentation, and provide clients with secure, real-time updates.',
+  animationPath: 'https://lottie.host/97df4523-1062-4af7-85b8-4f0eb327a919/0TlMyUCifS.json',
+  gradient: '#1de144ff',
+  icon: Gavel, 
+  color: 'bg-indigo-600', 
+  details: [
+    { icon: Home, description: 'End-to-end case management', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
+    { icon: Hammer, description: 'Time tracking & automated billing', iconColor: 'text-white', iconBg: 'bg-indigo-700' },
+    { icon: CalendarRange, description: 'Dedicated client portal access', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
+    { icon: Bot, description: 'Legal workflow automation', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
+    { icon: FileTextIcon, description: 'Secure document management', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
+    { icon: ShieldCheck, description: 'Military-grade encryption & HTTPS security', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
+  ],
+  features: LEGAL_CASE_MANAGEMENT_FEATURES,
+}
 ];

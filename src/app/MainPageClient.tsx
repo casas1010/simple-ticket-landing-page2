@@ -1,10 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useModule } from './core/context/module';
 
-import { useEffect, useState } from 'react';
-
-import { Module } from './core/types/module';
 import { PLATFORM_FEATURES } from './core/data/features';
 import { MODULES } from './core/data/modules';
 import StarBackground from './ui/components/backgrounds/star';
@@ -16,30 +15,45 @@ import TitleAndIcon from './ui/components/title_and_icon';
 import ContactUs from './ui/components/contact_us';
 import RawPage from './ui/pages/raw';
 import ModulePage from './ui/pages/module';
-import AboutUsHero from './ui/pages/about_us';
-
-
-
+import AboutUs from './ui/pages/about_us';
+import Footer from './ui/components/footer';
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
-  const [module, setModule] = useState<Module | null>(null);
 
 
-  const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
-  const getUi = () => (mode != null ? <ModulePage mode={mode} /> : <RawPage setModule={setModule} module={module} />);
+  const renderUi = () => {
+    if (mode == null) {
+      return <RawPage />;
+    }
+
+    if (mode == 'about-us') {
+      return <AboutUs key="about" />;
+    }
+
+    return <ModulePage mode={mode} key={mode} />;
+  };
 
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
-      <StarBackground starColor={module?.gradient} />
-      <Header title={getTitle()} />
-      {/* <AboutUsHero /> */}
+      <StarBackground />
+      <Header />
 
-      {getUi()}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={mode || 'raw'}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+        >
+          {renderUi()}
+        </motion.div>
+      </AnimatePresence>
+
+      <Footer />
       <div className="h-25"></div>
     </div>
   );
 }
-
-

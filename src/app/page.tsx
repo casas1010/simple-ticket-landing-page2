@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import MainPageClient from './MainPageClient';
 
 import { MobileProvider } from './core/context/mobile_context';
+import { ModuleProvider } from './core/context/module';
 import { isMobileUserAgent } from './core/context_utils/is_mobile';
 import Loader from './ui/components/loader';
 
@@ -21,9 +22,11 @@ export default function Page() {
 
   return (
     <MobileProvider isMobile={isMobile}>
-      <Suspense fallback={<Loader />}>
-        <MainPageClient />
-      </Suspense>
+      <ModuleProvider>
+        <Suspense fallback={<Loader />}>
+          <MainPageClient />
+        </Suspense>
+      </ModuleProvider>
     </MobileProvider>
   );
 }
