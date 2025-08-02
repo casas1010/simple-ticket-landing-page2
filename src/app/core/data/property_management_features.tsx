@@ -37,6 +37,7 @@ export const PROPERTY_MANAGEMENT_FEATURES: Features[] = [
             { icon: FileText, description: 'Automated lease renewals and digital documents', iconColor: 'text-white', iconBg: 'bg-green-600' },
             { icon: Lock, description: 'Tenant portal access with secure login', iconColor: 'text-white', iconBg: 'bg-green-600' },
         ],
+     
     },
     {
         title: 'Rent Collection & Accounting',

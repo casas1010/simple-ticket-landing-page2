@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Copy, Mail, Calendar } from 'lucide-react';
 
-const ContactSection = () => {
+type ContactSectionProps = {
+  text?: string;
+};
+
+const ContactSection = ({ text = "Contact us" }: ContactSectionProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const emailAddress = 'jcasas@simple-ticket.net';
@@ -18,7 +22,6 @@ const ContactSection = () => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    setIsHovered(false);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -30,7 +33,7 @@ const ContactSection = () => {
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(emailAddress);
-      // toast.success('Email address copied to clipboard');
+      toast.success('Email address copied to clipboard');
     } catch (err) {
       toast.error('Failed to copy email');
     }
@@ -47,7 +50,7 @@ const ContactSection = () => {
           onClick={openCalendly}
           className="px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm rounded-lg hover:from-indigo-600 hover:to-purple-700 transition shadow-md"
         >
-          Contact us
+          {text}
         </button>
       </div>
     );
@@ -66,21 +69,21 @@ const ContactSection = () => {
               onClick={copyEmail}
               className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md transition-colors"
             >
-              <Copy size={16} />
+              <Copy size={25} />
               Copy Email
             </button>
             <button
               onClick={sendEmail}
               className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md transition-colors"
             >
-              <Mail size={16} />
+              <Mail size={25} />
               Send Email
             </button>
             <button
               onClick={openCalendly}
               className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md transition-colors"
             >
-              <Calendar size={16} />
+              <Calendar size={25} />
               Schedule Meeting
             </button>
           </div>
@@ -90,7 +93,7 @@ const ContactSection = () => {
           onClick={sendEmail}
           className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition shadow-md"
         >
-          Contact us
+          {text}
         </button>
       </div>
     </div>

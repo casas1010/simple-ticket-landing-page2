@@ -2,7 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { Module } from './core/types/module';
 import { PLATFORM_FEATURES } from './core/data/features';
 import { MODULES } from './core/data/modules';
@@ -15,6 +16,7 @@ import TitleAndIcon from './ui/components/title_and_icon';
 import ContactUs from './ui/components/contact_us';
 import RawPage from './ui/pages/raw';
 import ModulePage from './ui/pages/module';
+import AboutUsHero from './ui/pages/about_us';
 
 
 
@@ -32,11 +34,12 @@ export default function MainPageClient() {
     <div className="bg-[#35495f] relative w-full overflow-hidden">
       <StarBackground starColor={module?.gradient} />
       <Header title={getTitle()} />
+      {/* <AboutUsHero /> */}
 
       {getUi()}
-      <div className="h-50">
-
-      </div>
+      <div className="h-25"></div>
     </div>
   );
 }
+
+

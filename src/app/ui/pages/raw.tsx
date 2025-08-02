@@ -33,6 +33,7 @@ export default function RawPage({setModule,module}:RawPageProps) {
       {/* <Header title={getTitle()} /> */}
 
       <TitleAndIcon
+
         mainText={mainText}
         highlight={highlight}
         subText={subText}
@@ -54,7 +55,7 @@ export default function RawPage({setModule,module}:RawPageProps) {
         features={PLATFORM_FEATURES}
       />
 
-      <ContactUs />
+      <ContactUs  text="Get started"/>
       <div className="h-50">
 
       </div>

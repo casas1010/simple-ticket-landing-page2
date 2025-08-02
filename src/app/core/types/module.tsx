@@ -1,5 +1,6 @@
 import { Detail } from "./detail";
 import { Features } from "./feature";
+import { Video } from "./video";
 
 export type Module = {
   title: string;
@@ -12,5 +13,6 @@ export type Module = {
   gradient: string;
   icon: React.ElementType;
   color: string;
+  videos?: Video[];
   features: Features[];
 };

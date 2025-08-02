@@ -47,9 +47,9 @@ export default function ModulePage({ mode }: ModulePageProps) {
 
   return (
     <>
-      {/* <Header title={"Simple " + module_.title} /> */}
 
       <TitleAndIcon
+         videos={module_?.videos}
         mainText={module_?.main_description || ''}
         highlight={module_?.main_description_highlight || ''}
         subText={module_?.sub_description || ''}
@@ -75,6 +75,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
           title={module_?.title}
           description={module_?.main_description}
           features={module_.features}
+
         />
       </div>
 
@@ -84,7 +85,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
         </button>
       </div> */}
 
-      <ContactSection />
+      <ContactSection text="Get started" />
 
 
 
