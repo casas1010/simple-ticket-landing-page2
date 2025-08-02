@@ -31,12 +31,17 @@ export default function ModulePage({ mode }: ModulePageProps) {
     }
   }, [module_]);
 
-  useEffect(() => {
-    // Scroll to ModuleFeatures after initial render
+useEffect(() => {
+  // Scroll to ModuleFeatures after initial render with 1s delay
+  const timeout = setTimeout(() => {
     if (moduleFeaturesRef.current) {
       moduleFeaturesRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
+  }, 1000); // 1000 milliseconds = 1 second
+
+  // Optional cleanup
+  return () => clearTimeout(timeout);
+}, []);
 
   if (module_ == null) {
     return <text>AAA</text>

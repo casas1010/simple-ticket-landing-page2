@@ -40,7 +40,7 @@ export default function RawPage() {
         open_page={true}
       />
 
-      <PlatformFeatures sub_title="" />
+      {/* <PlatformFeatures sub_title="" /> */}
 
       <ModuleFeatures
         title="Built for simplicity"

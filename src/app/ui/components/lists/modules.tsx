@@ -28,13 +28,18 @@ export const ModuleFeatures = ({
 
   const handleCardClick = (feature: typeof features[number]) => {
     if (open_page && feature.mode) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('mode', feature.mode);
-      router.push(`${pathname}?${params.toString()}`);
+      // Scroll to top first
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Delay setting the mode slightly to allow scroll animation to start
+      setTimeout(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('mode', feature.mode!);
+        router.push(`${pathname}?${params.toString()}`);
+      }, 200); // adjust delay as needed
     }
   };
 
-  // Split features into full rows and a final partial row
   const fullRows = Math.floor(features.length / 3) * 3;
   const rowsExceptLast = features.slice(0, fullRows);
   const lastRow = features.slice(fullRows);
@@ -48,7 +53,6 @@ export const ModuleFeatures = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Render full rows */}
           {rowsExceptLast.map((feature, index) => (
             <div
               key={index}
@@ -59,7 +63,6 @@ export const ModuleFeatures = ({
             </div>
           ))}
 
-          {/* Center last row if it exists */}
           {lastRow.length > 0 && (
             <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center gap-8">
               {lastRow.map((feature, index) => (

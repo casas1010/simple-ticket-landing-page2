@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+
+import { Variants } from 'framer-motion';
+
+const fadeUpVariant: Variants = {
+    hidden: {
+        opacity: 0,
+        y: 30,
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.6,
+            ease: 'easeOut',
+        },
+    },
+};
 
 const Footer = () => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: false, margin: '-50px' });
+
     return (
-        <footer className="w-full bg-transparent">
+        <footer className="w-full bg-transparent" ref={ref}>
             {/* Mountain wave design */}
             <div className="relative overflow-hidden">
                 {/* First mountain layer */}
@@ -41,19 +62,36 @@ const Footer = () => {
 
             {/* Main footer content */}
             <div className="bg-black text-white py-16 px-6">
-                <div className="max-w-6xl mx-auto text-center">
+                <div className="max-w-6xl mx-auto text-center space-y-6">
                     {/* Brand section */}
-                    <div className="mb-12">
-                        <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    <motion.div
+                        variants={fadeUpVariant}
+                        initial="hidden"
+                        animate={isInView ? "visible" : "hidden"}
+                    >
+                        <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent text-2xl">
                             SIMPLE TICKET
                         </span>
-                        <p className="text-gray-300 text-lg tracking-wide">
-                            TOGETHER, LET'S SIMPLIFY CUSTOMER SUPPORT.
-                        </p>
-                    </div>
+                    </motion.div>
+
+                    <motion.p
+                        variants={fadeUpVariant}
+                        initial="hidden"
+                        animate={isInView ? "visible" : "hidden"}
+                        transition={{ delay: 0.2 }}
+                        className="text-gray-300 text-lg tracking-wide"
+                    >
+                        TOGETHER, LET'S SIMPLIFY CUSTOMER SUPPORT.
+                    </motion.p>
 
                     {/* Navigation links */}
-                    <nav className="flex flex-wrap justify-center gap-8 md:gap-12">
+                    <motion.nav
+                        variants={fadeUpVariant}
+                        initial="hidden"
+                        animate={isInView ? "visible" : "hidden"}
+                        transition={{ delay: 0.4 }}
+                        className="flex flex-wrap justify-center gap-8 md:gap-12"
+                    >
                         <a
                             href="#"
                             onClick={(e) => {
@@ -67,7 +105,7 @@ const Footer = () => {
                         >
                             ABOUT US
                         </a>
-                    </nav>
+                    </motion.nav>
                 </div>
             </div>
 

@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Module } from '@/app/core/types/module';
 import { useEffect, useRef, useState } from 'react';
 
-
 // Helper function to extract YouTube video ID from URL
 function getYouTubeVideoId(url: string): string | null {
   const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
@@ -69,10 +68,8 @@ function VideoPlaylist({ videos, autoplay = true }: { videos: Video[]; autoplay?
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [showSelection, setShowSelection] = useState(true);
   const [countdown, setCountdown] = useState(6);
+  const [isManualSelection, setIsManualSelection] = useState(false);
   
-//   console.log("VideoPlaylist - videos:", videos);
-//   console.log("VideoPlaylist - currentVideoIndex:", currentVideoIndex);
-
   // Countdown timer for auto-selection
   useEffect(() => {
     if (!showSelection) return;
@@ -93,6 +90,20 @@ function VideoPlaylist({ videos, autoplay = true }: { videos: Video[]; autoplay?
   const handleVideoSelect = (index: number) => {
     setCurrentVideoIndex(index);
     setShowSelection(false);
+    setIsManualSelection(true); // Mark as manual selection to enable audio
+  };
+
+  const handlePlaylistVideoSelect = (index: number) => {
+    setCurrentVideoIndex(index);
+    setIsManualSelection(true); // Enable audio for playlist selections
+  };
+
+  const handleVideoEnd = () => {
+    // Auto-advance to next video
+    if (currentVideoIndex < videos.length - 1) {
+      setCurrentVideoIndex(prev => prev + 1);
+      setIsManualSelection(true); // Keep audio enabled for auto-advance
+    }
   };
 
   if (!videos || videos.length === 0) return null;
@@ -119,7 +130,9 @@ function VideoPlaylist({ videos, autoplay = true }: { videos: Video[]; autoplay?
           <YouTubePlayer 
             key={`${videoId}-${currentVideoIndex}`} // Force re-render when video changes
             videoId={videoId} 
-            autoplay={autoplay} 
+            autoplay={autoplay}
+            enableAudio={isManualSelection} // Enable audio for manual selections
+            onVideoEnd={handleVideoEnd}
           />
           <h3 className="text-white text-lg font-semibold mt-2 text-center">
             {currentVideo.name}
@@ -136,7 +149,7 @@ function VideoPlaylist({ videos, autoplay = true }: { videos: Video[]; autoplay?
           {videos.map((video, index) => (
             <button
               key={index}
-              onClick={() => setCurrentVideoIndex(index)}
+              onClick={() => handlePlaylistVideoSelect(index)}
               className={`w-full p-3 rounded-lg text-left transition-all duration-200 ${
                 index === currentVideoIndex
                   ? 'bg-blue-600/30 border border-blue-400/50 text-white'
@@ -159,25 +172,71 @@ function VideoPlaylist({ videos, autoplay = true }: { videos: Video[]; autoplay?
   );
 }
 
-function YouTubePlayer({ videoId, autoplay = false }: { videoId: string; autoplay?: boolean }) {
+function YouTubePlayer({ 
+  videoId, 
+  autoplay = false, 
+  enableAudio = false,
+  onVideoEnd 
+}: { 
+  videoId: string; 
+  autoplay?: boolean; 
+  enableAudio?: boolean;
+  onVideoEnd?: () => void;
+}) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-//   console.log("YouTubePlayer - videoId:", videoId, "autoplay:", autoplay);
-
   useEffect(() => {
-    if (autoplay && iframeRef.current) {
-      // Optional: Add any additional autoplay logic here
-    //   console.log("YouTubePlayer - autoplay enabled");
+    // Set up YouTube API for video end detection
+    if (onVideoEnd && typeof window !== 'undefined') {
+      // Load YouTube IFrame API if not already loaded
+      if (!window.YT) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+        
+        window.onYouTubeIframeAPIReady = () => {
+          initializePlayer();
+        };
+      } else {
+        initializePlayer();
+      }
     }
-  }, [autoplay]);
 
-  const embedUrl = `https://www.youtube.com/embed/${videoId}${autoplay ? '?autoplay=1&mute=1' : ''}`;
-//   console.log("YouTubePlayer - embedUrl:", embedUrl);
+    function initializePlayer() {
+      if (window.YT && iframeRef.current) {
+        new window.YT.Player(iframeRef.current, {
+          events: {
+            onStateChange: (event: any) => {
+              // YT.PlayerState.ENDED = 0
+              if (event.data === window.YT.PlayerState.ENDED && onVideoEnd) {
+                onVideoEnd();
+              }
+            }
+          }
+        });
+      }
+    }
+  }, [videoId, onVideoEnd]);
+
+  // Build embed URL with appropriate parameters
+  const params = new URLSearchParams();
+  if (autoplay) {
+    params.append('autoplay', '1');
+    // Only mute if audio is not explicitly enabled
+    if (!enableAudio) {
+      params.append('mute', '1');
+    }
+  }
+  params.append('enablejsapi', '1'); // Enable JavaScript API for end detection
+  
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 
   return (
     <div className="w-full aspect-video rounded-lg overflow-hidden">
       <iframe
         ref={iframeRef}
+        id={`youtube-player-${videoId}`}
         src={embedUrl}
         title="YouTube video player"
         frameBorder="0"
@@ -189,7 +248,12 @@ function YouTubePlayer({ videoId, autoplay = false }: { videoId: string; autopla
   );
 }
 
-
-
+// Extend Window interface for TypeScript
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
 
 export default VideoPlaylist;

@@ -17,10 +17,21 @@ import RawPage from './ui/pages/raw';
 import ModulePage from './ui/pages/module';
 import AboutUs from './ui/pages/about_us';
 import Footer from './ui/components/footer';
+import { useEffect } from 'react';
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
+  const { module, setModule } = useModule();
+
+
+  useEffect(() => {
+    if (mode == null) return;
+    var filtered = MODULES.filter((r) => r.mode == mode);
+    if (filtered.length == 0) return;
+    setModule(filtered[0]);
+
+  }, []);
 
 
   const renderUi = () => {
@@ -53,7 +64,7 @@ export default function MainPageClient() {
       </AnimatePresence>
 
       <Footer />
-      <div className="h-25"></div>
+      {/* <div className="h-25"></div> */}
     </div>
   );
 }

@@ -6,14 +6,20 @@ import Image from "next/image"
 import ContactUs from "../contact_us"
 import { useModule } from "@/app/core/context/module"
 
-export default function HeaderClient({ title = "Simple Ticket" }: { title?: string }) {
+export default function HeaderClient() {
   const [scrolled, setScrolled] = useState(false)
   const [flash, setFlash] = useState(false)
-  const { module, setModule } = useModule();
 
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const { module, setModule } = useModule();
+
+  const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
+
+
+  // useEffect( ()=>{},[module])
 
   useEffect(() => {
     const onScroll = () => {
@@ -78,7 +84,7 @@ export default function HeaderClient({ title = "Simple Ticket" }: { title?: stri
               className={`transition-all duration-300 ${scrolled ? "w-4 h-4" : "w-6 h-6"}`}
             />
           </div>
-          <span className="text-white text-xl font-bold">{title}</span>
+          <span className="text-white text-xl font-bold">{getTitle()}</span>
         </div>
 
         <ContactUs />
@@ -86,3 +92,4 @@ export default function HeaderClient({ title = "Simple Ticket" }: { title?: stri
     </div>
   )
 }
+
