@@ -7,8 +7,6 @@ import Lottie from 'lottie-react';
 
 
 import { MODULES } from '@/app/core/data/modules';
-import GradientBackground from '../components/backgrounds/gradient';
-import Header from '../components/header/header';
 import TitleAndIcon from '../components/title_and_icon';
 import { ModuleFeatures } from '../components/lists/modules';
 import ContactSection from '../components/contact_us';
@@ -31,17 +29,17 @@ export default function ModulePage({ mode }: ModulePageProps) {
     }
   }, [module_]);
 
-useEffect(() => {
-  // Scroll to ModuleFeatures after initial render with 1s delay
-  const timeout = setTimeout(() => {
-    if (moduleFeaturesRef.current) {
-      moduleFeaturesRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, 1000); // 1000 milliseconds = 1 second
+  useEffect(() => {
+    // Scroll to ModuleFeatures after initial render with 1s delay
+    const timeout = setTimeout(() => {
+      if (moduleFeaturesRef.current) {
+        moduleFeaturesRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 1000); // 1000 milliseconds = 1 second
 
-  // Optional cleanup
-  return () => clearTimeout(timeout);
-}, []);
+    // Optional cleanup
+    return () => clearTimeout(timeout);
+  }, []);
 
   if (module_ == null) {
     return <text>AAA</text>

@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-
 import { Variants } from 'framer-motion';
 
 const fadeUpVariant: Variants = {
@@ -67,7 +66,7 @@ const Footer = () => {
                     <motion.div
                         variants={fadeUpVariant}
                         initial="hidden"
-                        animate={isInView ? "visible" : "hidden"}
+                        animate={isInView ? 'visible' : 'hidden'}
                     >
                         <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent text-2xl">
                             SIMPLE TICKET
@@ -77,7 +76,7 @@ const Footer = () => {
                     <motion.p
                         variants={fadeUpVariant}
                         initial="hidden"
-                        animate={isInView ? "visible" : "hidden"}
+                        animate={isInView ? 'visible' : 'hidden'}
                         transition={{ delay: 0.2 }}
                         className="text-gray-300 text-lg tracking-wide"
                     >
@@ -88,7 +87,7 @@ const Footer = () => {
                     <motion.nav
                         variants={fadeUpVariant}
                         initial="hidden"
-                        animate={isInView ? "visible" : "hidden"}
+                        animate={isInView ? 'visible' : 'hidden'}
                         transition={{ delay: 0.4 }}
                         className="flex flex-wrap justify-center gap-8 md:gap-12"
                     >
@@ -106,6 +105,17 @@ const Footer = () => {
                             ABOUT US
                         </a>
                     </motion.nav>
+
+                    {/* Copyright */}
+                    <motion.p
+                        variants={fadeUpVariant}
+                        initial="hidden"
+                        animate={isInView ? 'visible' : 'hidden'}
+                        transition={{ delay: 0.6 }}
+                        className="text-sm text-gray-500 mt-8"
+                    >
+                        © {new Date().getFullYear()} Simple Ticket. All rights reserved.
+                    </motion.p>
                 </div>
             </div>
 
@@ -137,15 +147,27 @@ const Footer = () => {
                 }
 
                 @keyframes wave-move {
-                    0% { transform: translateX(0); }
-                    50% { transform: translateX(-50%); }
-                    100% { transform: translateX(0); }
+                    0% {
+                        transform: translateX(0);
+                    }
+                    50% {
+                        transform: translateX(-50%);
+                    }
+                    100% {
+                        transform: translateX(0);
+                    }
                 }
 
                 @keyframes wave-move-reverse {
-                    0% { transform: translateX(-50%); }
-                    50% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
+                    0% {
+                        transform: translateX(-50%);
+                    }
+                    50% {
+                        transform: translateX(0);
+                    }
+                    100% {
+                        transform: translateX(-50%);
+                    }
                 }
             `}</style>
         </footer>

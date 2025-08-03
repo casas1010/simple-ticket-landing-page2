@@ -1,9 +1,50 @@
 import { Video } from "@/app/core/types/video";
 
-import { useIsMobile } from '@/app/core/context/mobile_context';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Module } from '@/app/core/types/module';
+import {  motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+
+// YouTube API Types
+interface YTPlayerState {
+  ENDED: number;
+  PLAYING: number;
+  PAUSED: number;
+  BUFFERING: number;
+  CUED: number;
+}
+
+interface YTPlayerEvent {
+  data: number;
+  target: YTPlayer;
+}
+
+interface YTPlayer {
+  destroy(): void;
+  playVideo(): void;
+  pauseVideo(): void;
+  stopVideo(): void;
+  seekTo(seconds: number, allowSeekAhead?: boolean): void;
+  getCurrentTime(): number;
+  getDuration(): number;
+  getPlayerState(): number;
+}
+
+interface YTPlayerOptions {
+  events?: {
+    onStateChange?: (event: YTPlayerEvent) => void;
+    onReady?: (event: YTPlayerEvent) => void;
+    onError?: (event: YTPlayerEvent) => void;
+  };
+  playerVars?: {
+    autoplay?: number;
+    mute?: number;
+    enablejsapi?: number;
+  };
+}
+
+interface YouTubeAPI {
+  Player: new (element: HTMLElement | string, options: YTPlayerOptions) => YTPlayer;
+  PlayerState: YTPlayerState;
+}
 
 // Helper function to extract YouTube video ID from URL
 function getYouTubeVideoId(url: string): string | null {
@@ -193,7 +234,9 @@ function YouTubePlayer({
         const tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+        if (firstScriptTag?.parentNode) {
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
         
         window.onYouTubeIframeAPIReady = () => {
           initializePlayer();
@@ -207,7 +250,7 @@ function YouTubePlayer({
       if (window.YT && iframeRef.current) {
         new window.YT.Player(iframeRef.current, {
           events: {
-            onStateChange: (event: any) => {
+            onStateChange: (event: YTPlayerEvent) => {
               // YT.PlayerState.ENDED = 0
               if (event.data === window.YT.PlayerState.ENDED && onVideoEnd) {
                 onVideoEnd();
@@ -251,7 +294,7 @@ function YouTubePlayer({
 // Extend Window interface for TypeScript
 declare global {
   interface Window {
-    YT: any;
+    YT: YouTubeAPI;
     onYouTubeIframeAPIReady: () => void;
   }
 }

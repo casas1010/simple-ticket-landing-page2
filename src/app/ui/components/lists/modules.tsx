@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import FeatureCard from '../cards/module_feature';
 
@@ -25,6 +25,17 @@ export const ModuleFeatures = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   const handleCardClick = (feature: typeof features[number]) => {
     if (open_page && feature.mode) {
@@ -40,6 +51,33 @@ export const ModuleFeatures = ({
     }
   };
 
+  // On mobile, just render all items in a single column
+  if (isMobile) {
+    return (
+      <div className="min-h-screen py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold text-white mb-6">{title}</h1>
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto">{description}</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                onClick={() => handleCardClick(feature)}
+                className={`w-full ${open_page ? 'cursor-pointer' : ''}`}
+              >
+                <FeatureCard feature={feature} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop layout with the centering logic for last row
   const fullRows = Math.floor(features.length / 3) * 3;
   const rowsExceptLast = features.slice(0, fullRows);
   const lastRow = features.slice(fullRows);

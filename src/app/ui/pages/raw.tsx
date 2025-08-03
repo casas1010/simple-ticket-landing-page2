@@ -2,17 +2,13 @@
 
 import React from 'react';
 
-import { useIsMobile } from '@/app/core/context/mobile_context';
 import { useModule } from '@/app/core/context/module';
 
 import { PLATFORM_FEATURES } from '@/app/core/data/features';
 import { MODULES } from '@/app/core/data/modules';
-import StarBackground from '../components/backgrounds/star';
-import Header from '../components/header/header';
 import TitleAndIcon from '../components/title_and_icon';
 import ModulesOrbit from '../components/modules_orbit/modules_orbit';
 import { ModuleFeatures } from '../components/lists/modules';
-import PlatformFeatures from '../components/platform_features';
 import ContactUs from '../components/contact_us';
 
 export default function RawPage() {

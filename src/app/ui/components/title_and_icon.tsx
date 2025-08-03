@@ -2,7 +2,6 @@
 import { useIsMobile } from '@/app/core/context/mobile_context';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Module } from '@/app/core/types/module';
-import { useEffect, useRef, useState } from 'react';
 import { Video } from '@/app/core/types/video';
 import VideoPlaylist from './video/video_list';
 
