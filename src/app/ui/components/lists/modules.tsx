@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import FeatureCard from '../cards/module_feature';
+import { useModule } from '@/app/core/context/module';
+import { Module } from '../../../core/types/module';
+import { MODULES } from '@/app/core/data/modules';
 
 export const ModuleFeatures = ({
   title,
@@ -26,6 +29,8 @@ export const ModuleFeatures = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isMobile, setIsMobile] = useState(false);
+  const { module, setModule } = useModule();
+
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -39,15 +44,24 @@ export const ModuleFeatures = ({
 
   const handleCardClick = (feature: typeof features[number]) => {
     if (open_page && feature.mode) {
-      // Scroll to top first
+      var modules = MODULES.filter((r) => r.title == feature.title);
+
+
+      // // Scroll to top first
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Delay setting the mode slightly to allow scroll animation to start
+
+      // // Delay setting the mode slightly to allow scroll animation to start
       setTimeout(() => {
         const params = new URLSearchParams(searchParams.toString());
         params.set('mode', feature.mode!);
         router.push(`${pathname}?${params.toString()}`);
-      }, 200); // adjust delay as needed
+      }, 200);
+
+      setTimeout(() => {
+        setModule(modules[0]);
+      }, 600);
+
     }
   };
 

@@ -56,7 +56,6 @@ export default function ModulePage({ mode }: ModulePageProps) {
         mainText={module_?.main_description || ''}
         highlight={module_?.main_description_highlight || ''}
         subText={module_?.sub_description || ''}
-        setModule={() => { }}
         component={
           <div className="flex justify-center items-center w-full h-full min-h-[400px]">
             {animationData && (

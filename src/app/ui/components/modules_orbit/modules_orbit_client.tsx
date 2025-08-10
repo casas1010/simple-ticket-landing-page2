@@ -6,14 +6,15 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import lottie, { AnimationItem } from 'lottie-web';
 import { Module } from '@/app/core/types/module';
 import { MODULES } from '@/app/core/data/modules';
+import { useModule } from '@/app/core/context/module';
 
-type Props = {
-    setModule: (module: Module | null) => void;
-};
+
 
 type LottieAnimationData = Record<string, unknown>;
 
-const ModulesOrbitClient: React.FC<Props> = ({ setModule }) => {
+const ModulesOrbitClient = () => {
+      const { module, setModule } = useModule();
+    
     const isMobile = useIsMobile();
     const [screenWidth, setScreenWidth] = useState<number>(0);
     const [currentAngle, setCurrentAngle] = useState<number>(0);

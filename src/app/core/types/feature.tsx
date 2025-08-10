@@ -13,7 +13,6 @@ export type Features = {
   main_icon_animation_path?: string;
   main_icon_path?: string;
   details: Detail[];
-
   gradient: string;
   icon: React.ElementType;
   color: string;

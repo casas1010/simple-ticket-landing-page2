@@ -12,7 +12,7 @@ import { ModuleFeatures } from '../components/lists/modules';
 import ContactUs from '../components/contact_us';
 
 export default function RawPage() {
-  const { module, setModule } = useModule();
+  const { module } = useModule();
 
   const mainText =
     module?.main_description ?? 'Discover the ideal data management system for your';
@@ -25,8 +25,7 @@ export default function RawPage() {
         mainText={mainText}
         highlight={highlight}
         subText={subText}
-        setModule={setModule}
-        component={<ModulesOrbit setModule={setModule} />}
+        component={<ModulesOrbit/>}
       />
 
       <ModuleFeatures

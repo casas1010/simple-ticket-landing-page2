@@ -1,63 +1,109 @@
-// components/AboutUsHero.jsx
-import React from 'react';
+import React from "react";
+import { motion } from "framer-motion";
+import { TreePalmIcon } from "lucide-react";
 
+type TopSectionProps = {
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+};
+
+const animationProps = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+};
+
+const TopSection: React.FC<TopSectionProps> = ({ title, description, icon }) => {
+  return (
+    <motion.section
+      className="py-16 px-6 rounded-lg text-white"
+      {...animationProps}
+    >
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          <motion.div className="flex-1 max-w-2xl" {...animationProps}>
+            <h1 className="text-4xl font-bold mb-6">{title}</h1>
+            <p className="text-gray-300 text-lg leading-relaxed">{description}</p>
+          </motion.div>
+          {icon && (
+            <motion.div className="flex-shrink-0" {...animationProps}>
+              <div className="w-48 h-48 flex items-center justify-center text-indigo-400">
+                {icon}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </div>
+    </motion.section>
+  );
+};
+
+const ValuesSection: React.FC<{ values: { title: string; description: string }[] }> = ({ values }) => {
+  return (
+    <motion.section className="py-16 px-6 rounded-lg" {...animationProps}>
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-white mb-12">Our Values</h2>
+        <div className="space-y-8">
+          {values.map((value, index) => (
+            <motion.div
+              key={index}
+              className="border-b border-white/30 pb-6 last:border-b-0"
+              {...animationProps}
+            >
+              <h3 className="text-xl font-semibold text-indigo-300 mb-3">
+                {value.title}
+              </h3>
+              <p className="text-gray-200 leading-relaxed">{value.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.section>
+  );
+};
+
+// TeamIcon stays the same
+
+const AboutUsHero: React.FC = () => {
 const values = [
   {
-    title: "Automate with Purpose",
+    title: "Champion Automation",
     description:
-      "We automate intentionally—to eliminate the mundane and unlock time for real innovation. Automation helps us and our customers focus on what truly matters.",
-    icon: "⚙️",
+      "We aim to automate repetitive tasks to free our customers to focus on what truly matters. Automation fuels innovation within our team and drives continuous improvement.",
   },
   {
-    title: "Relentlessly Improve",
+    title: "Relentless Improvement",
     description:
-      "Stagnation isn’t an option. From our products to our people, we’re always evolving—learning, refining, and pushing boundaries.",
-    icon: "📈",
+      "Good enough isn’t good enough. We challenge ourselves to exceed expectations and continuously raise the bar in everything we do.",
   },
   {
-    title: "Move with Agility",
+    title: "Embrace Agility",
     description:
-      "Adaptability is our strength. We stay flexible, move fast, and embrace change to stay ahead of what our customers need next.",
-    icon: "🤸",
+      "We embrace flexibility and open-mindedness, empowering agile delivery that allows us to pivot swiftly and adapt to our customers’ evolving needs.",
   },
   {
-    title: "Lead with Honesty",
+    title: "Lead with Integrity",
     description:
-      "We choose transparency over ego. Honest feedback and open communication build trust, growth, and meaningful progress.",
-    icon: "🫱🤝🫲",
+      "We value humility and transparency. Owning our mistakes enables collective learning and fosters a culture of trust and growth.",
   },
   {
-    title: "Assume Positive Intent",
+    title: "Trust & Respect",
     description:
-      "We trust each other first. By assuming the best in people, we create space for bold ideas, open dialogue, and authentic collaboration.",
-    icon: "💡",
+      "We build trust by giving others the benefit of the doubt, creating a safe environment that encourages positivity, innovation, and authentic self-expression.",
   },
 ];
 
-const AboutUs = () => {
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
-      {values.map((value, index) => (
-        <div
-          key={index}
-          className="relative overflow-hidden rounded-2xl border border-white/20 shadow-xl backdrop-blur-md bg-white/10 transition-transform hover:scale-[1.02]"
-        >
-          {/* Content */}
-          <div className="relative z-10 p-6 flex items-start gap-4 text-white">
-            <div className="text-3xl mt-1">{value.icon}</div>
-            <div>
-              <h3 className="text-xl font-semibold tracking-wide">
-                {value.title}
-              </h3>
-              <p className="text-white/80 mt-2 leading-relaxed font-medium">
-                {value.description}
-              </p>
-            </div>
-          </div>
-        </div>
-      ))}
+    <div className="relative min-h-screen text-white z-10">
+      <TopSection
+        title="About Us"
+        description="Simple Ticket was founded in 2024 with the mission of streamlining business operations through intelligent automation. Our focus is on helping organizations discover, implement, and maintain solutions that grow and evolve with their changing business requirements. We are committed to applying agile methodologies across all aspects of our operations and leverage these approaches to deliver exceptional results for our clients."
+        icon={<TreePalmIcon />}
+      />
+      <ValuesSection values={values} />
     </div>
   );
 };
 
-export default AboutUs;
+export default AboutUsHero;

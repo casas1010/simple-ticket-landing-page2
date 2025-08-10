@@ -3,16 +3,14 @@ import ModulesOrbitClient from './modules_orbit_client';
 import Loader from '../loader';
 import { Module } from '@/app/core/types/module';
 
-type Props = {
-    setModule: (module: Module | null) => void;
-};
 
-const ModulesOrbit: React.FC<Props> = ({ setModule }) => {
+
+const ModulesOrbit  = () => {
     return (
         <Suspense fallback={
             <Loader />
         }>
-            <ModulesOrbitClient setModule={setModule} />
+            <ModulesOrbitClient />
         </Suspense>
     );
 };

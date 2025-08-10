@@ -22,7 +22,6 @@ type Props = {
   highlight: string;
   subText: string;
   videos?: Video[];
-  setModule: (m: Module | null) => void;
   component?: React.ReactNode;
 };
 
@@ -33,8 +32,8 @@ export default function TitleAndIcon(props: Props) {
 
 
 
-function MobileContent({ mainText, highlight, subText, setModule, component: uiComponent, videos }: Props) {
-  console.log("MOBILE");
+function MobileContent({ mainText, highlight, subText, component: uiComponent, videos }: Props) {
+  //console.log("MOBILE");
   return (
     <div className="relative flex flex-col items-center px-8 pt-10 text-center max-w-7xl mx-auto min-h-screen">
       {/* Background component (Lottie) - dimmed */}
@@ -79,12 +78,12 @@ function MobileContent({ mainText, highlight, subText, setModule, component: uiC
   );
 }
 
-function DesktopContent({ mainText, highlight, subText, setModule, component: orbitComponent, videos }: Props) {
+function DesktopContent({ mainText, highlight, subText, component: orbitComponent, videos }: Props) {
   // console.log("DESKTOP - videos prop:", videos);
 
 
   if (videos!=null) {
-    console.log("VIDEOS FOUND "+videos?.length);
+    // console.log("VIDEOS FOUND "+videos?.length);
     return (
       <div className="relative min-h-[70vh]">
         {/* Background orbit component - full screen background */}
@@ -128,7 +127,7 @@ function DesktopContent({ mainText, highlight, subText, setModule, component: or
     );
 
   } else {
-    console.log("NOOOOO VIDEOS FOUND");
+    // console.log("NOOOOO VIDEOS FOUND");
 
     return (
       <div className="relative z-10 flex flex-col md:flex-row items-center md:items-stretch px-8 pt-10 text-left max-w-7xl mx-auto gap-10 min-h-[70vh]">

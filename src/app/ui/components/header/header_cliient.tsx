@@ -19,7 +19,9 @@ export default function HeaderClient() {
   const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
 
 
-  // useEffect( ()=>{},[module])
+  useEffect( ()=>{
+    console.log("MODULE: "+module);
+  },[module])
 
   useEffect(() => {
     const onScroll = () => {
