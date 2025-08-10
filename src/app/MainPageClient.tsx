@@ -64,7 +64,6 @@ export default function MainPageClient() {
       </AnimatePresence>
 
       <Footer />
-      {/* <div className="h-25"></div> */}
     </div>
   );
 }

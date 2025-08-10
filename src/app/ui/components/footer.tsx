@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Variants } from 'framer-motion';
+import { useModule } from '@/app/core/context/module';
 
 const fadeUpVariant: Variants = {
     hidden: {
@@ -20,6 +21,7 @@ const fadeUpVariant: Variants = {
 const Footer = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, margin: '-50px' });
+  const { module, setModule } = useModule();
 
     return (
         <footer className="w-full bg-transparent" ref={ref}>
@@ -99,6 +101,10 @@ const Footer = () => {
                                 url.searchParams.set('mode', 'about-us');
                                 window.history.pushState({}, '', url);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                                setTimeout(() => {
+                                    setModule(null);
+                                }, 600);
                             }}
                             className="text-gray-300 hover:text-white transition-colors duration-200 text-lg font-medium"
                         >
