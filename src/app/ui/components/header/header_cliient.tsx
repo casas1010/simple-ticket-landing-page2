@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Image from "next/image"
 import ContactUs from "../contact_us"
 import { useModule } from "@/app/core/context/module"
+import CompanyName from "../titles/company_title"
 
 export default function HeaderClient() {
   const [scrolled, setScrolled] = useState(false)
@@ -20,7 +21,7 @@ export default function HeaderClient() {
 
 
   useEffect( ()=>{
-    console.log("MODULE: "+module);
+    // console.log("MODULE: "+module);
   },[module])
 
   useEffect(() => {
@@ -86,7 +87,8 @@ export default function HeaderClient() {
               className={`transition-all duration-300 ${scrolled ? "w-4 h-4" : "w-6 h-6"}`}
             />
           </div>
-          <span className="text-white text-xl font-bold">{getTitle()}</span>
+          {/* <span className="text-white text-xl font-bold">{getTitle()}</span> */}
+          <CompanyName name={module?.title} />
         </div>
 
         <ContactUs />

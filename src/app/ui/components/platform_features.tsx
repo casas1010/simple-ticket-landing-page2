@@ -5,7 +5,7 @@ import { Check } from 'lucide-react';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
-import SectionTitle from './section_title';
+import SectionTitle from './titles/section_title';
 
 const PlatformFeatures = ({ sub_title }: { sub_title: string }) => {
   const features = [

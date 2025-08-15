@@ -38,8 +38,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 
-Upload to 
-public_html/website_f2f21074
-
-run 
+# Upload to public_html/website_f2f21074 run 
 npm run build-export

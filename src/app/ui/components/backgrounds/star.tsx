@@ -1,7 +1,6 @@
 import { useModule } from '@/app/core/context/module';
 import React, { useEffect, useRef } from 'react';
-
-
+import { useSearchParams } from 'next/navigation';
 
 function StarBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -10,6 +9,8 @@ function StarBackground() {
   const currentStarColorRef = useRef<string>('white');
   const { module, setModule } = useModule();
 
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
 
   // Update the current color ref when starColor changes
   useEffect(() => {
@@ -77,11 +78,25 @@ function StarBackground() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 z-0 pointer-events-none"
-      style={{ width: '100%', height: '100%' }}
-    />
+    <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none">
+      {/* Custom gradient background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 20% 80%, rgba(40, 60, 150, 0.5) 0%, rgba(20, 30, 70, 0.0) 50%), radial-gradient(circle at 80% 20%, rgba(120, 60, 140, 0.4) 0%, rgba(30, 20, 60, 0.0) 60%), linear-gradient(135deg, #0f0f2d 0%, #1a1240 100%)`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
+          backgroundBlendMode: 'screen'
+        }}
+      />
+      {/* Canvas for stars */}
+      <canvas
+        ref={canvasRef}
+        className="absolute top-0 left-0"
+        style={{ width: '100%', height: '100%' }}
+      />
+    </div>
   );
 }
 

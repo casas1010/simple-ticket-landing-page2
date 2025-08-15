@@ -4,15 +4,11 @@ import { useSearchParams } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useModule } from './core/context/module';
 
-import { PLATFORM_FEATURES } from './core/data/features';
+
 import { MODULES } from './core/data/modules';
 import StarBackground from './ui/components/backgrounds/star';
 import Header from './ui/components/header/header';
-import { ModuleFeatures } from './ui/components/lists/modules';
-import ModulesOrbit from './ui/components/modules_orbit/modules_orbit';
-import PlatformFeatures from './ui/components/platform_features';
-import TitleAndIcon from './ui/components/title_and_icon';
-import ContactUs from './ui/components/contact_us';
+
 import RawPage from './ui/pages/raw';
 import ModulePage from './ui/pages/module';
 import AboutUs from './ui/pages/about_us';

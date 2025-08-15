@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Variants } from 'framer-motion';
 import { useModule } from '@/app/core/context/module';
-
+import { FaLinkedin, FaYoutube } from 'react-icons/fa';
 const fadeUpVariant: Variants = {
     hidden: {
         opacity: 0,
@@ -21,10 +21,10 @@ const fadeUpVariant: Variants = {
 const Footer = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, margin: '-50px' });
-  const { module, setModule } = useModule();
+    const { module, setModule } = useModule();
 
     return (
-        <footer className="w-full bg-transparent" ref={ref}>
+        <footer className="w-full bg-transparent relative z-10" ref={ref}>
             {/* Mountain wave design */}
             <div className="relative overflow-hidden">
                 {/* First mountain layer */}
@@ -62,7 +62,7 @@ const Footer = () => {
             </div>
 
             {/* Main footer content */}
-            <div className="bg-black text-white py-16 px-6">
+            <div className="bg-black text-white py-16 px-6 relative z-10">
                 <div className="max-w-6xl mx-auto text-center space-y-6">
                     {/* Brand section */}
                     <motion.div
@@ -122,6 +122,40 @@ const Footer = () => {
                     >
                         © {new Date().getFullYear()} Simple Ticket. All rights reserved.
                     </motion.p>
+
+
+
+                    {/* Social media */}
+                    <motion.div
+                        variants={fadeUpVariant}
+                        initial="hidden"
+                        animate={isInView ? 'visible' : 'hidden'}
+                        transition={{ delay: 0.5 }}
+                        className="flex justify-center gap-4 mt-4"
+                    >
+                        <a
+                            href="https://www.linkedin.com/in/juanfcasas/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-300 hover:text-blue-500 transition-colors duration-200 text-2xl"
+                        >
+                            <FaLinkedin />
+                        </a>
+
+                        <a
+                            href="https://www.youtube.com/@simple_ticket/videos"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-300 hover:text-blue-500 transition-colors duration-200 text-2xl"
+                        >
+                            <FaYoutube />
+                        </a>
+                    </motion.div>
+
+
+
+
+
                 </div>
             </div>
 
