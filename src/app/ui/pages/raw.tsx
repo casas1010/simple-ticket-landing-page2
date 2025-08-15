@@ -21,13 +21,8 @@ export default function RawPage() {
   const subText = module?.sub_description ?? '';
 
   return (
-    <div
-      style={{
-        transform: 'translateZ(1px)',
-        transformStyle: 'preserve-3d',
-        perspective: '1000px',
-      }}
-    >
+    <div className="z-1">
+
       <TitleAndIcon
         mainText={mainText}
         highlight={highlight}

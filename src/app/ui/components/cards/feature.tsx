@@ -42,7 +42,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
   };
 
   const IconBlock = (
-    <div className="flex flex-1 items-center justify-center">
+    <div className="flex flex-1 items-center justify-center z-1">
       <div
         className={`relative z-0 flex items-center justify-center rounded-2xl p-8 shadow-lg ${animationClass} ${
           feature.color || "bg-[#0F0F1A]"
@@ -67,7 +67,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
   );
 
   const TextBlock = (
-    <div className="flex flex-1 flex-col justify-center h-full">
+    <div className="flex flex-1 flex-col justify-center h-full z-1">
       <h2 className="text-3xl font-bold" style={{ color: feature.gradient || "#a78bfa" }}>
         {feature.title}
       </h2>
@@ -106,6 +106,8 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
   );
 
   return (
+
+       <div className="z-1">
     <motion.div
       ref={ref}
       initial="hidden"
@@ -127,5 +129,6 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
         )}
       </div>
     </motion.div>
+    </div>
   );
 };

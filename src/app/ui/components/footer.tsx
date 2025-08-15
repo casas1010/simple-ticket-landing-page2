@@ -134,7 +134,7 @@ const Footer = () => {
                         className="flex justify-center gap-4 mt-4"
                     >
                         <a
-                            href="https://www.linkedin.com/in/juanfcasas/"
+                            href="https://www.linkedin.com/company/simple-ticket/?viewAsMember=true"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-300 hover:text-blue-500 transition-colors duration-200 text-2xl"
