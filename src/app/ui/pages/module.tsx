@@ -8,7 +8,7 @@ import Lottie from 'lottie-react';
 
 import { MODULES } from '@/app/core/data/modules';
 import TitleAndIcon from '../components/title_and_icon';
-import { ModuleFeatures } from '../components/lists/modules';
+import { ModulesList } from '../components/lists/modules';
 import ContactSection from '../components/contact_us';
 
 interface ModulePageProps {
@@ -73,7 +73,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
       />
 
       <div ref={moduleFeaturesRef}>
-        <ModuleFeatures
+        <ModulesList
           title={module_?.title}
           description={module_?.main_description}
           features={module_.features}

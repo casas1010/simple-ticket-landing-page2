@@ -18,7 +18,7 @@ const LottiePlayer = dynamic(
 );
 
 // === Single FeatureCard Component ===
-const FeatureCard = ({
+const ModuleCard = ({
   feature,
 }: {
   feature: {
@@ -134,4 +134,4 @@ const FeatureCard = ({
   );
 };
 
-export default FeatureCard;
+export default ModuleCard;

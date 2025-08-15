@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import FeatureCard from '../cards/module_feature';
+import ModuleCard from '../cards/module';
 import { useModule } from '@/app/core/context/module';
 import { Module } from '../../../core/types/module';
 import { MODULES } from '@/app/core/data/modules';
 
-export const ModuleFeatures = ({
+export const ModulesList = ({
   title,
   description,
   features,
@@ -82,7 +82,7 @@ export const ModuleFeatures = ({
                 onClick={() => handleCardClick(feature)}
                 className={`w-full ${open_page ? 'cursor-pointer' : ''}`}
               >
-                <FeatureCard feature={feature} />
+                <ModuleCard feature={feature} />
               </div>
             ))}
           </div>
@@ -110,7 +110,7 @@ export const ModuleFeatures = ({
               onClick={() => handleCardClick(feature)}
               className={`w-full ${open_page ? 'cursor-pointer' : ''}`}
             >
-              <FeatureCard feature={feature} />
+              <ModuleCard feature={feature} />
             </div>
           ))}
 
@@ -122,7 +122,7 @@ export const ModuleFeatures = ({
                   onClick={() => handleCardClick(feature)}
                   className={`w-full max-w-sm ${open_page ? 'cursor-pointer' : ''}`}
                 >
-                  <FeatureCard feature={feature} />
+                  <ModuleCard feature={feature} />
                 </div>
               ))}
             </div>

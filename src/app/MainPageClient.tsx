@@ -14,6 +14,9 @@ import ModulePage from './ui/pages/module';
 import AboutUs from './ui/pages/about_us';
 import Footer from './ui/components/footer';
 import { useEffect } from 'react';
+import { FeatureCard } from './ui/components/cards/feature';
+import { FeaturesList } from './ui/components/lists/features';
+import { PLATFORM_FEATURES } from './core/data/features';
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();
@@ -42,10 +45,14 @@ export default function MainPageClient() {
     return <ModulePage mode={mode} key={mode} />;
   };
 
+  
+
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
       <StarBackground />
       <Header />
+
+
 
       <AnimatePresence mode="wait">
         <motion.div

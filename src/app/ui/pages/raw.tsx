@@ -8,8 +8,9 @@ import { PLATFORM_FEATURES } from '@/app/core/data/features';
 import { MODULES } from '@/app/core/data/modules';
 import TitleAndIcon from '../components/title_and_icon';
 import ModulesOrbit from '../components/modules_orbit/modules_orbit';
-import { ModuleFeatures } from '../components/lists/modules';
+import { ModulesList } from '../components/lists/modules';
 import ContactUs from '../components/contact_us';
+import { FeaturesList } from '../components/lists/features';
 
 export default function RawPage() {
   const { module } = useModule();
@@ -20,24 +21,28 @@ export default function RawPage() {
   const subText = module?.sub_description ?? '';
 
   return (
-    <>
+    <div
+      style={{
+        transform: 'translateZ(1px)',
+        transformStyle: 'preserve-3d',
+        perspective: '1000px',
+      }}
+    >
       <TitleAndIcon
         mainText={mainText}
         highlight={highlight}
         subText={subText}
-        component={<ModulesOrbit/>}
+        component={<ModulesOrbit />}
       />
 
-      <ModuleFeatures
+      <ModulesList
         title="Modules"
         description="Start from one of our pre build modules or create your own"
         features={MODULES}
         open_page={true}
       />
 
-      {/* <PlatformFeatures sub_title="" /> */}
-
-      <ModuleFeatures
+      <FeaturesList
         title="Built for simplicity"
         description="Designed with user experience at the core, our platform simplifies complex workflows with intuitive automation, real-time insights, and smart controls—empowering you to focus on what matters most."
         features={PLATFORM_FEATURES}
@@ -45,6 +50,6 @@ export default function RawPage() {
 
       <ContactUs text="Get started" />
       <div className="h-50" />
-    </>
+    </div>
   );
 }
