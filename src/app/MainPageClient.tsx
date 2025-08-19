@@ -47,7 +47,7 @@ export default function MainPageClient() {
 
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
-      <StarBackground />
+      <StarBackground />  
       <Header />
 
 

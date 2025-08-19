@@ -46,7 +46,9 @@ export default function RawPage() {
         features={PLATFORM_FEATURES}
       />
 
-      <ContactUs text="Get started" />
+      <div className="relative z-10">
+        <ContactUs text="Get started" />
+      </div>
       <div className="h-50" />
     </div>
   );

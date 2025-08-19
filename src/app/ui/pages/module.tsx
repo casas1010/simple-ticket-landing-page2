@@ -10,6 +10,7 @@ import { MODULES } from '@/app/core/data/modules';
 import TitleAndIcon from '../components/title_and_icon';
 import { ModulesList } from '../components/lists/modules';
 import ContactSection from '../components/contact_us';
+import ContactUs from '../components/contact_us';
 
 interface ModulePageProps {
   mode: string;
@@ -87,8 +88,10 @@ export default function ModulePage({ mode }: ModulePageProps) {
         </button>
       </div> */}
 
-      <ContactSection text="Get started" />
-
+      {/* <ContactSection text="Get started" /> */}
+          <div className="relative z-10">
+        <ContactUs text="Get started" />
+      </div>
 
 
     </>
