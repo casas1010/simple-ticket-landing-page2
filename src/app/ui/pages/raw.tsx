@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useModule } from '@/app/core/context/module';
 
@@ -11,14 +11,16 @@ import ModulesOrbit from '../components/modules_orbit/modules_orbit';
 import { ModulesList } from '../components/lists/modules';
 import ContactUs from '../components/contact_us';
 import { FeaturesList } from '../components/lists/features';
+import { useIsMobile } from '@/app/core/context/mobile_context';
 
 export default function RawPage() {
   const { module } = useModule();
-
+  const isMobile = useIsMobile();
   const mainText =
     module?.main_description ?? 'Discover the ideal data management system for your';
   const highlight = module?.main_description_highlight ?? 'organization';
   const subText = module?.sub_description ?? '';
+
 
   return (
     <div className="z-1">
@@ -30,12 +32,13 @@ export default function RawPage() {
         component={<ModulesOrbit />}
       />
 
-      <ModulesList
-        title="Modules"
-        description="Start from one of our pre build modules or create your own"
-        features={MODULES}
-        open_page={true}
-      />
+      {isMobile ?
+        <ModulesList
+          title="Modules"
+          description="Start from one of our pre build modules or create your own"
+          features={MODULES}
+          open_page={true}
+        /> : <></>}
 
       <FeaturesList
         title="Built for simplicity"

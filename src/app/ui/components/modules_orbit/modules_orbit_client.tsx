@@ -8,12 +8,42 @@ import { Module } from '@/app/core/types/module';
 import { MODULES } from '@/app/core/data/modules';
 import { useModule } from '@/app/core/context/module';
 
-
-
 type LottieAnimationData = Record<string, unknown>;
 
+// Size configuration constants
+const SIZE_CONFIG = {
+  DESKTOP: {
+    CONTAINER: 600,           // px
+    HOUSE: 100,               // px
+    ORB: 64,                  // px (w-16 = 4rem = 64px)
+    ICON: {                   // Icon sizes
+      DEFAULT: 24,            // px (w-6 = 1.5rem = 24px)
+      HOVERED: 40,            // px (w-10 = 2.5rem = 40px)
+      MOBILE: 32              // px (w-8 = 2rem = 32px)
+    },
+    TEXT: {                   // Text sizes (tailwind classes)
+      DEFAULT: 'text-sm',
+      HOVERED: 'text-base',
+      MOBILE: 'text-xs'
+    },
+    RADIUS: 220               // px
+  },
+  MOBILE: {
+    CONTAINER_SCALE: 100,     // vw
+    HOUSE_SCALE: 15,          // vw
+    ORB_SCALE: 16,            // vw (w-16 = 4rem)
+    ICON_SCALE: {             // Icon scales
+      DEFAULT: 0.5,           // 50% of orb size
+      HOVERED: 0.625,         // 62.5% of orb size
+      MOBILE: 0.5             // 50% of orb size
+    },
+    TEXT: 'text-xs',          // Fixed text size
+    RADIUS_SCALE: 0.35        // 35% of screen width
+  }
+};
+
 const ModulesOrbitClient = () => {
-      const { module, setModule } = useModule();
+    const { module, setModule } = useModule();
     
     const isMobile = useIsMobile();
     const [screenWidth, setScreenWidth] = useState<number>(0);
@@ -38,16 +68,43 @@ const ModulesOrbitClient = () => {
         setScreenWidth(window.innerWidth);
     }, []);
 
-    const HOUSE_SIZE = isMobile ? '15vw' : '100px';
-    const CONTAINER_SIZE = isMobile ? '100vw' : '600px';
-    const ROTATION_SPEED = 0.005;
-
-    const radius = useMemo(() => {
+    // Size calculations based on configuration
+    const sizes = useMemo(() => {
         if (isMobile && screenWidth > 0) {
-            return screenWidth * 0.35;
+            const containerSize = `${screenWidth * (SIZE_CONFIG.MOBILE.CONTAINER_SCALE / 100)}px`;
+            const houseSize = `${screenWidth * (SIZE_CONFIG.MOBILE.HOUSE_SCALE / 100)}px`;
+            const orbSize = `${screenWidth * (SIZE_CONFIG.MOBILE.ORB_SCALE / 100)}px`;
+            const radius = screenWidth * SIZE_CONFIG.MOBILE.RADIUS_SCALE;
+            
+            return {
+                containerSize,
+                houseSize,
+                orbSize,
+                iconSize: {
+                    default: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.DEFAULT}px`,
+                    hovered: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.HOVERED}px`,
+                    mobile: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.MOBILE}px`
+                },
+                textSize: SIZE_CONFIG.MOBILE.TEXT,
+                radius
+            };
+        } else {
+            return {
+                containerSize: `${SIZE_CONFIG.DESKTOP.CONTAINER}px`,
+                houseSize: `${SIZE_CONFIG.DESKTOP.HOUSE}px`,
+                orbSize: `${SIZE_CONFIG.DESKTOP.ORB}px`,
+                iconSize: {
+                    default: `${SIZE_CONFIG.DESKTOP.ICON.DEFAULT}px`,
+                    hovered: `${SIZE_CONFIG.DESKTOP.ICON.HOVERED}px`,
+                    mobile: `${SIZE_CONFIG.DESKTOP.ICON.MOBILE}px`
+                },
+                textSize: SIZE_CONFIG.DESKTOP.TEXT,
+                radius: SIZE_CONFIG.DESKTOP.RADIUS
+            };
         }
-        return 220;
     }, [isMobile, screenWidth]);
+
+    const ROTATION_SPEED = 0.005;
 
     const fetchLottieData = async (url: string): Promise<LottieAnimationData> => {
         if (animationCache.has(url)) {
@@ -171,37 +228,23 @@ const ModulesOrbitClient = () => {
         };
     }, [isPaused]);
 
-    // DEBUG: Animation loading with debug statements
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
         
-        // console.log('🔄 Animation Effect Triggered:', {
-        //     moduleToShow: moduleToShow?.title,
-        //     hasAnimationPath: !!moduleToShow?.animationPath,
-        //     isTransitioning,
-        //     animationReady,
-        //     hasActiveAnimation
-        // });
-
         if (moduleToShow?.animationPath && animationContainerRef.current) {
-            // console.log('🚀 Starting animation load for:', moduleToShow.title);
             setIsTransitioning(true);
             setAnimationReady(false);
 
             if (animationInstanceRef.current) {
-                console.log('🗑️ Destroying previous animation');
                 animationInstanceRef.current.destroy();
                 animationInstanceRef.current = null;
             }
 
             const loadAnimation = async () => {
                 try {
-                    // console.log('📦 Fetching animation data...');
                     const animationData = await fetchLottieData(moduleToShow.animationPath);
-                    // console.log('✅ Animation data loaded');
-
+                    
                     if (animationContainerRef.current) {
-                        console.log('🎬 Creating Lottie animation');
                         animationInstanceRef.current = lottie.loadAnimation({
                             container: animationContainerRef.current,
                             renderer: 'svg',
@@ -211,30 +254,26 @@ const ModulesOrbitClient = () => {
                         });
 
                         setTimeout(() => {
-                            // console.log('🎯 Animation ready!');
                             setAnimationReady(true);
                             setIsTransitioning(false);
                         }, 100);
                     }
                 } catch (error) {
-                    console.error('❌ Error loading Lottie animation:', error);
+                    console.error('Error loading Lottie animation:', error);
                     setIsTransitioning(false);
                     setAnimationReady(false);
                 }
             };
 
-            // Start loading immediately for smoother transition
             loadAnimation();
 
             return () => {
                 if (animationInstanceRef.current) {
-                    // console.log('🧹 Cleanup: destroying animation');
                     animationInstanceRef.current.destroy();
                     animationInstanceRef.current = null;
                 }
             };
         } else {
-            // console.log('🛑 No animation needed, cleaning up');
             setIsTransitioning(false);
             setAnimationReady(false);
             if (animationInstanceRef.current) {
@@ -245,7 +284,6 @@ const ModulesOrbitClient = () => {
     }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache]);
 
     const handleModuleHover = (mod: Module | null) => {
-        // console.log('🖱️ Module hover:', mod?.title || 'null');
         setHoveredModule(mod);
         setModule(mod);
 
@@ -267,6 +305,8 @@ const ModulesOrbitClient = () => {
     const searchParams = useSearchParams();
 
     const handleModuleClick = (mod: Module) => {
+        if(isMobile)return;
+        
         const params = new URLSearchParams(searchParams.toString());
         params.set('mode', mod.mode);
 
@@ -280,24 +320,12 @@ const ModulesOrbitClient = () => {
 
     const hasActiveAnimation = (hoveredModule?.animationPath || activeModule?.animationPath);
 
-    // DEBUG: Log state changes
-    useEffect(() => {
-        // console.log('📊 State Update:', {
-        //     hasActiveAnimation: !!hasActiveAnimation,
-        //     isTransitioning,
-        //     animationReady,
-        //     hoveredModule: hoveredModule?.title,
-        //     activeModule: activeModule?.title
-        // });
-    }, [hasActiveAnimation, isTransitioning, animationReady, hoveredModule, activeModule]);
-
     return (
         <div className="flex justify-center items-start w-full">
-            <div className="relative" style={{ width: CONTAINER_SIZE, height: CONTAINER_SIZE }}>
+            <div className="relative" style={{ width: sizes.containerSize, height: sizes.containerSize }}>
 
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                    <div className="relative" style={{ width: HOUSE_SIZE, height: HOUSE_SIZE }}>
-                        {/* DEBUG: Static house with debug info */}
+                    <div className="relative" style={{ width: sizes.houseSize, height: sizes.houseSize }}>
                         <img
                             src="https://i.imgur.com/OEMWwAS.png"
                             alt="Static house"
@@ -307,22 +335,14 @@ const ModulesOrbitClient = () => {
                                     : 'opacity-100 scale-100 blur-0'
                             }`}
                             style={{
-                                width: HOUSE_SIZE,
-                                height: HOUSE_SIZE,
+                                width: sizes.houseSize,
+                                height: sizes.houseSize,
                                 transformOrigin: 'center center',
                                 filter: hasActiveAnimation ? 'brightness(0.7)' : 'brightness(1)',
                                 zIndex: hasActiveAnimation ? 5 : 15
                             }}
-                            onTransitionEnd={() => {
-                                // console.log('🏠 House transition ended:', {
-                                //     hasActiveAnimation,
-                                //     opacity: hasActiveAnimation ? 0 : 100,
-                                //     scale: hasActiveAnimation ? 0.3 : 1
-                                // });
-                            }}
                         />
                         
-                        {/* DEBUG: Animation container with debug info */}
                         <div
                             ref={animationContainerRef}
                             className={`absolute inset-0 transition-all ease-out transform ${
@@ -337,17 +357,8 @@ const ModulesOrbitClient = () => {
                                 zIndex: hasActiveAnimation ? 25 : 10,
                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
                             }}
-                            onTransitionEnd={() => {
-                                // console.log('🎬 Animation transition ended:', {
-                                //     hasActiveAnimation,
-                                //     animationReady,
-                                //     opacity: hasActiveAnimation && animationReady ? 100 : 0,
-                                //     scale: hasActiveAnimation && animationReady ? 1.8 : 0.3
-                                // });
-                            }}
                         />
                         
-                        {/* FIXED: Improved transition overlay */}
                         <div
                             className={`absolute inset-0 rounded-full transition-all duration-300 ease-in-out ${
                                 isTransitioning
@@ -364,7 +375,6 @@ const ModulesOrbitClient = () => {
                             }}
                         />
                         
-                        {/* Glow effect */}
                         {hasActiveAnimation && animationReady && (
                             <div
                                 className="absolute inset-0 rounded-full opacity-20 animate-pulse"
@@ -386,15 +396,16 @@ const ModulesOrbitClient = () => {
                         transition: isPaused ? 'none' : 'transform 0.1s linear',
                     }}
                 >
-                    {radius > 0 &&
+                    {sizes.radius > 0 &&
                         MODULES.map((mod, index) => {
                             const Icon = mod.icon;
                             const angle = (index * 360) / MODULES.length;
-                            const x = Math.cos((angle - 90) * (Math.PI / 180)) * radius;
-                            const y = Math.sin((angle - 90) * (Math.PI / 180)) * radius;
+                            const x = Math.cos((angle - 90) * (Math.PI / 180)) * sizes.radius;
+                            const y = Math.sin((angle - 90) * (Math.PI / 180)) * sizes.radius;
                             const isActive = activeModule?.title === mod.title;
                             const isHovered = hoveredModule?.title === mod.title;
                             const orbColor = mod.color;
+                            const shouldHide = !isMobile && hoveredModule && !isHovered;
 
                             return (
                                 <div
@@ -403,22 +414,28 @@ const ModulesOrbitClient = () => {
                                     style={{
                                         left: `${x}px`,
                                         top: `${y}px`,
-                                        marginLeft: '-32px',
-                                        marginTop: '-32px',
+                                        marginLeft: `-${parseFloat(sizes.orbSize) / 2}px`,
+                                        marginTop: `-${parseFloat(sizes.orbSize) / 2}px`,
                                         transform: `rotate(-${currentAngle}deg)`,
                                     }}
                                 >
                                     <div
-                                        className={`w-16 h-16 relative cursor-pointer transition-all duration-300 ease-out hover:scale-110 ${
-                                            isActive ? 'scale-125' : ''
-                                        }`}
+                                        className={`relative cursor-pointer transition-all duration-300 ease-out ${
+                                            isMobile 
+                                                ? (isActive ? 'scale-125' : '')
+                                                : (isHovered ? 'scale-125 hover:scale-150' : 'scale-100')
+                                        } ${shouldHide ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                                        style={{
+                                            width: sizes.orbSize,
+                                            height: sizes.orbSize
+                                        }}
                                         onMouseEnter={() => handleModuleHover(mod)}
                                         onMouseLeave={() => handleModuleHover(null)}
                                         onClick={() => handleModuleClick(mod)}
-                                    >
+                                        >
                                         <div
                                             className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${
-                                                isActive ? 'opacity-100 scale-110' : 'hover:opacity-90 hover:scale-105'
+                                                isActive ? 'opacity-100' : 'hover:opacity-90 hover:scale-105'
                                             }`}
                                         />
                                         <div
@@ -427,10 +444,33 @@ const ModulesOrbitClient = () => {
                                             }`}
                                         />
                                         <div className="absolute inset-0 flex items-center justify-center z-10">
-                                            <Icon className="w-8 h-8 text-white drop-shadow-md transition-all duration-200" />
+                                            <Icon 
+                                                className="text-white drop-shadow-md transition-all duration-200"
+                                                style={{
+                                                    width: isMobile 
+                                                        ? sizes.iconSize.mobile 
+                                                        : isHovered 
+                                                            ? sizes.iconSize.hovered 
+                                                            : sizes.iconSize.default,
+                                                    height: isMobile 
+                                                        ? sizes.iconSize.mobile 
+                                                        : isHovered 
+                                                            ? sizes.iconSize.hovered 
+                                                            : sizes.iconSize.default
+                                                }}
+                                            />
                                         </div>
-                                        {(isHovered || (isActive && !hoveredModule && !isMobile)) && (
-                                            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg z-20 animate-fade-in">
+                                        {(!isMobile || isHovered || (isActive && !hoveredModule && !isMobile)) && (
+                                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg whitespace-nowrap shadow-lg z-20 transition-all duration-300 mt-2 ${
+                                                isMobile 
+                                                    ? sizes.textSize 
+                                                    : isHovered 
+                                                        ? SIZE_CONFIG.DESKTOP.TEXT.HOVERED 
+                                                        : SIZE_CONFIG.DESKTOP.TEXT.DEFAULT
+                                            } ${isHovered ? 'animate-fade-in' : ''}`}
+                                            style={{
+                                                opacity: isMobile || isHovered ? 1 : 0.8,
+                                            }}>
                                                 {mod.title}
                                                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
                                             </div>

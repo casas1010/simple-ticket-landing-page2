@@ -13,7 +13,9 @@ export default function Page() {
 
   useEffect(() => {
     const userAgent = navigator.userAgent || '';
-    setIsMobile(isMobileUserAgent(userAgent));
+    const mobile = isMobileUserAgent(userAgent);
+    setIsMobile(mobile);
+    console.log("Detected mobile:", mobile); // log the value directly
   }, []);
 
   if (isMobile === null) {

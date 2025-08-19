@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { TreePalmIcon } from "lucide-react";
+import { useIsMobile } from "@/app/core/context/mobile_context";
 
 type TopSectionProps = {
   title: string;
@@ -15,6 +15,8 @@ const animationProps = {
 };
 
 const ValuesSection: React.FC<{ values: { title: string; description: string }[] }> = ({ values }) => {
+  const isMobile = useIsMobile();
+
   return (
     <motion.section className="py-16 px-4" {...animationProps}>
       <div className="max-w-6xl mx-auto bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
@@ -23,7 +25,9 @@ const ValuesSection: React.FC<{ values: { title: string; description: string }[]
           {values.map((value, index) => (
             <motion.div
               key={index}
-              className="border-b border-white/30 pb-6 last:border-b-0"
+              className={`border-b border-white/30 pb-6 last:border-b-0 ${
+                isMobile ? "text-center" : "text-left"
+              }`}
               {...animationProps}
             >
               <h3 className="text-xl font-semibold text-indigo-300 mb-3">
@@ -37,7 +41,6 @@ const ValuesSection: React.FC<{ values: { title: string; description: string }[]
     </motion.section>
   );
 };
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -55,17 +58,21 @@ const itemVariants = {
 };
 
 function AboutUs() {
+  const isMobile = useIsMobile();
+
   return (
     <motion.section
       className="flex flex-col items-center justify-center min-h-screen"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.3 }} // Replay animation when in view
+      viewport={{ once: false, amount: 0.3 }}
     >
       {/* Tagline */}
       <motion.p
-        className="text-gray-400 tracking-widest text-lg md:text-xl mb-6 uppercase font-semibold"
+        className={`text-gray-400 tracking-widest text-lg md:text-xl mb-6 uppercase font-semibold ${
+          isMobile ? "text-center" : ""
+        }`}
         variants={itemVariants}
         transition={{ duration: 0.6 }}
       >
@@ -74,7 +81,7 @@ function AboutUs() {
 
       {/* Title */}
       <motion.h1
-        className="text-6xl font-bold mb-6"
+        className={`text-6xl font-bold mb-6 ${isMobile ? "text-center" : ""}`}
         variants={itemVariants}
         transition={{ duration: 0.6 }}
       >
@@ -88,7 +95,9 @@ function AboutUs() {
 
       {/* Description */}
       <motion.p
-        className="text-gray-400 leading-relaxed max-w-3xl mx-auto"
+        className={`text-gray-400 leading-relaxed max-w-3xl mx-auto ${
+          isMobile ? "text-center" : "text-left"
+        }`}
         variants={itemVariants}
         transition={{ duration: 0.6 }}
       >
@@ -100,7 +109,6 @@ function AboutUs() {
     </motion.section>
   );
 }
-
 
 const AboutUsHero: React.FC = () => {
   const values = [

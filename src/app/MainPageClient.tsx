@@ -14,9 +14,7 @@ import ModulePage from './ui/pages/module';
 import AboutUs from './ui/pages/about_us';
 import Footer from './ui/components/footer';
 import { useEffect } from 'react';
-import { FeatureCard } from './ui/components/cards/feature';
-import { FeaturesList } from './ui/components/lists/features';
-import { PLATFORM_FEATURES } from './core/data/features';
+
 
 export default function MainPageClient() {
   const searchParams = useSearchParams();

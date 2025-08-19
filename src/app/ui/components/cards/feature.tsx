@@ -34,15 +34,15 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.2, once: false });
 
-  // ✅ Fix: type the object as Variants
   const cardVariants: Variants = {
     hidden: { opacity: 0, y: 50, scale: 0.95 },
     visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
     exit: { opacity: 0, y: -30, scale: 0.95, transition: { duration: 0.3 } },
   };
 
+  // Icon for desktop/tablet
   const IconBlock = (
-    <div className="flex flex-1 items-center justify-center z-1">
+    <div className="hidden sm:flex flex-1 items-center justify-center z-10">
       <div
         className={`relative z-0 flex items-center justify-center rounded-2xl p-8 shadow-lg ${animationClass} ${
           feature.color || "bg-[#0F0F1A]"
@@ -66,8 +66,13 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
     </div>
   );
 
+  // Dimmed background icon (mobile only)
+  const MobileBackgroundIcon = feature.icon ? (
+    <feature.icon className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-10 text-[200px] sm:hidden pointer-events-none" />
+  ) : null;
+
   const TextBlock = (
-    <div className="flex flex-1 flex-col justify-center h-full z-1">
+    <div className="flex flex-1 flex-col justify-center h-full z-10">
       <h2 className="text-3xl font-bold" style={{ color: feature.gradient || "#a78bfa" }}>
         {feature.title}
       </h2>
@@ -106,29 +111,29 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
   );
 
   return (
-
-       <div className="z-1">
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "exit"}
-      variants={cardVariants} // ✅ No more type error
-      className="flex items-center justify-center py-12 px-6 rounded-xl shadow-lg"
-    >
-      <div className="flex max-w-5xl w-full items-center gap-12">
-        {isFlipped ? (
-          <>
-            {TextBlock}
-            {IconBlock}
-          </>
-        ) : (
-          <>
-            {IconBlock}
-            {TextBlock}
-          </>
-        )}
-      </div>
-    </motion.div>
+    <div className="relative z-1">
+      {MobileBackgroundIcon}
+      <motion.div
+        ref={ref}
+        initial="hidden"
+        animate={isInView ? "visible" : "exit"}
+        variants={cardVariants}
+        className="flex items-center justify-center py-12 px-6 rounded-xl shadow-lg relative"
+      >
+        <div className="flex max-w-5xl w-full items-center gap-12">
+          {isFlipped ? (
+            <>
+              {TextBlock}
+              {IconBlock}
+            </>
+          ) : (
+            <>
+              {IconBlock}
+              {TextBlock}
+            </>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 };

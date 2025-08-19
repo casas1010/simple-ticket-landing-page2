@@ -91,6 +91,9 @@ export const ModulesList = ({
     );
   }
 
+
+
+
   // Desktop layout with the centering logic for last row
   const fullRows = Math.floor(features.length / 3) * 3;
   const rowsExceptLast = features.slice(0, fullRows);

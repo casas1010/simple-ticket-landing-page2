@@ -91,7 +91,7 @@ export default function HeaderClient() {
           <CompanyName name={module?.title} />
         </div>
 
-        <ContactUs />
+        {/* <ContactUs /> */}
       </header>
     </div>
   )
