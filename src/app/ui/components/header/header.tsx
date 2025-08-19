@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import HeaderClient from './header_cliient';
+import HeaderClient from './header_client';
 import { useModule } from '@/app/core/context/module';
 
 export default function Header() {

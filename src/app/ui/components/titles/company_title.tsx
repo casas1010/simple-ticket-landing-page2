@@ -1,8 +1,8 @@
-
 // company_title.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useModule } from '@/app/core/context/module';
+import { useIsMobile } from '@/app/core/context/mobile_context';
 
 interface CompanyNameProps {
     name?: string;
@@ -10,8 +10,9 @@ interface CompanyNameProps {
 
 const CompanyName: React.FC<CompanyNameProps> = ({ name: name = 'TICKET' }) => {
     const [nameProp, setModuleProp] = useState(name);
-    const [color, setColor] = useState<string>('white'); // state for dynamic color
-    const { module, setModule } = useModule();
+    const [color, setColor] = useState<string>('white');
+    const { module } = useModule();
+    const isMobile = useIsMobile();
 
     // Update the color state whenever module.gradient changes
     useEffect(() => {
@@ -28,12 +29,16 @@ const CompanyName: React.FC<CompanyNameProps> = ({ name: name = 'TICKET' }) => {
         exit: { x: -50, opacity: 0 },
     };
 
-    return (
-        <div className="flex items-center p-2 overflow-hidden">
-            {/* Apply dynamic color to SIMPLE */}
-            <span className="font-bold text-3xl" style={{ color: 'white' }}>         SIMPLE       </span>
+    const hasSpace = nameProp.includes(' ');
 
-            <div className="ml-1 relative inline-block">
+    // console.log("isMobile: "+isMobile)
+
+    return (
+        <div className={`p-2 overflow-hidden ${hasSpace&& isMobile ? 'flex flex-col items-start' : 'flex items-center'}`}>
+            {/* SIMPLE */}
+            <span className="font-bold text-3xl" style={{ color: 'white' }}>SIMPLE</span>
+
+            <div className={`${hasSpace && isMobile ? 'mt-1' : 'ml-1'} relative inline-block`}>
                 <AnimatePresence mode="wait">
                     <motion.span
                         key={nameProp}
@@ -43,7 +48,7 @@ const CompanyName: React.FC<CompanyNameProps> = ({ name: name = 'TICKET' }) => {
                         animate="animate"
                         exit="exit"
                         transition={{ duration: 0.3 }}
-                        style={{ color }} // Apply dynamic color here too
+                        style={{ color }}
                     >
                         {nameProp}
                     </motion.span>
@@ -54,5 +59,3 @@ const CompanyName: React.FC<CompanyNameProps> = ({ name: name = 'TICKET' }) => {
 };
 
 export default CompanyName;
-
-

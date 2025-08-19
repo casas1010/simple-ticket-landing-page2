@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import Image from "next/image"
-import ContactUs from "../contact_us"
+
 import { useModule } from "@/app/core/context/module"
 import CompanyName from "../titles/company_title"
 
@@ -16,8 +15,6 @@ export default function HeaderClient() {
   const searchParams = useSearchParams()
 
   const { module, setModule } = useModule();
-
-  const getTitle = () => (module ? `Simple ${module.title}` : 'Simple Ticket');
 
 
   useEffect( ()=>{
