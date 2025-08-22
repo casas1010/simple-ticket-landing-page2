@@ -12,6 +12,8 @@ import { ModulesList } from '../components/lists/modules';
 import ContactUs from '../components/contact_us';
 import { FeaturesList } from '../components/lists/features';
 import { useIsMobile } from '@/app/core/context/mobile_context';
+import HubSpot from '../components/competitor_comparisons/competitors/hubspot';
+import CompetitorComparison from '../components/competitor_comparisons/competitor_comparisons';
 
 export default function RawPage() {
   const { module } = useModule();
@@ -23,7 +25,7 @@ export default function RawPage() {
 
 
   return (
-    <div className="z-1">
+    <div className="relative z-10">
 
       <TitleAndIcon
         mainText={mainText}
@@ -46,9 +48,11 @@ export default function RawPage() {
         features={PLATFORM_FEATURES}
       />
 
-      <div className="relative z-10">
+    
         <ContactUs text="Get started" />
-      </div>
+
+        <CompetitorComparison />
+
       <div className="h-50" />
     </div>
   );
