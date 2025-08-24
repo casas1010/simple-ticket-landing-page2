@@ -4,7 +4,7 @@ import {
   History, Contact, TrendingUp, CheckCircle, Workflow, Receipt, Calculator, FileBarChart,
   CheckSquare, Timer, Settings, Shield, Lock, CheckLine, Home, Hammer, CalendarRange,
   AlertTriangle, Zap, Droplets, UserPlus, PieChart, DollarSign, FolderKanban, Building2,
-  Gavel,
+  Gavel,Stethoscope,Clock,
   FileTextIcon,
   ShieldCheck
 } from 'lucide-react';
@@ -16,6 +16,7 @@ import { SALES_MANAGEMENT_FEATURES } from './sales_management_features';
 import { CUSTOMER_MANAGEMENT_FEATURES } from './customer_management_feature';
 import { MARKETING_FEATURES } from './marketing_feature';
 import { LEGAL_CASE_MANAGEMENT_FEATURES } from './legal_case_management';
+import { HEALTHCARE_CASE_MANAGEMENT_FEATURES } from './health_care_features';
 
 export const MODULES: Module[] = [
   {
@@ -154,23 +155,23 @@ export const MODULES: Module[] = [
   ///////////
 
 {
-  title: 'Case Management',
-  mode: 'case_management',
-  main_description: 'Simplify legal workflows, from intake to invoicing',
-  main_description_highlight: '— all with intelligent automation.',
-  sub_description: 'Manage legal workflows, automate documentation, and provide clients with secure, real-time updates.',
-  animationPath: 'https://lottie.host/97df4523-1062-4af7-85b8-4f0eb327a919/0TlMyUCifS.json',
+  title: 'Patient & Care Management',
+  mode: 'patient_management',
+  main_description: 'Streamline intake to follow-ups',
+  main_description_highlight: '— all while staying HIPAA compliant.',
+  sub_description: 'Manage patient records, automate care documentation, and provide patients with secure, real-time updates.',
+  animationPath: 'https://lottie.host/693c5f9c-3029-4e2f-a811-0ce03e99b1f7/UooAnGQGZR.json',
   gradient: '#1de144ff',
-  icon: Gavel, 
-  color: 'bg-indigo-600', 
+  icon: Stethoscope, 
+  color: 'bg-teal-600', 
   details: [
-    { icon: Home, description: 'End-to-end case management', iconColor: 'text-white', iconBg: 'bg-indigo-600' },
-    { icon: Hammer, description: 'Time tracking & automated billing', iconColor: 'text-white', iconBg: 'bg-indigo-700' },
-    { icon: CalendarRange, description: 'Dedicated client portal access', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
-    { icon: Bot, description: 'Legal workflow automation', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
-    { icon: FileTextIcon, description: 'Secure document management', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
-    { icon: ShieldCheck, description: 'Military-grade encryption & HTTPS security', iconColor: 'text-white', iconBg: 'bg-indigo-800' },
+    { icon: ClipboardList, description: 'End-to-end patient case management', iconColor: 'text-white', iconBg: 'bg-teal-600' },
+    { icon: Clock, description: 'Appointment scheduling & telehealth integration', iconColor: 'text-white', iconBg: 'bg-teal-700' },
+    { icon: Users, description: 'Dedicated patient & family portal access', iconColor: 'text-white', iconBg: 'bg-teal-800' },
+    { icon: Bot, description: 'Automated follow-ups & reminders', iconColor: 'text-white', iconBg: 'bg-teal-800' },
+    // { icon: FileTextIcon, description: 'Secure EMR/EHR document management', iconColor: 'text-white', iconBg: 'bg-teal-800' },
+    // { icon: ShieldCheck, description: 'HIPAA-compliant encryption & secure messaging', iconColor: 'text-white', iconBg: 'bg-teal-800' },
   ],
-  features: LEGAL_CASE_MANAGEMENT_FEATURES,
+  features: HEALTHCARE_CASE_MANAGEMENT_FEATURES,
 }
 ];
