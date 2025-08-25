@@ -55,41 +55,41 @@ const tierToKey = (tier: string): string => {
 // Get proper legend label for tier based on module
 const getTierLegendLabel = (pricingRules: Record<string, Record<string, PricingRule>>, tier: string): string => {
   // Find which modules have this tier
-  const modulesWithTier = Object.keys(pricingRules).filter(module => 
+  const modulesWithTier = Object.keys(pricingRules).filter(module =>
     Object.keys(pricingRules[module]).includes(tier)
   );
-  
+
   // Create proper legend labels based on the requirements
   const legendLabels: Record<string, string> = {};
-  
+
   // Small Business tiers
   if (modulesWithTier.includes("Small Business")) {
     legendLabels["Starter"] = "Small Business - Starter";
     legendLabels["Pro"] = "Small Business - Pro";
     legendLabels["Enterprise"] = "Small Business - Enterprise";
   }
-  
+
   // Sales tiers
   if (modulesWithTier.includes("Sales")) {
     legendLabels["Starter"] = "Sales - Starter";
-    legendLabels["Pro"] = "Sales - Pro";  
+    legendLabels["Pro"] = "Sales - Pro";
     legendLabels["Enterprise"] = "Sales - Enterprise";
   }
-  
+
   // Service Cloud tiers
   if (modulesWithTier.includes("Service Cloud")) {
     legendLabels["Starter"] = "Service Cloud - Starter";
     legendLabels["Pro"] = "Service Cloud - Pro";
     legendLabels["Enterprise"] = "Service Cloud - Enterprise";
   }
-  
+
   // Marketing tiers
   if (modulesWithTier.includes("Marketing")) {
     legendLabels["Starter Suite"] = "Marketing - Starter Suite";
     legendLabels["Marketing Cloud Growth Edition"] = "Marketing - Marketing Cloud Growth Edition";
     legendLabels["Marketing Cloud Advanced"] = "Marketing - Marketing Cloud Advanced";
   }
-  
+
   // Marketing Cloud Account Engagement tiers
   if (modulesWithTier.includes("Marketing Cloud Account Engagement")) {
     legendLabels["Growth"] = "Marketing Cloud Account Engagement - Growth";
@@ -97,7 +97,7 @@ const getTierLegendLabel = (pricingRules: Record<string, Record<string, PricingR
     legendLabels["Advanced"] = "Marketing Cloud Account Engagement - Advanced";
     legendLabels["Premium"] = "Marketing Cloud Account Engagement - Premium";
   }
-  
+
   return legendLabels[tier] || tier;
 };
 
@@ -250,7 +250,7 @@ function TierPricingSummary({
 
   return (
     <div className="rounded-xl shadow-xl p-6 backdrop-blur-lg bg-white/10 border border-white/20">
-      <h2 className="text-xl font-semibold mb-4 text-white">Tier Pricing Summary (by Module)</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Tier Pricing Summary (by Module in USD)</h2>
       {enabledModules.length === 0 ? (
         <p className="text-gray-300 italic">No modules enabled</p>
       ) : (
@@ -334,9 +334,9 @@ function PricingChart({
               <YAxis stroke="rgba(255,255,255,0.8)" />
               <Tooltip
                 formatter={(value, name) => [
-                  value === null ? "Not Available" : 
-                  value === 0 ? "Free" : 
-                  `${value?.toLocaleString()}`,
+                  value === null ? "Not Available" :
+                    value === 0 ? "Free" :
+                      `${value?.toLocaleString()}`,
                   // Find the proper legend name for this key
                   legendConfig.find(config => config.key === name)?.name || String(name),
                 ]}
@@ -351,13 +351,13 @@ function PricingChart({
               <Legend />
               {/* Dynamic lines based on legend config - only for enabled tiers */}
               {legendConfig.map((config) => (
-                <Line 
+                <Line
                   key={config.key}
-                  type="monotone" 
-                  dataKey={config.key} 
-                  stroke={config.stroke} 
-                  strokeWidth={3} 
-                  name={config.name} 
+                  type="monotone"
+                  dataKey={config.key}
+                  stroke={config.stroke}
+                  strokeWidth={3}
+                  name={config.name}
                   dot={false}
                   activeDot={{ r: 6 }}
                 />
@@ -393,7 +393,7 @@ function ActiveModulesSummary({ moduleConfigs }: { moduleConfigs: Record<string,
 export default function PricingComparison({
   pricingRules,
   initialModuleConfigs,
-      title="Pricing Comparison (in usd)",
+  title = "Pricing Comparison",
   gradientClass = ""
 }: {
   pricingRules: Record<string, Record<string, PricingRule>>;
@@ -429,7 +429,7 @@ export default function PricingComparison({
     const tierPrices: Record<string, number | null> = {};
     enabledTiers.forEach(tier => {
       let price = 0;
-      
+
       // Calculate price for each enabled module that has this tier
       for (const [module, config] of Object.entries(moduleConfigs)) {
         if (config.enabled && config.users > 0) {
@@ -457,7 +457,7 @@ export default function PricingComparison({
           }
         }
       }
-      
+
       tierPrices[tierToKey(tier)] = price === Infinity ? null : price;
     });
 
@@ -471,18 +471,30 @@ export default function PricingComparison({
     <div className={`p-6 min-h-screen ${gradientClass}`}>
       <div className="max-w-7xl mx-auto space-y-6">
         <h1 className="text-3xl font-bold text-white mb-8 text-center">{title}</h1>
-
         <TierPricingSummary moduleConfigs={moduleConfigs} pricingRules={pricingRules} />
-        {/* <PricingChart 
-          data={data} 
-          maxUsers={maxUsers} 
-          setMaxUsers={setMaxUsers} 
-          tiers={enabledTiers}
-          pricingRules={pricingRules}
-        />
-        <ModuleConfigPanel moduleConfigs={moduleConfigs} updateModuleConfig={updateModuleConfig} />
-        <ActiveModulesSummary moduleConfigs={moduleConfigs} /> */}
+
+        {/* Flex container for PricingChart and ModuleConfigPanel */}
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <PricingChart
+              data={data}
+              maxUsers={maxUsers}
+              setMaxUsers={setMaxUsers}
+              tiers={enabledTiers}
+              pricingRules={pricingRules}
+            />
+          </div>
+          <div className="flex-1">
+            <ModuleConfigPanel
+              moduleConfigs={moduleConfigs}
+              updateModuleConfig={updateModuleConfig}
+            />
+          </div>
+        </div>
+
+        {/* <ActiveModulesSummary moduleConfigs={moduleConfigs} /> */}
       </div>
     </div>
   );
+
 }

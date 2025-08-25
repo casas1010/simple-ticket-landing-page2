@@ -33,7 +33,7 @@ export default function CompetitorComparison() {
       </div>
 
       {/* Tab Content */}
-      <div className="w-full max-w-2xl text-center">
+      <div className="w-full max-w-7xl  text-center">
         {competitors.map(
           (c) => active === c.title && <div key={c.title}>{c.component}</div>
         )}

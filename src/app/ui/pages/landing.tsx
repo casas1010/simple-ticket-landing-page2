@@ -48,10 +48,8 @@ export default function LandingPage() {
         features={PLATFORM_FEATURES}
       />
 
-    
-        {/* <ContactUs text="Get started" /> */}
+      {!isMobile ? <CompetitorComparison /> : <></>}
 
-        <CompetitorComparison />
 
       <div className="h-50" />
     </div>

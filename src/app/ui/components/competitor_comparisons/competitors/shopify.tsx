@@ -36,7 +36,7 @@ export default function Shopify() {
     <PricingComparison
       pricingRules={pricingRules}
       initialModuleConfigs={initialModuleConfigs}
-      title="Pricing Comparison (in usd)"
+      title="Pricing Comparison"
 
     />
   );
