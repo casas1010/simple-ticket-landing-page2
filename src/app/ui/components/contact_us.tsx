@@ -1,100 +1,84 @@
-'use client';
+import { AnimatePresence, motion } from "framer-motion";
+import { Copy, Mail, Calendar, HelpCircle } from "lucide-react";
+import { useState } from "react";
 
-import { useEffect, useState } from 'react';
-import { Copy, Mail, Calendar } from 'lucide-react';
-import { useIsMobile } from '@/app/core/context/mobile_context';
+export default function ContactUs() {
+  const [open, setOpen] = useState(false);
 
-type ContactSectionProps = {
-  text?: string;
-};
+  const email = "jcasas@simple-ticket.net";
 
-const ContactSection = ({ text = "Contact us" }: ContactSectionProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-const isMobile = useIsMobile();
-  const emailAddress = 'jcasas@simple-ticket.net';
-  const calendlyUrl = 'https://calendly.com/jcasasmail';
-
-  const toast = {
-    success: (message: string) => alert(message),
-    error: (message: string) => alert(message),
-  };
-
-
-  const sendEmail = () => {
-    const emailUri = `mailto:${emailAddress}?subject=Contact&body=Hi there!`;
-    window.open(emailUri, '_blank');
-  };
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(emailAddress);
-      toast.success('Email address copied to clipboard');
-    } catch (err) {
-      toast.error('Failed to copy email');
+  const copyEmail = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(email).then(() => {
+        alert("Email copied to clipboard!");
+      }).catch(() => {
+        fallbackCopy(email);
+      });
+    } else {
+      fallbackCopy(email);
     }
   };
 
-  const openCalendly = () => {
-    window.open(calendlyUrl, '_blank');
+  const fallbackCopy = (text: string) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+    alert("Email copied to clipboard!");
   };
 
-  if (isMobile) {
-    return (
-      <div className="flex justify-center items-center">
-        <button
-          onClick={openCalendly}
-          className="px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm rounded-lg hover:from-indigo-600 hover:to-purple-700 transition shadow-md"
-        >
-          {text}
-        </button>
-      </div>
-    );
-  }
+  const sendEmail = () => {
+    if (typeof window !== "undefined") {
+      window.location.href = `mailto:${email}`;
+    }
+  };
+
+  const scheduleMeeting = () => {
+    if (typeof window !== "undefined") {
+      window.open("https://calendly.com/jcasasmail", "_blank");
+    }
+  };
+
+  const options = [
+    { label: "Copy email", icon: <Copy className="w-4 h-4" />, action: copyEmail },
+    { label: "Send email", icon: <Mail className="w-4 h-4" />, action: sendEmail },
+    { label: "Schedule meeting", icon: <Calendar className="w-4 h-4" />, action: scheduleMeeting },
+  ];
 
   return (
-    <div className="flex justify-center items-center">
-      <div
-        className="relative"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div
-          className={`absolute -top-0 left-1/2 transform -translate-x-1/2 bg-white shadow-xl rounded-xl p-4 flex gap-4 z-10 border border-gray-200
-                      transition-all duration-300
-                      ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
-        >
-          <button
-            onClick={copyEmail}
-            className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md transition-colors"
-          >
-            <Copy size={25} />
-            Copy Email
-          </button>
-          <button
-            onClick={sendEmail}
-            className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md transition-colors"
-          >
-            <Mail size={25} />
-            Send Email
-          </button>
-          <button
-            onClick={openCalendly}
-            className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md transition-colors"
-          >
-            <Calendar size={25} />
-            Schedule Meeting
-          </button>
-        </div>
+    <div className="fixed bottom-6 right-6 z-10">
+      <div className="relative flex flex-col items-end">
+        <AnimatePresence>
+          {open &&
+            options.map((opt, i) => (
+              <motion.button
+                key={opt.label}
+                onClick={opt.action}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: i * 0.05 }}
+                className="mb-2 flex items-center gap-2 bg-white shadow-lg px-3 py-2 rounded-xl hover:bg-gray-100 transition"
+              >
+                {opt.icon}
+                {opt.label}
+              </motion.button>
+            ))}
+        </AnimatePresence>
 
         <button
-          onClick={sendEmail}
-          className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition shadow-md"
+          onClick={() => setOpen(!open)}
+          className="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition"
         >
-          {text}
+          <HelpCircle className="w-6 h-6" />
         </button>
       </div>
     </div>
   );
-};
+}
 
-export default ContactSection;
+

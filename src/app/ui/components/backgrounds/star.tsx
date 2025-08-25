@@ -6,7 +6,7 @@ function StarBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Array<{ x: number, y: number, r: number, dx: number, dy: number }>>([]);
   const animationIdRef = useRef<number>(1);
-  const currentStarColorRef = useRef<string>('white');
+  const currentStarColorRef = useRef<string>('#7d7e81ff');
   const { module, setModule } = useModule();
 
   const searchParams = useSearchParams();
@@ -14,7 +14,7 @@ function StarBackground() {
 
   // Update the current color ref when starColor changes
   useEffect(() => {
-    currentStarColorRef.current = module?.gradient || 'white';
+    currentStarColorRef.current = module?.gradient || '#7d7e81ff';
   }, [module?.gradient]);
 
   useEffect(() => {

@@ -118,7 +118,8 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature, isFlipped = false }
         initial="hidden"
         animate={isInView ? "visible" : "exit"}
         variants={cardVariants}
-        className="flex items-center justify-center py-12 px-6 rounded-xl shadow-lg relative"
+        className="flex items-center justify-center py-12 px-6 rounded-2xl shadow-lg relative
+                   bg-white/10 backdrop-blur-md border border-white/20"
       >
         <div className="flex max-w-5xl w-full items-center gap-12">
           {isFlipped ? (

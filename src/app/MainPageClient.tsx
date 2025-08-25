@@ -9,11 +9,12 @@ import { MODULES } from './core/data/modules';
 import StarBackground from './ui/components/backgrounds/star';
 import Header from './ui/components/header/header';
 
-import RawPage from './ui/pages/raw';
+import LandingPage from './ui/pages/landing';
 import ModulePage from './ui/pages/module';
 import AboutUs from './ui/pages/about_us';
 import Footer from './ui/components/footer';
 import { useEffect } from 'react';
+import ContactUs from './ui/components/contact_us';
 
 
 export default function MainPageClient() {
@@ -33,7 +34,7 @@ export default function MainPageClient() {
 
   const renderUi = () => {
     if (mode == null) {
-      return <RawPage />;
+      return <LandingPage />;
     }
 
     if (mode == 'about-us') {
@@ -43,15 +44,12 @@ export default function MainPageClient() {
     return <ModulePage mode={mode} key={mode} />;
   };
 
-  
+
 
   return (
     <div className="bg-[#35495f] relative w-full overflow-hidden">
-      <StarBackground />  
+      <StarBackground />
       <Header />
-
-
-
       <AnimatePresence mode="wait">
         <motion.div
           key={mode || 'raw'}
@@ -63,7 +61,7 @@ export default function MainPageClient() {
           {renderUi()}
         </motion.div>
       </AnimatePresence>
-
+      <ContactUs />
       <Footer />
     </div>
   );

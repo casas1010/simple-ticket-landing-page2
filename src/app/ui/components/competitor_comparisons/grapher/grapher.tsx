@@ -271,7 +271,7 @@ function TierPricingSummary({
                             const price = calculateModuleTierPrice(module, tier);
                             if (price === Infinity) return "Not Available";
                             if (price === 0) return "Free";
-                            return `${price.toLocaleString()}/mo`;
+                            return `$${price.toLocaleString()}/mo`;
                           })()}
                         </p>
                       </div>
@@ -393,7 +393,7 @@ function ActiveModulesSummary({ moduleConfigs }: { moduleConfigs: Record<string,
 export default function PricingComparison({
   pricingRules,
   initialModuleConfigs,
-  title = "Pricing Comparison",
+      title="Pricing Comparison (in usd)",
   gradientClass = ""
 }: {
   pricingRules: Record<string, Record<string, PricingRule>>;
@@ -473,7 +473,7 @@ export default function PricingComparison({
         <h1 className="text-3xl font-bold text-white mb-8 text-center">{title}</h1>
 
         <TierPricingSummary moduleConfigs={moduleConfigs} pricingRules={pricingRules} />
-        <PricingChart 
+        {/* <PricingChart 
           data={data} 
           maxUsers={maxUsers} 
           setMaxUsers={setMaxUsers} 
@@ -481,7 +481,7 @@ export default function PricingComparison({
           pricingRules={pricingRules}
         />
         <ModuleConfigPanel moduleConfigs={moduleConfigs} updateModuleConfig={updateModuleConfig} />
-        <ActiveModulesSummary moduleConfigs={moduleConfigs} />
+        <ActiveModulesSummary moduleConfigs={moduleConfigs} /> */}
       </div>
     </div>
   );

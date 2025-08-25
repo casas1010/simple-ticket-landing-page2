@@ -31,19 +31,17 @@ export default function TitleAndIcon(props: Props) {
 }
 
 
-
 function MobileContent({ mainText, highlight, subText, component: uiComponent, videos }: Props) {
-  //console.log("MOBILE");
   return (
-    <div className="relative flex flex-col items-center px-8 pt-10 text-center max-w-7xl mx-auto min-h-screen">
-      {/* Background component (Lottie) - dimmed */}
-      <div className="absolute inset-0 z-0 flex justify-center items-center w-full opacity-30">
+    <div className="relative flex flex-col items-center px-8 text-center max-w-7xl mx-auto ">
+      {/* Background component (Lottie) - positioned to align with text */}
+      <div className="absolute top-0 left-0 right-0 z-0 flex justify-center items-center opacity-30" style={{ height: '60vh' }}>
         {uiComponent}
       </div>
 
       {/* Text content - in foreground */}
       <div className="relative z-10 max-w-2xl pt-20">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait">  
           <motion.div
             key={`${mainText}-${highlight}-${subText}`}
             initial={{ rotateY: 15, rotateX: 5, opacity: 0, transformPerspective: 1000 }}
@@ -73,10 +71,12 @@ function MobileContent({ mainText, highlight, subText, component: uiComponent, v
       </div>
 
       {/* Spacer to maintain layout */}
-      <div className="flex-1"></div>
+
     </div>
   );
 }
+
+
 
 function DesktopContent({ mainText, highlight, subText, component: orbitComponent, videos }: Props) {
   // console.log("DESKTOP - videos prop:", videos);

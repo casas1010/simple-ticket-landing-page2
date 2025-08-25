@@ -15,7 +15,7 @@ import { useIsMobile } from '@/app/core/context/mobile_context';
 import HubSpot from '../components/competitor_comparisons/competitors/hubspot';
 import CompetitorComparison from '../components/competitor_comparisons/competitor_comparisons';
 
-export default function RawPage() {
+export default function LandingPage() {
   const { module } = useModule();
   const isMobile = useIsMobile();
   const mainText =
@@ -49,7 +49,7 @@ export default function RawPage() {
       />
 
     
-        <ContactUs text="Get started" />
+        {/* <ContactUs text="Get started" /> */}
 
         <CompetitorComparison />
 

@@ -17,9 +17,9 @@ export default function HeaderClient() {
   const { module, setModule } = useModule();
 
 
-  useEffect( ()=>{
+  useEffect(() => {
     // console.log("MODULE: "+module);
-  },[module])
+  }, [module])
 
   useEffect(() => {
     const onScroll = () => {
@@ -78,10 +78,8 @@ export default function HeaderClient() {
           >
             <img
               src="https://i.imgur.com/OEMWwAS.png"
-              alt="Logo"
-              width={200}
-              height={200}
-              className={`transition-all duration-300 ${scrolled ? "w-4 h-4" : "w-6 h-6"}`}
+              alt="Company logo"
+              className={`transition-all duration-300 ${scrolled ? "w-6" : "w-10"} h-auto`}
             />
           </div>
           {/* <span className="text-white text-xl font-bold">{getTitle()}</span> */}

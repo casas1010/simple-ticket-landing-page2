@@ -305,8 +305,8 @@ const ModulesOrbitClient = () => {
     const searchParams = useSearchParams();
 
     const handleModuleClick = (mod: Module) => {
-        if(isMobile)return;
-        
+        if(isMobile) return;
+
         const params = new URLSearchParams(searchParams.toString());
         params.set('mode', mod.mode);
 
@@ -324,6 +324,7 @@ const ModulesOrbitClient = () => {
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: sizes.containerSize, height: sizes.containerSize }}>
 
+                {/* House + Animation */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: sizes.houseSize, height: sizes.houseSize }}>
                         <img
@@ -389,6 +390,7 @@ const ModulesOrbitClient = () => {
                     </div>
                 </div>
 
+                {/* Orbit */}
                 <div
                     className="absolute top-1/2 left-1/2"
                     style={{
@@ -420,19 +422,19 @@ const ModulesOrbitClient = () => {
                                     }}
                                 >
                                     <div
-                                        className={`relative cursor-pointer transition-all duration-300 ease-out ${
+                                        className={`relative transition-all duration-300 ease-out ${
                                             isMobile 
                                                 ? (isActive ? 'scale-125' : '')
-                                                : (isHovered ? 'scale-125 hover:scale-150' : 'scale-100')
+                                                : (isHovered ? 'scale-125 hover:scale-150 cursor-pointer' : 'scale-100 cursor-pointer')
                                         } ${shouldHide ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                                         style={{
                                             width: sizes.orbSize,
                                             height: sizes.orbSize
                                         }}
-                                        onMouseEnter={() => handleModuleHover(mod)}
-                                        onMouseLeave={() => handleModuleHover(null)}
-                                        onClick={() => handleModuleClick(mod)}
-                                        >
+                                        onMouseEnter={() => !isMobile && handleModuleHover(mod)}
+                                        onMouseLeave={() => !isMobile && handleModuleHover(null)}
+                                        onClick={() => !isMobile && handleModuleClick(mod)}
+                                    >
                                         <div
                                             className={`absolute inset-0 rounded-full ${orbColor} opacity-80 blur-sm transition-all duration-300 ease-out ${
                                                 isActive ? 'opacity-100' : 'hover:opacity-90 hover:scale-105'
@@ -485,4 +487,4 @@ const ModulesOrbitClient = () => {
     );
 };
 
-export default ModulesOrbitClient;
+export default ModulesOrbitClient
