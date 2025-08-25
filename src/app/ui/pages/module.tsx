@@ -90,7 +90,7 @@ export default function ModulePage({ mode }: ModulePageProps) {
 
       {/* <ContactSection text="Get started" /> */}
           <div className="relative z-10">
-        <ContactUs text="Get started" />
+        <ContactUs/>
       </div>
 
 
