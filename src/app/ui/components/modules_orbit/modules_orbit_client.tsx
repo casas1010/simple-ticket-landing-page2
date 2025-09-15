@@ -12,39 +12,39 @@ type LottieAnimationData = Record<string, unknown>;
 
 // Size configuration constants
 const SIZE_CONFIG = {
-  DESKTOP: {
-    CONTAINER: 600,           // px
-    HOUSE: 100,               // px
-    ORB: 64,                  // px (w-16 = 4rem = 64px)
-    ICON: {                   // Icon sizes
-      DEFAULT: 24,            // px (w-6 = 1.5rem = 24px)
-      HOVERED: 40,            // px (w-10 = 2.5rem = 40px)
-      MOBILE: 32              // px (w-8 = 2rem = 32px)
+    DESKTOP: {
+        CONTAINER: 600,
+        HOUSE: 100,
+        ORB: 64,
+        ICON: {
+            DEFAULT: 24,
+            HOVERED: 40,
+            MOBILE: 32
+        },
+        TEXT: {
+            DEFAULT: 'text-sm',
+            HOVERED: 'text-base',
+            MOBILE: 'text-xs'
+        },
+        RADIUS: 220
     },
-    TEXT: {                   // Text sizes (tailwind classes)
-      DEFAULT: 'text-sm',
-      HOVERED: 'text-base',
-      MOBILE: 'text-xs'
-    },
-    RADIUS: 220               // px
-  },
-  MOBILE: {
-    CONTAINER_SCALE: 100,     // vw
-    HOUSE_SCALE: 15,          // vw
-    ORB_SCALE: 16,            // vw (w-16 = 4rem)
-    ICON_SCALE: {             // Icon scales
-      DEFAULT: 0.5,           // 50% of orb size
-      HOVERED: 0.625,         // 62.5% of orb size
-      MOBILE: 0.5             // 50% of orb size
-    },
-    TEXT: 'text-xs',          // Fixed text size
-    RADIUS_SCALE: 0.35        // 35% of screen width
-  }
+    MOBILE: {
+        CONTAINER_SCALE: 100,
+        HOUSE_SCALE: 15,
+        ORB_SCALE: 16,
+        ICON_SCALE: {
+            DEFAULT: 0.5,
+            HOVERED: 0.625,
+            MOBILE: 0.5
+        },
+        TEXT: 'text-xs',
+        RADIUS_SCALE: 0.35
+    }
 };
 
 const ModulesOrbitClient = () => {
     const { module, setModule } = useModule();
-    
+
     const isMobile = useIsMobile();
     const [screenWidth, setScreenWidth] = useState<number>(0);
     const [currentAngle, setCurrentAngle] = useState<number>(0);
@@ -64,6 +64,12 @@ const ModulesOrbitClient = () => {
     const [animationReady, setAnimationReady] = useState<boolean>(false);
     const [animationCache, setAnimationCache] = useState<Map<string, LottieAnimationData>>(new Map());
 
+    // NEW: ref for static house Lottie
+    const logoLottieRef = useRef<HTMLDivElement>(null);
+    
+    // NEW: State to track if we're in the initial 2-second house display period
+    const [showingInitialHouse, setShowingInitialHouse] = useState<boolean>(true);
+
     useEffect(() => {
         setScreenWidth(window.innerWidth);
     }, []);
@@ -75,11 +81,14 @@ const ModulesOrbitClient = () => {
             const houseSize = `${screenWidth * (SIZE_CONFIG.MOBILE.HOUSE_SCALE / 100)}px`;
             const orbSize = `${screenWidth * (SIZE_CONFIG.MOBILE.ORB_SCALE / 100)}px`;
             const radius = screenWidth * SIZE_CONFIG.MOBILE.RADIUS_SCALE;
-            
+            // Logo size - make it bigger than house size
+            const logoSize = `${screenWidth * (SIZE_CONFIG.MOBILE.HOUSE_SCALE / 100) * 3}px`;
+
             return {
                 containerSize,
                 houseSize,
                 orbSize,
+                logoSize,
                 iconSize: {
                     default: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.DEFAULT}px`,
                     hovered: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.HOVERED}px`,
@@ -89,10 +98,14 @@ const ModulesOrbitClient = () => {
                 radius
             };
         } else {
+            // Logo size - make it bigger than house size (3x larger)
+            const logoSize = `${SIZE_CONFIG.DESKTOP.HOUSE * 3}px`;
+            
             return {
                 containerSize: `${SIZE_CONFIG.DESKTOP.CONTAINER}px`,
                 houseSize: `${SIZE_CONFIG.DESKTOP.HOUSE}px`,
                 orbSize: `${SIZE_CONFIG.DESKTOP.ORB}px`,
+                logoSize,
                 iconSize: {
                     default: `${SIZE_CONFIG.DESKTOP.ICON.DEFAULT}px`,
                     hovered: `${SIZE_CONFIG.DESKTOP.ICON.HOVERED}px`,
@@ -118,7 +131,6 @@ const ModulesOrbitClient = () => {
             }
 
             const animationData = await response.json() as LottieAnimationData;
-
             setAnimationCache(prev => new Map(prev.set(url, animationData)));
 
             return animationData;
@@ -150,62 +162,24 @@ const ModulesOrbitClient = () => {
         }
     };
 
+    // UPDATED: Modified to handle initial 2-second house display
     useEffect(() => {
-        const firstModule = MODULES[0];
-        setActiveModule(firstModule);
-        setCurrentModuleIndex(0);
-
-        startAutoSelect();
+        // Show house for first 2 seconds, then start module cycling
+        const houseDisplayTimer = setTimeout(() => {
+            setShowingInitialHouse(false);
+            const firstModule = MODULES[0];
+            setActiveModule(firstModule);
+            setCurrentModuleIndex(0);
+            startAutoSelect();
+        }, 2000);
 
         return () => {
+            clearTimeout(houseDisplayTimer);
             stopAutoSelect();
         };
     }, []);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollY = window.scrollY;
-            const threshold = 100;
-            const hasScrolledEnough = scrollY > threshold;
-
-            if (hasScrolledEnough !== scrollThresholdPassed) {
-                setScrollThresholdPassed(hasScrolledEnough);
-            }
-
-            if (hasScrolledEnough) {
-                const scrollDelta = scrollY - threshold;
-                const moduleIndex = Math.floor(scrollDelta / 150) % MODULES.length;
-                const calculatedModule = MODULES[moduleIndex];
-
-                if (activeModule?.title !== calculatedModule.title) {
-                    setActiveModule(calculatedModule);
-                    setModule(calculatedModule);
-                    setCurrentModuleIndex(moduleIndex);
-                    setIsPaused(true);
-                    stopAutoSelect();
-                }
-            } else {
-                if (activeModule !== null) {
-                    setActiveModule(null);
-                    setModule(null);
-                    setIsPaused(false);
-
-                    if (!autoSelectIntervalRef.current) {
-                        const firstModule = MODULES[0];
-                        setActiveModule(firstModule);
-                        setCurrentModuleIndex(0);
-                        startAutoSelect();
-                    }
-                }
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [setModule, setIsPaused, activeModule, scrollThresholdPassed]);
-
+    // Animate orbit rotation
     useEffect(() => {
         const animate = (timestamp: number) => {
             if (!isPaused) {
@@ -228,10 +202,11 @@ const ModulesOrbitClient = () => {
         };
     }, [isPaused]);
 
+    // Lottie for hovered/active module
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
-        
-        if (moduleToShow?.animationPath && animationContainerRef.current) {
+
+        if (moduleToShow?.animationPath && animationContainerRef.current && !showingInitialHouse) {
             setIsTransitioning(true);
             setAnimationReady(false);
 
@@ -243,7 +218,7 @@ const ModulesOrbitClient = () => {
             const loadAnimation = async () => {
                 try {
                     const animationData = await fetchLottieData(moduleToShow.animationPath);
-                    
+
                     if (animationContainerRef.current) {
                         animationInstanceRef.current = lottie.loadAnimation({
                             container: animationContainerRef.current,
@@ -281,9 +256,25 @@ const ModulesOrbitClient = () => {
                 animationInstanceRef.current = null;
             }
         }
-    }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache]);
+    }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache, showingInitialHouse]);
+
+    // NEW: static house Lottie loader
+    useEffect(() => {
+        if (!logoLottieRef.current) return;
+        const anim = lottie.loadAnimation({
+            container: logoLottieRef.current,
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "https://lottie.host/1ff80abf-d30d-480a-909b-d742257dfda8/vCOh7iQBkh.json",
+        });
+        return () => anim.destroy();
+    }, []);
 
     const handleModuleHover = (mod: Module | null) => {
+        // Don't allow hover interactions during initial house display
+        if (showingInitialHouse) return;
+        
         setHoveredModule(mod);
         setModule(mod);
 
@@ -305,7 +296,8 @@ const ModulesOrbitClient = () => {
     const searchParams = useSearchParams();
 
     const handleModuleClick = (mod: Module) => {
-        if(isMobile) return;
+        // Don't allow click interactions during initial house display
+        if (isMobile || showingInitialHouse) return;
 
         const params = new URLSearchParams(searchParams.toString());
         params.set('mode', mod.mode);
@@ -318,7 +310,8 @@ const ModulesOrbitClient = () => {
         stopAutoSelect();
     };
 
-    const hasActiveAnimation = (hoveredModule?.animationPath || activeModule?.animationPath);
+    // UPDATED: Check if we should show active animation (not during initial house display)
+    const hasActiveAnimation = !showingInitialHouse && (hoveredModule?.animationPath || activeModule?.animationPath);
 
     return (
         <div className="flex justify-center items-start w-full">
@@ -327,31 +320,37 @@ const ModulesOrbitClient = () => {
                 {/* House + Animation */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: sizes.houseSize, height: sizes.houseSize }}>
-                        <img
-                            src="https://i.imgur.com/OEMWwAS.png"
-                            alt="Static house"
-                            className={`absolute inset-0 object-contain transition-all duration-500 ease-in-out transform ${
+
+                        {/* Static House Lottie - FIXED: Use sizes.logoSize for bigger logo */}
+                        <div
+                            ref={logoLottieRef}
+                            className={`absolute object-contain transition-all duration-500 ease-in-out ${
                                 hasActiveAnimation
-                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none'
-                                    : 'opacity-100 scale-100 blur-0'
+                                    ? 'opacity-0 blur-sm pointer-events-none'
+                                    : 'opacity-100 blur-0'
                             }`}
                             style={{
-                                width: sizes.houseSize,
-                                height: sizes.houseSize,
-                                transformOrigin: 'center center',
+                                height: sizes.logoSize,   // Now using larger logoSize
+                                width: sizes.logoSize,    // Now using larger logoSize
                                 filter: hasActiveAnimation ? 'brightness(0.7)' : 'brightness(1)',
-                                zIndex: hasActiveAnimation ? 5 : 15
+                                zIndex: hasActiveAnimation ? 5 : 15,
+                                // Center the larger logo within the house container
+                                left: '50%',
+                                top: '50%',
+                                transform: `translate(-50%, -50%) ${hasActiveAnimation ? 'scale(0.3)' : 'scale(1)'}`,
+                                transformOrigin: 'center center',
                             }}
                         />
-                        
+
+                        {/* Active Module Animation */}
                         <div
                             ref={animationContainerRef}
                             className={`absolute inset-0 transition-all ease-out transform ${
                                 hasActiveAnimation && animationReady
                                     ? 'opacity-100 scale-[1.8] blur-0 duration-500'
                                     : hasActiveAnimation && !animationReady
-                                    ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
-                                    : 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
+                                        ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
+                                        : 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
                             }`}
                             style={{
                                 transformOrigin: 'center center',
@@ -359,12 +358,11 @@ const ModulesOrbitClient = () => {
                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
                             }}
                         />
-                        
+
+                        {/* Transition overlay */}
                         <div
                             className={`absolute inset-0 rounded-full transition-all duration-300 ease-in-out ${
-                                isTransitioning
-                                    ? 'opacity-20 scale-105'
-                                    : 'opacity-0 scale-100'
+                                isTransitioning ? 'opacity-20 scale-105' : 'opacity-0 scale-100'
                             }`}
                             style={{
                                 background: hasActiveAnimation
@@ -375,7 +373,7 @@ const ModulesOrbitClient = () => {
                                 transformOrigin: 'center center'
                             }}
                         />
-                        
+
                         {hasActiveAnimation && animationReady && (
                             <div
                                 className="absolute inset-0 rounded-full opacity-20 animate-pulse"
@@ -423,7 +421,7 @@ const ModulesOrbitClient = () => {
                                 >
                                     <div
                                         className={`relative transition-all duration-300 ease-out ${
-                                            isMobile 
+                                            isMobile
                                                 ? (isActive ? 'scale-125' : '')
                                                 : (isHovered ? 'scale-125 hover:scale-150 cursor-pointer' : 'scale-100 cursor-pointer')
                                         } ${shouldHide ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
@@ -446,33 +444,35 @@ const ModulesOrbitClient = () => {
                                             }`}
                                         />
                                         <div className="absolute inset-0 flex items-center justify-center z-10">
-                                            <Icon 
+                                            <Icon
                                                 className="text-white drop-shadow-md transition-all duration-200"
                                                 style={{
-                                                    width: isMobile 
-                                                        ? sizes.iconSize.mobile 
-                                                        : isHovered 
-                                                            ? sizes.iconSize.hovered 
+                                                    width: isMobile
+                                                        ? sizes.iconSize.mobile
+                                                        : isHovered
+                                                            ? sizes.iconSize.hovered
                                                             : sizes.iconSize.default,
-                                                    height: isMobile 
-                                                        ? sizes.iconSize.mobile 
-                                                        : isHovered 
-                                                            ? sizes.iconSize.hovered 
+                                                    height: isMobile
+                                                        ? sizes.iconSize.mobile
+                                                        : isHovered
+                                                            ? sizes.iconSize.hovered
                                                             : sizes.iconSize.default
                                                 }}
                                             />
                                         </div>
                                         {(!isMobile || isHovered || (isActive && !hoveredModule && !isMobile)) && (
-                                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg whitespace-nowrap shadow-lg z-20 transition-all duration-300 mt-2 ${
-                                                isMobile 
-                                                    ? sizes.textSize 
-                                                    : isHovered 
-                                                        ? SIZE_CONFIG.DESKTOP.TEXT.HOVERED 
-                                                        : SIZE_CONFIG.DESKTOP.TEXT.DEFAULT
-                                            } ${isHovered ? 'animate-fade-in' : ''}`}
-                                            style={{
-                                                opacity: isMobile || isHovered ? 1 : 0.8,
-                                            }}>
+                                            <div
+                                                className={`absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg whitespace-nowrap shadow-lg z-20 transition-all duration-300 mt-2 ${
+                                                    isMobile
+                                                        ? sizes.textSize
+                                                        : isHovered
+                                                            ? SIZE_CONFIG.DESKTOP.TEXT.HOVERED
+                                                            : SIZE_CONFIG.DESKTOP.TEXT.DEFAULT
+                                                } ${isHovered ? 'animate-fade-in' : ''}`}
+                                                style={{
+                                                    opacity: isMobile || isHovered ? 1 : 0.8,
+                                                }}
+                                            >
                                                 {mod.title}
                                                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
                                             </div>
@@ -487,4 +487,4 @@ const ModulesOrbitClient = () => {
     );
 };
 
-export default ModulesOrbitClient
+export default ModulesOrbitClient;

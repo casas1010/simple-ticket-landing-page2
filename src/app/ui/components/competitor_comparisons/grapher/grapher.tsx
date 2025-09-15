@@ -14,7 +14,7 @@ interface PricingRule {
   includedSeats?: number;
   perSeatPrice?: number;
   maxUsers?: number | "unlimited";
-  notes?: string[];
+  features?: string[];
 }
 
 /* ---------------- UTIL FUNCTIONS ---------------- */
@@ -250,7 +250,9 @@ function TierPricingSummary({
 
   return (
     <div className="rounded-xl shadow-xl p-6 backdrop-blur-lg bg-white/10 border border-white/20">
-      <h2 className="text-xl font-semibold mb-4 text-white">Tier Pricing Summary (by Module in USD)</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">
+        Tier Pricing Summary (by Module in USD)
+      </h2>
       {enabledModules.length === 0 ? (
         <p className="text-gray-300 italic">No modules enabled</p>
       ) : (
@@ -258,17 +260,26 @@ function TierPricingSummary({
           {enabledModules.map((module) => {
             const moduleTiers = getModuleTiers(pricingRules, module);
             return (
-              <div key={module} className="border rounded-lg p-4 backdrop-blur-sm bg-white/5 border-white/20">
-                <h3 className="font-semibold text-white mb-3">{module} ({moduleConfigs[module].users} users)</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div
+                key={module}
+                className="border rounded-lg p-4 backdrop-blur-sm bg-white/5 border-white/20"
+              >
+                <h3 className="font-semibold text-white mb-3">
+                  {module} ({moduleConfigs[module].users} users)
+                </h3>
+
+                {/* FLEX, wrapped and centered */}
+                <div className="flex flex-wrap justify-evenly gap-3">
                   {moduleTiers.map((tier) => {
                     const price = calculateModuleTierPrice(module, tier);
                     return (
-                      <div key={tier} className="border rounded-lg p-3 text-center backdrop-blur-sm bg-white/10 border-white/30">
+                      <div
+                        key={tier}
+                        className="border rounded-lg p-3 text-center backdrop-blur-sm bg-white/10 border-white/30 w-[180px]"
+                      >
                         <h4 className="font-medium text-sm mb-2 text-white">{tier}</h4>
                         <p className="text-lg font-bold text-cyan-300">
                           {(() => {
-                            const price = calculateModuleTierPrice(module, tier);
                             if (price === Infinity) return "Not Available";
                             if (price === 0) return "Free";
                             return `$${price.toLocaleString()}/mo`;
@@ -285,6 +296,7 @@ function TierPricingSummary({
       )}
     </div>
   );
+
 }
 
 function PricingChart({

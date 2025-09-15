@@ -1,4 +1,4 @@
-import { UserCheck, Mail, CalendarClock, ClipboardCheck, FileText, BarChart, Bot, Bell, ShieldCheck, CalendarDays, Zap, Megaphone, Send, History } from "lucide-react";
+import { UserCheck, Mail, CalendarClock, ClipboardCheck, FileText, BarChart, Bot, Bell, ShieldCheck, CalendarDays, Zap, Megaphone, Send, History, Brain, FileSearch, Linkedin, Scale, Sparkles } from "lucide-react";
 import { Features } from "../types/feature";
 
 
@@ -18,7 +18,7 @@ export const CUSTOMER_MANAGEMENT_FEATURES: Features[] = [
       { icon: Mail, description: 'Communication history and contact info', iconColor: 'text-white', iconBg: 'bg-blue-600' },
       { icon: CalendarClock, description: 'Interaction timeline tracking', iconColor: 'text-white', iconBg: 'bg-blue-600' },
       { icon: ClipboardCheck, description: 'Custom fields for unique attributes', iconColor: 'text-white', iconBg: 'bg-blue-600' },
-      { icon: FileText, description: 'Attach files, agreements, or notes', iconColor: 'text-white', iconBg: 'bg-blue-600' },
+      { icon: FileText, description: 'Attach files, agreements, resumes etx', iconColor: 'text-white', iconBg: 'bg-blue-600' },
     ],
   },
   {
@@ -57,24 +57,26 @@ export const CUSTOMER_MANAGEMENT_FEATURES: Features[] = [
       { icon: Bot, description: 'Auto-assign agents by customer type', iconColor: 'text-white', iconBg: 'bg-yellow-600' },
     ],
   },
-  {
-    title: 'Engagement History',
-    mode: 'engagement_history',
-    main_description: 'Track all interactions',
-    main_description_highlight: 'across channels',
-    sub_description: '',
-    main_icon_path: '📞',
-    gradient: '#8b5cf6',
-    icon: History,
-    color: 'bg-purple-600',
-    details: [
-      { icon: History, description: 'Timeline of touchpoints', iconColor: 'text-white', iconBg: 'bg-purple-600' },
-      { icon: Mail, description: 'Email, chat, and call records', iconColor: 'text-white', iconBg: 'bg-purple-600' },
-      { icon: FileText, description: 'Logged notes and outcomes', iconColor: 'text-white', iconBg: 'bg-purple-600' },
-      { icon: CalendarDays, description: 'Meeting and task tracking', iconColor: 'text-white', iconBg: 'bg-purple-600' },
-      { icon: Zap, description: 'Automated logging of communication', iconColor: 'text-white', iconBg: 'bg-purple-600' },
-    ],
-  },
+{
+  title: 'AI Candidate Matching',
+  mode: 'ai_candidate_matching',
+  main_description: 'Automate recruiting',
+  main_description_highlight: 'with AI skill analysis',
+  sub_description: 'From parsing resumes to scoring candidates',
+  main_icon_path: '🤖',
+  gradient: '#06b6d4',
+  icon: Brain,
+  color: 'bg-cyan-600',
+  details: [
+    { icon: FileSearch, description: 'Extract measurable skills from job posts', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+    { icon: Linkedin, description: 'Parse LinkedIn profiles and resumes automatically', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+    { icon: Bot, description: 'AI agent performs candidate outreach & data collection', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+    { icon: Mail, description: 'Verify candidate skill timelines via AI prompts', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+    { icon: Scale, description: 'Score candidates against job requirements (0–10+)', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+    { icon: BarChart, description: 'Compare candidates side by side with weighted scoring', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+    { icon: Sparkles, description: 'Automatic deduction for outdated skills', iconColor: 'text-white', iconBg: 'bg-cyan-600' },
+  ],
+},
   {
     title: 'Customer Feedback & Surveys',
     mode: 'feedback_surveys',
