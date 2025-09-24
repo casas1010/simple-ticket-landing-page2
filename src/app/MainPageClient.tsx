@@ -15,6 +15,9 @@ import AboutUs from './ui/pages/about_us';
 import Footer from './ui/components/footer';
 import { useEffect } from 'react';
 import ContactUs from './ui/components/contact_us';
+import TermsOfService from './ui/pages/terms_of_service';
+import PrivacyPolicy from './ui/pages/privacy_policy';
+import BankPartnershipPage from './ui/pages/bank_pitch';
 
 
 export default function MainPageClient() {
@@ -41,14 +44,27 @@ export default function MainPageClient() {
       return <AboutUs key="about" />;
     }
 
+    if (mode == 'terms-of-service') {
+      return <TermsOfService key="terms-of-service" />;
+    }
+
+    if (mode == 'privacy-policy') {
+      return <PrivacyPolicy key="privacy" />
+    }
+
+    if (mode == 'bank') {
+      return <BankPartnershipPage key="bank" />
+    }
+
     return <ModulePage mode={mode} key={mode} />;
   };
 
 
 
-  return (
-    <div className="bg-[#35495f] relative w-full overflow-hidden">
-      <StarBackground />
+return (
+  <div className="bg-[#35495f] relative w-full overflow-hidden">
+    <StarBackground />
+    <div className="relative z-1">
       <Header />
       <AnimatePresence mode="wait">
         <motion.div
@@ -64,5 +80,6 @@ export default function MainPageClient() {
       <ContactUs />
       <Footer />
     </div>
-  );
+  </div>
+);
 }

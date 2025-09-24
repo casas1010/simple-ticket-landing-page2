@@ -146,11 +146,13 @@ export const MODULES: Module[] = [
     ],
     features: PROPERTY_MANAGEMENT_FEATURES,
     videos: [
-      { "name": "Incident creation", "url": "https://youtu.be/VUgp57b2bAs" },
-      { "name": "Job creation", "url": "https://youtu.be/hcsNQiEUC3s" },
-      { "name": "Job application", "url": "https://youtu.be/dEJj68S3F_8" },
-      { "name": "Complete job", "url": "https://youtu.be/MSBbHMUkkhI" },
-      { "name": "Incident complete", "url": "https://youtu.be/q-K9RAaB2fE" },
+      { "name": "Incident creation", "url": "https://youtu.be/u90DZB566O8" }, //
+      { "name": "Job creation", "url": "https://youtu.be/pZqDoHGxM90" },
+      { "name": "Job application", "url": "https://youtu.be/RxcSxLRPmyw" },
+      { "name": "Complete job", "url": "https://youtu.be/SzKfLZxysZ0" },
+      { "name": "Incident complete", "url": "https://youtu.be/O4ZOmwZm670" },
+      { "name": "Kanban board", "url": "https://youtu.be/Ux4-RVOO4ME" },
+      { "name": "Reports", "url": "https://youtu.be/yaRJ2A9usiQ" },
 
     ]
   },
