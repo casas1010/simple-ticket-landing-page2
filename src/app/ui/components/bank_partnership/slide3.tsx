@@ -32,52 +32,55 @@ const Slide3Content: React.FC = () => {
     datasets: []
   });
 
-  useEffect(() => {
-    const years = 5;
-    const months = years * 12;
-    
-    // Get current date to start from current month
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth(); // 0-11
-    const currentYear = currentDate.getFullYear();
-    
-    const labels = Array.from({ length: months }, (_, i) => {
-      const monthIndex = (currentMonth + i) % 12;
-      const yearOffset = Math.floor((currentMonth + i) / 12);
-      const year = currentYear + yearOffset;
-      return `${new Date(year, monthIndex, 1).toLocaleString('default', { month: 'short' })} ${year}`;
-    });
 
-    const data = [];
-    let cumulativeBusinesses = 0;
-    let cumulativeIncome = 0;
+useEffect(() => {
+  const years = 5;
+  const months = years * 12;
+  
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  
+  const labels = Array.from({ length: months }, (_, i) => {
+    const monthIndex = (currentMonth + i) % 12;
+    const yearOffset = Math.floor((currentMonth + i) / 12);
+    const year = currentYear + yearOffset;
+    return `${new Date(year, monthIndex, 1).toLocaleString('default', { month: 'short' })} ${year}`;
+  });
 
-    for (let i = 0; i < months; i++) {
-      // Calculate businesses onboarded this month
-      const businessesOnboardedThisMonth = salesmen * salesPerMonth;
-      cumulativeBusinesses += businessesOnboardedThisMonth;
-      
-      // Calculate total monthly income from all businesses onboarded so far
-      const monthlyIncome = cumulativeBusinesses * incomePerBusiness;
-      cumulativeIncome += monthlyIncome;
-      
-      // data.push(cumulativeIncome);
-      data.push(monthlyIncome);
-    }
+  const data = [];
+  let cumulativeBusinesses = 0;
 
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: 'Cumulative Sales ($)',
-          data,
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          tension: 0.1,
-        },
-      ],
-    });
-  }, [salesmen, salesPerMonth, incomePerBusiness]);
+  for (let i = 0; i < months; i++) {
+    const businessesOnboardedThisMonth = salesmen * salesPerMonth;
+    cumulativeBusinesses += businessesOnboardedThisMonth;
+
+    // Monthly income = all existing businesses * income per business
+    const monthlyIncome = cumulativeBusinesses * incomePerBusiness;
+
+    // ❗️Push only this month's income (not cumulative)
+    data.push(monthlyIncome);
+  }
+
+  setChartData({
+    labels,
+    datasets: [
+      {
+        label: 'Monthly Income ($)',
+        data,
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        tension: 0.1,
+      },
+    ],
+  });
+}, [salesmen, salesPerMonth, incomePerBusiness]);
+
+
+
+
+
+
 
   const options = {
     responsive: true,
