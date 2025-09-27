@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Chart as ChartJS, 
-  CategoryScale, 
-  LinearScale, 
-  PointElement, 
-  LineElement, 
-  Title, 
-  Tooltip, 
-  Legend 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -25,7 +25,7 @@ ChartJS.register(
 const Slide3Content: React.FC = () => {
   const [salesmen, setSalesmen] = useState<number>(3);
   const [salesPerMonth, setSalesPerMonth] = useState<number>(3);
-  const [incomePerBusiness, setIncomePerBusiness] = useState<number>(16500000); 
+  const [incomePerBusiness, setIncomePerBusiness] = useState<number>(16500000);
 
   const [chartData, setChartData] = useState<any>({
     labels: [],
@@ -33,48 +33,50 @@ const Slide3Content: React.FC = () => {
   });
 
 
-useEffect(() => {
-  const years = 5;
-  const months = years * 12;
+
   
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-  
-  const labels = Array.from({ length: months }, (_, i) => {
-    const monthIndex = (currentMonth + i) % 12;
-    const yearOffset = Math.floor((currentMonth + i) / 12);
-    const year = currentYear + yearOffset;
-    return `${new Date(year, monthIndex, 1).toLocaleString('default', { month: 'short' })} ${year}`;
-  });
+  useEffect(() => {
+    const years = 5;
+    const months = years * 12;
 
-  const data = [];
-  let cumulativeBusinesses = 0;
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
 
-  for (let i = 0; i < months; i++) {
-    const businessesOnboardedThisMonth = salesmen * salesPerMonth;
-    cumulativeBusinesses += businessesOnboardedThisMonth;
+    const labels = Array.from({ length: months }, (_, i) => {
+      const monthIndex = (currentMonth + i) % 12;
+      const yearOffset = Math.floor((currentMonth + i) / 12);
+      const year = currentYear + yearOffset;
+      return `${new Date(year, monthIndex, 1).toLocaleString('default', { month: 'short' })} ${year}`;
+    });
 
-    // Monthly income = all existing businesses * income per business
-    const monthlyIncome = cumulativeBusinesses * incomePerBusiness;
+    const data = [];
+    let cumulativeBusinesses = 0;
 
-    // ❗️Push only this month's income (not cumulative)
-    data.push(monthlyIncome);
-  }
+    for (let i = 0; i < months; i++) {
+      const businessesOnboardedThisMonth = salesmen * salesPerMonth;
+      cumulativeBusinesses += businessesOnboardedThisMonth;
 
-  setChartData({
-    labels,
-    datasets: [
-      {
-        label: 'Monthly Income ($)',
-        data,
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        tension: 0.1,
-      },
-    ],
-  });
-}, [salesmen, salesPerMonth, incomePerBusiness]);
+      // Monthly income = all existing businesses * income per business
+      const monthlyIncome = cumulativeBusinesses * incomePerBusiness;
+
+      // ❗️Push only this month's income (not cumulative)
+      data.push(monthlyIncome);
+    }
+
+    setChartData({
+      labels,
+      datasets: [
+        {
+          label: 'Monthly Income ($)',
+          data,
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          tension: 0.1,
+        },
+      ],
+    });
+  }, [salesmen, salesPerMonth, incomePerBusiness]);
 
 
 
@@ -106,10 +108,10 @@ useEffect(() => {
           color: 'white',
           font: { size: 10 },
         },
-        ticks: { 
+        ticks: {
           color: 'white',
           font: { size: 9 },
-          callback: function(value: number | string) {
+          callback: function (value: number | string) {
             return '$' + Number(value).toLocaleString();
           }
         },
@@ -133,7 +135,7 @@ useEffect(() => {
 
   return (
     <div className="p-3 max-w-5xl mx-auto bg-transparent text-white">
-      
+
       {/* Dynamic Inputs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
         <div className="bg-transparent p-2 rounded-lg border border-gray-300">
@@ -150,7 +152,7 @@ useEffect(() => {
             step="1"
           />
         </div>
-        
+
         <div className="bg-transparent p-2 rounded-lg border border-gray-300">
           <label className="block text-xs font-medium mb-1">
             Sales/Month per Salesman: {salesPerMonth}
@@ -165,7 +167,7 @@ useEffect(() => {
             step="1"
           />
         </div>
-        
+
         <div className="bg-transparent p-2 rounded-lg border border-gray-300">
           <label className="block text-xs font-medium mb-1">
             Income per Business/Month: ${incomePerBusiness.toLocaleString()}
@@ -182,7 +184,7 @@ useEffect(() => {
         </div>
       </div>
 
-      
+
       {/* Chart */}
       <div className="bg-transparent p-2 rounded-lg shadow border border-gray-300 h-[400px]">
         <Line options={options} data={chartData} />
