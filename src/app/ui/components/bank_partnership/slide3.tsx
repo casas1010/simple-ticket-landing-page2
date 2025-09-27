@@ -61,7 +61,8 @@ const Slide3Content: React.FC = () => {
       const monthlyIncome = cumulativeBusinesses * incomePerBusiness;
       cumulativeIncome += monthlyIncome;
       
-      data.push(cumulativeIncome);
+      // data.push(cumulativeIncome);
+      data.push(monthlyIncome);
     }
 
     setChartData({
