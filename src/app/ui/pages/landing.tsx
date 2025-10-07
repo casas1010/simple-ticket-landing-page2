@@ -48,7 +48,7 @@ export default function LandingPage() {
         features={PLATFORM_FEATURES}
       />
 
-      {/* {!isMobile ? <CompetitorComparison /> : <></>} */}
+      {!isMobile ? <CompetitorComparison /> : <></>}
 
 
       <div className="h-50" />
