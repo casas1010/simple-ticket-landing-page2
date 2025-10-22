@@ -53,7 +53,6 @@ const ModulesOrbitClient = () => {
     const [hoveredModule, setHoveredModule] = useState<Module | null>(null);
     const animationRef = useRef<number | null>(null);
     const lastTimeRef = useRef<number>(0);
-    const [scrollThresholdPassed, setScrollThresholdPassed] = useState<boolean>(false);
     const autoSelectIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const [currentModuleIndex, setCurrentModuleIndex] = useState<number>(0);
     const router = useRouter();
@@ -63,12 +62,6 @@ const ModulesOrbitClient = () => {
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
     const [animationReady, setAnimationReady] = useState<boolean>(false);
     const [animationCache, setAnimationCache] = useState<Map<string, LottieAnimationData>>(new Map());
-
-    // NEW: ref for static house Lottie
-    const logoLottieRef = useRef<HTMLDivElement>(null);
-    
-    // NEW: State to track if we're in the initial 2-second house display period
-    const [showingInitialHouse, setShowingInitialHouse] = useState<boolean>(true);
 
     useEffect(() => {
         setScreenWidth(window.innerWidth);
@@ -81,14 +74,11 @@ const ModulesOrbitClient = () => {
             const houseSize = `${screenWidth * (SIZE_CONFIG.MOBILE.HOUSE_SCALE / 100)}px`;
             const orbSize = `${screenWidth * (SIZE_CONFIG.MOBILE.ORB_SCALE / 100)}px`;
             const radius = screenWidth * SIZE_CONFIG.MOBILE.RADIUS_SCALE;
-            // Logo size - make it bigger than house size
-            const logoSize = `${screenWidth * (SIZE_CONFIG.MOBILE.HOUSE_SCALE / 100) * 3}px`;
 
             return {
                 containerSize,
                 houseSize,
                 orbSize,
-                logoSize,
                 iconSize: {
                     default: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.DEFAULT}px`,
                     hovered: `${parseFloat(orbSize) * SIZE_CONFIG.MOBILE.ICON_SCALE.HOVERED}px`,
@@ -98,14 +88,10 @@ const ModulesOrbitClient = () => {
                 radius
             };
         } else {
-            // Logo size - make it bigger than house size (3x larger)
-            const logoSize = `${SIZE_CONFIG.DESKTOP.HOUSE * 3}px`;
-            
             return {
                 containerSize: `${SIZE_CONFIG.DESKTOP.CONTAINER}px`,
                 houseSize: `${SIZE_CONFIG.DESKTOP.HOUSE}px`,
                 orbSize: `${SIZE_CONFIG.DESKTOP.ORB}px`,
-                logoSize,
                 iconSize: {
                     default: `${SIZE_CONFIG.DESKTOP.ICON.DEFAULT}px`,
                     hovered: `${SIZE_CONFIG.DESKTOP.ICON.HOVERED}px`,
@@ -162,19 +148,14 @@ const ModulesOrbitClient = () => {
         }
     };
 
-    // UPDATED: Modified to handle initial 2-second house display
+    // Start with first module and begin auto-cycling
     useEffect(() => {
-        // Show house for first 2 seconds, then start module cycling
-        const houseDisplayTimer = setTimeout(() => {
-            setShowingInitialHouse(false);
-            const firstModule = MODULES[0];
-            setActiveModule(firstModule);
-            setCurrentModuleIndex(0);
-            startAutoSelect();
-        }, 2000);
+        const firstModule = MODULES[0];
+        setActiveModule(firstModule);
+        setCurrentModuleIndex(0);
+        startAutoSelect();
 
         return () => {
-            clearTimeout(houseDisplayTimer);
             stopAutoSelect();
         };
     }, []);
@@ -206,7 +187,7 @@ const ModulesOrbitClient = () => {
     useEffect(() => {
         const moduleToShow = hoveredModule || activeModule;
 
-        if (moduleToShow?.animationPath && animationContainerRef.current && !showingInitialHouse) {
+        if (moduleToShow?.animationPath && animationContainerRef.current) {
             setIsTransitioning(true);
             setAnimationReady(false);
 
@@ -256,25 +237,9 @@ const ModulesOrbitClient = () => {
                 animationInstanceRef.current = null;
             }
         }
-    }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache, showingInitialHouse]);
-
-    // NEW: static house Lottie loader
-    useEffect(() => {
-        if (!logoLottieRef.current) return;
-        const anim = lottie.loadAnimation({
-            container: logoLottieRef.current,
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            path: "https://lottie.host/1ff80abf-d30d-480a-909b-d742257dfda8/vCOh7iQBkh.json",
-        });
-        return () => anim.destroy();
-    }, []);
+    }, [hoveredModule?.animationPath, activeModule?.animationPath, animationCache]);
 
     const handleModuleHover = (mod: Module | null) => {
-        // Don't allow hover interactions during initial house display
-        if (showingInitialHouse) return;
-        
         setHoveredModule(mod);
         setModule(mod);
 
@@ -296,8 +261,7 @@ const ModulesOrbitClient = () => {
     const searchParams = useSearchParams();
 
     const handleModuleClick = (mod: Module) => {
-        // Don't allow click interactions during initial house display
-        if (isMobile || showingInitialHouse) return;
+        if (isMobile) return;
 
         const params = new URLSearchParams(searchParams.toString());
         params.set('mode', mod.mode);
@@ -310,37 +274,15 @@ const ModulesOrbitClient = () => {
         stopAutoSelect();
     };
 
-    // UPDATED: Check if we should show active animation (not during initial house display)
-    const hasActiveAnimation = !showingInitialHouse && (hoveredModule?.animationPath || activeModule?.animationPath);
+    const hasActiveAnimation = hoveredModule?.animationPath || activeModule?.animationPath;
 
     return (
         <div className="flex justify-center items-start w-full">
             <div className="relative" style={{ width: sizes.containerSize, height: sizes.containerSize }}>
 
-                {/* House + Animation */}
+                {/* Center Animation */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                     <div className="relative" style={{ width: sizes.houseSize, height: sizes.houseSize }}>
-
-                        {/* Static House Lottie - FIXED: Use sizes.logoSize for bigger logo */}
-                        <div
-                            ref={logoLottieRef}
-                            className={`absolute object-contain transition-all duration-500 ease-in-out ${
-                                hasActiveAnimation
-                                    ? 'opacity-0 blur-sm pointer-events-none'
-                                    : 'opacity-100 blur-0'
-                            }`}
-                            style={{
-                                height: sizes.logoSize,   // Now using larger logoSize
-                                width: sizes.logoSize,    // Now using larger logoSize
-                                filter: hasActiveAnimation ? 'brightness(0.7)' : 'brightness(1)',
-                                zIndex: hasActiveAnimation ? 5 : 15,
-                                // Center the larger logo within the house container
-                                left: '50%',
-                                top: '50%',
-                                transform: `translate(-50%, -50%) ${hasActiveAnimation ? 'scale(0.3)' : 'scale(1)'}`,
-                                transformOrigin: 'center center',
-                            }}
-                        />
 
                         {/* Active Module Animation */}
                         <div
@@ -348,13 +290,11 @@ const ModulesOrbitClient = () => {
                             className={`absolute inset-0 transition-all ease-out transform ${
                                 hasActiveAnimation && animationReady
                                     ? 'opacity-100 scale-[1.8] blur-0 duration-500'
-                                    : hasActiveAnimation && !animationReady
-                                        ? 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
-                                        : 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
+                                    : 'opacity-0 scale-[0.3] blur-sm pointer-events-none duration-300'
                             }`}
                             style={{
                                 transformOrigin: 'center center',
-                                zIndex: hasActiveAnimation ? 25 : 10,
+                                zIndex: 25,
                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
                             }}
                         />
@@ -388,20 +328,26 @@ const ModulesOrbitClient = () => {
                     </div>
                 </div>
 
-                {/* Orbit */}
+                {/* Orbit — FIXED FOR SAFARI */}
                 <div
                     className="absolute top-1/2 left-1/2"
                     style={{
                         transform: `translate(-50%, -50%) rotate(${currentAngle}deg)`,
-                        transition: isPaused ? 'none' : 'transform 0.1s linear',
+                        // Only transition when paused (e.g., on hover exit)
+                        transition: isPaused ? 'transform 0.3s ease-out' : 'none',
+                        // Safari hardware acceleration hints
+                        transformStyle: 'preserve-3d',
+                        backfaceVisibility: 'hidden',
+                        willChange: 'transform',
                     }}
                 >
                     {sizes.radius > 0 &&
                         MODULES.map((mod, index) => {
                             const Icon = mod.icon;
                             const angle = (index * 360) / MODULES.length;
-                            const x = Math.cos((angle - 90) * (Math.PI / 180)) * sizes.radius;
-                            const y = Math.sin((angle - 90) * (Math.PI / 180)) * sizes.radius;
+                            // 🔸 ROUND x/y to avoid subpixel jitter in Safari
+                            const x = Math.round(Math.cos((angle - 90) * (Math.PI / 180)) * sizes.radius);
+                            const y = Math.round(Math.sin((angle - 90) * (Math.PI / 180)) * sizes.radius);
                             const isActive = activeModule?.title === mod.title;
                             const isHovered = hoveredModule?.title === mod.title;
                             const orbColor = mod.color;
@@ -417,6 +363,9 @@ const ModulesOrbitClient = () => {
                                         marginLeft: `-${parseFloat(sizes.orbSize) / 2}px`,
                                         marginTop: `-${parseFloat(sizes.orbSize) / 2}px`,
                                         transform: `rotate(-${currentAngle}deg)`,
+                                        // Safari compositing hint for each orb
+                                        transformStyle: 'preserve-3d',
+                                        backfaceVisibility: 'hidden',
                                     }}
                                 >
                                     <div

@@ -29,9 +29,8 @@ const PolicySection: React.FC<{ sections: Section[] }> = ({ sections }) => {
           {sections.map((section, index) => (
             <motion.div
               key={index}
-              className={`border-b border-white/30 pb-6 last:border-b-0 ${
-                isMobile ? "text-center" : "text-left"
-              }`}
+              className={`border-b border-white/30 pb-6 last:border-b-0 ${isMobile ? "text-center" : "text-left"
+                }`}
               {...animationProps}
             >
               <h3 className="text-xl font-semibold text-indigo-300 mb-3">
@@ -97,6 +96,16 @@ const PrivacyPolicy: React.FC = () => {
           <li>Access, correct, or delete your personal data.</li>
           <li>Withdraw consent for data processing.</li>
           <li>Request a copy of your data in a portable format.</li>
+          <li>
+            If you want your data removed, please email{" "}
+            <a
+              href="mailto:admin@simple-ticket.net"
+              className="text-indigo-300 underline hover:text-indigo-400"
+            >
+              admin@simple-ticket.net
+            </a>
+            .
+          </li>
         </ul>
       ),
     },
@@ -120,20 +129,6 @@ const PrivacyPolicy: React.FC = () => {
       description:
         "We may update this Privacy Policy from time to time. Continued use of the Service after updates indicates acceptance.",
     },
-    // {
-    //   title: "11. Contact Us",
-    //   description: (
-    //     <p>
-    //       [Your Company Name]
-    //       <br />
-    //       Email: privacy@yourcompany.com
-    //       <br />
-    //       Phone: [Your Phone Number]
-    //       <br />
-    //       Address: [Company Address]
-    //     </p>
-    //   ),
-    // },
   ];
 
   return (
